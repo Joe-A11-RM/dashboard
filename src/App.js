@@ -9,6 +9,7 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import Cards from "./Components/Cards/Cards";
+import OffCanvasTemplate from "./Components/OffCanvas";
 
 function App() {
   let [data, setData] = useState([
@@ -21,6 +22,13 @@ function App() {
     { id: 7, value: 7 },
     { id: 8, value: 8 },
   ]);
+  const [mainData, setMainData] = useState([
+    { id: 9, value: 9 },
+    { id: 10, value: 10 },
+    { id: 11, value: 11 },
+    { id: 12, value: 12 },
+  ]);
+
   const getTaskPos = (id) => data.findIndex((task) => task.id === id);
 
   const handleDragEnd = (event) => {
@@ -42,21 +50,20 @@ function App() {
     });
   };
 
-  console.log("Data", data);
-
-  const [mainData, setMainData] = useState(["0", "1", "2", "3"]);
-
-  const data = ["4", "5", "6", "7"];
-
   const handleDragStart = (e, item) => {
-    e.dataTransfer.setData("text/plain", item);
+    e.dataTransfer.setData("text/plain", JSON.stringify(item));
+    console.log(item);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const item = e.dataTransfer.getData("text/plain");
-    if (item && !mainData.includes(item)) {
-      setMainData((prev) => [...prev, item]);
+    const itemData = e.dataTransfer.getData("text/plain"); // Get stored data
+
+    const item = JSON.parse(itemData); // Convert string back to object
+
+    console.log("Dropped Item:", item);
+    if (item && !data.includes(item)) {
+      setData((prev) => [...prev, item]);
     }
   };
 
@@ -72,15 +79,11 @@ function App() {
         title={"Draggable Items"}
         backdrop={false}
       >
-        <div
-          className="container"
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-        >
+        <div className="container">
           <div className="col">
-            {data.map((item) => (
+            {mainData.map((item) => (
               <div
-                key={item}
+                key={item.id}
                 className="item-card"
                 draggable
                 onDragStart={(e) => handleDragStart(e, item)}
@@ -93,13 +96,25 @@ function App() {
                   cursor: "grab",
                 }}
               >
-                {item}
+                {item.value}
               </div>
             ))}
           </div>
         </div>
       </OffCanvasTemplate>
-      <div className="container">
+      <div
+        className="container"
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        style={{
+          border: "2px dashed #007bff",
+          padding: "20px",
+          marginTop: "20px",
+          minHeight: "150px",
+          backgroundColor: "#f8f9fa",
+          textAlign: "center",
+        }}
+      >
         <div className="row">
           <DndContext
             collisionDetection={closestCorners}
