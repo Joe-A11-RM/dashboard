@@ -1,4 +1,10 @@
-import { closestCorners, DndContext } from "@dnd-kit/core";
+import {
+  closestCorners,
+  DndContext,
+  MouseSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import "./App.css";
 import { useRef, useState } from "react";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
@@ -65,7 +71,11 @@ function App() {
     e.dataTransfer.dropEffect = "copy";
   };
   const containerRef = useRef(null);
-
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: { delay: 100 },
+    })
+  );
   return (
     <div className="App container-fluid">
       <Header
@@ -121,6 +131,7 @@ function App() {
             collisionDetection={closestCorners}
             modifiers={[restrictToWindowEdges]}
             onDragEnd={handleDragEnd}
+			sensors={sensors}
           >
             <SortableContext
               items={data.map((i) => i.id)}
@@ -129,12 +140,7 @@ function App() {
               {data.map((i) => {
                 return (
                   <div key={i.id} className="col-lg-3">
-                    <Cards
-                      id={i.id}
-                      item={i}
-                      setData={setData}
-                      data={data}
-                    />
+                    <Cards id={i.id} item={i} setData={setData} data={data} />
                   </div>
                 );
               })}

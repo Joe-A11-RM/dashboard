@@ -4,8 +4,8 @@ import { BiSolidTrashAlt } from "react-icons/bi";
 import React from "react";
 import LabelChart from "../Charts/LabelChart";
 
-export default function Cards({ id, item, setData, data2 }) {
-  const data = {
+export default function Cards({ id, item, setData, data }) {
+  const ChartData = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
     data: [65, 59, 80, 81, 56, 55, 40],
   };
@@ -46,8 +46,8 @@ export default function Cards({ id, item, setData, data2 }) {
     >
       {item.value === 1 ? (
         <LabelChart
-          data={data.data}
-          labels={data.labels}
+          data={ChartData.data}
+          labels={ChartData.labels}
           title="Numbers of total employees"
           number={15}
           color="#3B82F6"
