@@ -1,13 +1,33 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { BiSolidTrashAlt } from "react-icons/bi";
 import React from "react";
 
-export default function Cards({ id, item }) {
+export default function Cards({ id, item, setData, data }) {
 	const { attributes, listeners, setNodeRef, transform, transition } =
 		useSortable({ id });
+
+	const customTransition = transition
+		? transition.replace("250ms", "600ms")
+		: "transform 200ms ease";
+
 	const style = {
-		transition,
+		transition: customTransition,
 		transform: CSS.Transform.toString(transform),
+	};
+
+	const removeWidget = (id) => {
+		setData(data.filter((item) => item.id !== id));
+	};
+
+	const handleBinClick = (e) => {
+		e.stopPropagation();
+		removeWidget(id);
+	};
+	const handlePointerDown = (e) => {
+		if (e.target.closest(".bin")) {
+			e.preventDefault(); 
+		}
 	};
 	return (
 		<div
@@ -16,8 +36,14 @@ export default function Cards({ id, item }) {
 			{...attributes}
 			{...listeners}
 			style={style}
- 		>
-			<div className="item-card">{item}</div>
+			onPointerDown={handlePointerDown}
+		>
+			<div className="item-card">
+				<div className="bin" onClick={handleBinClick}>
+					<BiSolidTrashAlt />
+				</div>
+				<div className="item-card-chart">{item}</div>
+			</div>
 		</div>
 	);
 }
