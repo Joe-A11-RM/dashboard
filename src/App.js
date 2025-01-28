@@ -2,31 +2,29 @@ import { closestCorners, DndContext } from "@dnd-kit/core";
 import "./App.css";
 import { useState } from "react";
 import {
-  horizontalListSortingStrategy,
   SortableContext,
-  verticalListSortingStrategy,
-  arrayMove,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import Cards from "./Components/Cards/Cards";
 import OffCanvasTemplate from "./Components/OffCanvas";
+import Header from "./Components/Header/Header";
 
 function App() {
   let [data, setData] = useState([
-    { id: 1, value: 1 },
-    { id: 2, value: 2 },
-    { id: 3, value: 3 },
-    { id: 4, value: 4 },
-    { id: 5, value: 5 },
-    { id: 6, value: 6 },
-    { id: 7, value: 7 },
-    { id: 8, value: 8 },
+    { id: 1, value: 1, style: "col-lg-3" },
+    { id: 2, value: 1, style: "col-lg-3" },
+    { id: 3, value: 1, style: "col-lg-3" },
+    { id: 4, value: 1, style: "col-lg-3" },
+    { id: 5, value: 5, style: "col-lg-3" },
+    { id: 6, value: 6, style: "col-lg-3" },
+    { id: 7, value: 7, style: "col-lg-3" },
+    { id: 8, value: 8, style: "col-lg-3" },
   ]);
   const [mainData, setMainData] = useState([
-    { id: 9, value: 9 },
-    { id: 10, value: 10 },
-    { id: 11, value: 11 },
-    { id: 12, value: 12 },
+    { id: 9, value: 9, style: "col-lg-3" },
+    { id: 10, value: 10, style: "col-lg-3" },
+    { id: 11, value: 11, style: "col-lg-3" },
+    { id: 12, value: 12, style: "col-lg-3" },
   ]);
 
   const getTaskPos = (id) => data.findIndex((task) => task.id === id);
@@ -52,7 +50,6 @@ function App() {
 
   const handleDragStart = (e, item) => {
     e.dataTransfer.setData("text/plain", JSON.stringify(item));
-    console.log(item);
   };
 
   const handleDrop = (e) => {
@@ -69,41 +66,48 @@ function App() {
 
   const handleDragOver = (e) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "copy"; // Ensure it's set to copy/move
+    e.dataTransfer.dropEffect = "copy";
   };
 
   return (
     <div className="App">
-      <OffCanvasTemplate
-        ButtonText={"Open"}
-        title={"Draggable Items"}
-        backdrop={false}
+      <Header
+        title={"Dynamic Dashboard"}
+        subTitle={"Create Your customied dashboard now"}
       >
-        <div className="container">
-          <div className="col">
-            {mainData.map((item) => (
-              <div
-                key={item.id}
-                className="item-card"
-                draggable
-                onDragStart={(e) => handleDragStart(e, item)}
-                style={{
-                  padding: "10px",
-                  margin: "5px 0",
-                  backgroundColor: "#f8f9fa",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
-                  cursor: "grab",
-                }}
-              >
-                {item.value}
+        <div className="d-flex justify-content-center align-items-center">
+          <OffCanvasTemplate
+            ButtonText={"Generate New Dashboard"}
+            title={"Draggable Items"}
+            backdrop={false}
+          >
+            <div className="container">
+              <div className="col">
+                {mainData.map((item) => (
+                  <div
+                    key={item.id}
+                    className="item-card"
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, item)}
+                    style={{
+                      padding: "10px",
+                      margin: "5px 0",
+                      backgroundColor: "#f8f9fa",
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                      cursor: "grab",
+                    }}
+                  >
+                    {item.value}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          </OffCanvasTemplate>
         </div>
-      </OffCanvasTemplate>
+      </Header>
       <div
-        className="container"
+        className="container-fluid"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         style={{
@@ -126,11 +130,9 @@ function App() {
             >
               {data.map((i) => {
                 return (
-                  <>
-                    <div className="col-lg-3">
-                      <Cards id={i.id} item={i.value} />
-                    </div>
-                  </>
+                  <div className={i.style} key={i.id}>
+                    <Cards id={i.id} item={i} />
+                  </div>
                 );
               })}
             </SortableContext>
