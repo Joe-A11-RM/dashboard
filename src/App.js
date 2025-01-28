@@ -1,13 +1,53 @@
-import React, { useState } from "react";
+import { closestCorners, DndContext } from "@dnd-kit/core";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.js";
-import OffCanvasTemplate from "./Components/OffCanvas";
+import { useState } from "react";
+import {
+  horizontalListSortingStrategy,
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import Cards from "./Components/Cards/Cards";
 
 function App() {
+  let [data, setData] = useState([
+    { id: 1, value: 1 },
+    { id: 2, value: 2 },
+    { id: 3, value: 3 },
+    { id: 4, value: 4 },
+    { id: 5, value: 5 },
+    { id: 6, value: 6 },
+    { id: 7, value: 7 },
+    { id: 8, value: 8 },
+  ]);
+  const getTaskPos = (id) => data.findIndex((task) => task.id === id);
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    // Find the indexes of the active and over items
+    const activeIndex = getTaskPos(active.id);
+    const overIndex = getTaskPos(over.id);
+
+    // Swap the items in the array
+    setData((tasks) => {
+      const updatedTasks = [...tasks];
+      [updatedTasks[activeIndex], updatedTasks[overIndex]] = [
+        updatedTasks[overIndex],
+        updatedTasks[activeIndex],
+      ];
+      return updatedTasks;
+    });
+  };
+
+  console.log("Data", data);
+
   const [mainData, setMainData] = useState(["0", "1", "2", "3"]);
 
   const data = ["4", "5", "6", "7"];
+
   const handleDragStart = (e, item) => {
     e.dataTransfer.setData("text/plain", item);
   };
@@ -27,8 +67,16 @@ function App() {
 
   return (
     <div className="App">
-      <OffCanvasTemplate ButtonText={"Open"} title={"Draggable Items"} backdrop={false}>
-        <div className="container">
+      <OffCanvasTemplate
+        ButtonText={"Open"}
+        title={"Draggable Items"}
+        backdrop={false}
+      >
+        <div
+          className="container"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+        >
           <div className="col">
             {data.map((item) => (
               <div
@@ -51,37 +99,27 @@ function App() {
           </div>
         </div>
       </OffCanvasTemplate>
-      <div
-        className="container drop-zone"
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        style={{
-          border: "2px dashed #007bff",
-          padding: "20px",
-          marginTop: "20px",
-          minHeight: "150px",
-          backgroundColor: "#f8f9fa",
-          textAlign: "center",
-        }}
-      >
-        <h5>Drop items here</h5>
+      <div className="container">
         <div className="row">
-          {mainData.map((item) => (
-            <div key={item} className="col-lg-3">
-              <div
-                className="item-card"
-                style={{
-                  padding: "10px",
-                  margin: "5px 0",
-                  backgroundColor: "#e9ecef",
-                  border: "1px solid #ced4da",
-                  borderRadius: "4px",
-                }}
-              >
-                {item}
-              </div>
-            </div>
-          ))}
+          <DndContext
+            collisionDetection={closestCorners}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={data.map((i) => i.id)}
+              strategy={rectSortingStrategy}
+            >
+              {data.map((i) => {
+                return (
+                  <>
+                    <div className="col-lg-3">
+                      <Cards id={i.id} item={i.value} />
+                    </div>
+                  </>
+                );
+              })}
+            </SortableContext>
+          </DndContext>
         </div>
       </div>
     </div>
