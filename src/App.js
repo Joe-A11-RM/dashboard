@@ -1,10 +1,8 @@
 import { closestCorners, DndContext } from "@dnd-kit/core";
 import "./App.css";
-import { useState } from "react";
-import {
-  SortableContext,
-  rectSortingStrategy,
-} from "@dnd-kit/sortable";
+import { useRef, useState } from "react";
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import Cards from "./Components/Cards/Cards";
 import OffCanvasTemplate from "./Components/OffCanvas";
 import Header from "./Components/Header/Header";
@@ -33,11 +31,9 @@ function App() {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    // Find the indexes of the active and over items
     const activeIndex = getTaskPos(active.id);
     const overIndex = getTaskPos(over.id);
 
-    // Swap the items in the array
     setData((tasks) => {
       const updatedTasks = [...tasks];
       [updatedTasks[activeIndex], updatedTasks[overIndex]] = [
@@ -54,9 +50,9 @@ function App() {
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const itemData = e.dataTransfer.getData("text/plain"); // Get stored data
+    const itemData = e.dataTransfer.getData("text/plain");
 
-    const item = JSON.parse(itemData); // Convert string back to object
+    const item = JSON.parse(itemData);
 
     console.log("Dropped Item:", item);
     if (item && !data.includes(item)) {
@@ -68,9 +64,10 @@ function App() {
     e.preventDefault();
     e.dataTransfer.dropEffect = "copy";
   };
+  const containerRef = useRef(null);
 
   return (
-    <div className="App">
+    <div className="App container-fluid">
       <Header
         title={"Dynamic Dashboard"}
         subTitle={"Create Your customied dashboard now"}
@@ -107,21 +104,22 @@ function App() {
         </div>
       </Header>
       <div
-        className="container-fluid"
+        ref={containerRef}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         style={{
           border: "2px dashed #007bff",
           padding: "20px",
           marginTop: "20px",
-          minHeight: "150px",
+          maxHeight: "fit-content",
           backgroundColor: "#f8f9fa",
-          textAlign: "center",
+          overflow: "hidden",
         }}
       >
         <div className="row">
           <DndContext
             collisionDetection={closestCorners}
+            modifiers={[restrictToWindowEdges]}
             onDragEnd={handleDragEnd}
           >
             <SortableContext
@@ -130,8 +128,13 @@ function App() {
             >
               {data.map((i) => {
                 return (
-                  <div className={i.style} key={i.id}>
-                    <Cards id={i.id} item={i} />
+                  <div key={i.id} className="col-lg-3">
+                    <Cards
+                      id={i.id}
+                      item={i}
+                      setData={setData}
+                      data={data}
+                    />
                   </div>
                 );
               })}
