@@ -18,7 +18,7 @@ export default function DashBoardMenu({ mainData, customData }) {
 				<DashboardSelection choice={choice} setChoice={setChoice} />
 
 				<div className="container">
-					<div className="row">
+					<div className="row ">
 						{data.map((item) => (
 							<div className="col-lg-4">
 								<div

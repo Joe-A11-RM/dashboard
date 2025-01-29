@@ -1,6 +1,6 @@
 export default function DashboardSelection({ choice, setChoice }) {
 	return (
-		<div className="dashboard-selection row">
+		<div className="dashboard-selection row gx-0">
 			<div className="dashboard-selection-button col-lg-6">
 				<div
 					className={` ${
