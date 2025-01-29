@@ -4,11 +4,10 @@ import DashboardSelection from "./DashboardSelection/DashboardSelection";
 import DashboardDiagrams from "./DashboardDiagarms/DashboardDiagrams";
 import { FaArrowLeftLong } from "react-icons/fa6";
 
-export default function DashBoardMenu({ mainData }) {
+export default function DashBoardMenu({ mainData, choice, setChoice }) {
 	const handleDragStart = (e, item) => {
 		e.dataTransfer.setData("text/plain", JSON.stringify(item));
 	};
-	const [choice, setChoice] = useState("ready");
 	const [shown, setShown] = useState({ value: false, type: "" });
 	console.log(shown);
 	const data = mainData.filter((item) =>
