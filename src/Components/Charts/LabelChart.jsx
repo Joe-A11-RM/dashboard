@@ -2,6 +2,7 @@ import React from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css"; // Import the skeleton styles
 import AreaChart from "./AreaChart";
+import { BiSolidTrashAlt } from "react-icons/bi";
 
 export default function LabelChart({
   data,
@@ -10,11 +11,15 @@ export default function LabelChart({
   title,
   number,
   color,
+  onDelete
 }) {
   return (
     <>
       {data && labels ? (
         <div className={`dashboard-label ${style}`}>
+          <div className="bin" onClick={onDelete}>
+            <BiSolidTrashAlt />
+          </div>
           <div className="dashboard-label-body">
             <h5 className="fs-16 fw-600">{title}</h5>
           </div>

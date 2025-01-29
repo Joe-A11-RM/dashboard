@@ -15,21 +15,154 @@ import Header from "./Components/Header/Header";
 
 function App() {
   let [data, setData] = useState([
-    { id: 1, value: 1, style: "col-lg-3" },
-    { id: 2, value: 1, style: "col-lg-3" },
-    { id: 3, value: 1, style: "col-lg-3" },
-    { id: 4, value: 1, style: "col-lg-3" },
-    { id: 5, value: 5, style: "col-lg-3" },
-    { id: 6, value: 6, style: "col-lg-3" },
-    { id: 7, value: 7, style: "col-lg-3" },
-    { id: 8, value: 8, style: "col-lg-3" },
+    {
+      id: 1,
+      chartType: "LabelChart",
+      style: "col-lg-3",
+      ChartData: {
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+        ],
+        data: [65, 59, 80, 81, 56, 55, 40],
+      },
+    },
+    {
+      id: 2,
+      chartType: "LabelChart",
+      style: "col-lg-3",
+      ChartData: {
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+        ],
+        data: [65, 59, 80, 81, 56, 55, 40],
+      },
+    },
+    {
+      id: 3,
+      chartType: "LabelChart",
+      style: "col-lg-3",
+      ChartData: {
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+        ],
+        data: [65, 59, 80, 81, 56, 55, 40],
+      },
+    },
+    {
+      id: 4,
+      chartType: "LabelChart",
+      style: "col-lg-3",
+      ChartData: {
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+        ],
+        data: [65, 59, 80, 81, 56, 55, 40],
+      },
+    },
+    {
+      id: 5,
+      chartType: "LineChart",
+      style: "col-lg-3",
+      ChartData: {
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+        ],
+        data: [65, 59, 80, 81, 56, 55, 40],
+      },
+    },
+    {
+      id: 6,
+      chartType: "LineChart",
+      style: "col-lg-3",
+      ChartData: {
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+        ],
+        data: [65, 59, 80, 81, 56, 55, 40],
+      },
+    },
+    {
+      id: 7,
+      chartType: "LineChart",
+      style: "col-lg-3",
+      ChartData: {
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+        ],
+        data: [65, 59, 80, 81, 56, 55, 40],
+      },
+    },
+    {
+      id: 8,
+      chartType: "LineChart",
+      style: "col-lg-3",
+      ChartData: {
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+        ],
+        data: [65, 59, 80, 81, 56, 55, 40],
+      },
+    },
   ]);
   const [mainData, setMainData] = useState([
-    { id: 9, value: 9, style: "col-lg-3" },
-    { id: 10, value: 10, style: "col-lg-3" },
-    { id: 11, value: 11, style: "col-lg-3" },
-    { id: 12, value: 12, style: "col-lg-3" },
-  ]);
+    {
+      id: 1,
+      chartType: "LabelChart",
+      style: "col-lg-3",
+      img: "labelchart.png",
+    },
+    { id: 2, chartType: "LineChart", style: "col-lg-3", img: "" },
+    { id: 3, chartType: "BarChart", style: "col-lg-3", img: "" },
+    { id: 4, chartType: "PieChart", style: "col-lg-3", img: "" },
+  ]); //Side Menu Chart types
 
   const getTaskPos = (id) => data.findIndex((task) => task.id === id);
 
@@ -57,13 +190,32 @@ function App() {
   const handleDrop = (e) => {
     e.preventDefault();
     const itemData = e.dataTransfer.getData("text/plain");
+    const chartType = JSON.parse(itemData);
 
-    const item = JSON.parse(itemData);
+    if (!chartType) return;
+    const newId = Date.now();
+    const randomData = Array.from({ length: 7 }, () =>
+      Math.floor(Math.random() * 100)
+    );
+    const labels =
+      data.length > 0
+        ? data[0].ChartData.labels
+        : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 
-    console.log("Dropped Item:", item);
-    if (item && !data.includes(item)) {
-      setData((prev) => [...prev, item]);
-    }
+    const chartStyle =
+      mainData.find((item) => item.chartType === chartType)?.style ||
+      "col-lg-3";
+
+    const newChart = {
+      id: newId,
+      chartType,
+      style: chartStyle,
+      ChartData: {
+        labels,
+        data: randomData,
+      },
+    };
+    setData((prev) => [...prev, newChart]);
   };
 
   const handleDragOver = (e) => {
@@ -93,9 +245,9 @@ function App() {
                 {mainData.map((item) => (
                   <div
                     key={item.id}
-                    className="item-card"
+                    className="dashboard-item"
                     draggable
-                    onDragStart={(e) => handleDragStart(e, item)}
+                    onDragStart={(e) => handleDragStart(e, item.chartType)}
                     style={{
                       padding: "10px",
                       margin: "5px 0",
@@ -105,7 +257,11 @@ function App() {
                       cursor: "grab",
                     }}
                   >
-                    {item.value}
+                    <img
+                      src={item.img}
+                      alt={item.chartType}
+                      className="img-fluid"
+                    />
                   </div>
                 ))}
               </div>
@@ -131,7 +287,7 @@ function App() {
             collisionDetection={closestCorners}
             modifiers={[restrictToWindowEdges]}
             onDragEnd={handleDragEnd}
-			sensors={sensors}
+            sensors={sensors}
           >
             <SortableContext
               items={data.map((i) => i.id)}
@@ -139,7 +295,7 @@ function App() {
             >
               {data.map((i) => {
                 return (
-                  <div key={i.id} className="col-lg-3">
+                  <div key={i.id} className={i.style}>
                     <Cards id={i.id} item={i} setData={setData} data={data} />
                   </div>
                 );
