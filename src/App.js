@@ -247,37 +247,63 @@ function App() {
   };
 
   const handleDrop = (e) => {
-    e.preventDefault();
-    const itemData = e.dataTransfer.getData("text/plain");
-    const chartType = JSON.parse(itemData);
+    try {
+      e.preventDefault();
 
-    if (!chartType) return;
-    const newId = Date.now();
-    const randomData = Array.from({ length: 7 }, () =>
-      Math.floor(Math.random() * 100)
-    );
-    const labels =
-      data.length > 0
-        ? data[0].ChartData.labels
-        : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
+      const itemData = e.dataTransfer.getData("text/plain");
+      if (!itemData) {
+        console.warn("No valid data found in the drop event.");
+        return;
+      }
 
-    const chartStyle =
-      mainData.find((item) => item.chartType === chartType)?.style ||
-      "col-lg-3";
+      let chartType;
+      try {
+        chartType = JSON.parse(itemData);
+      } catch (parseError) {
+        console.warn("Invalid data format. Dropped item is not supported.");
+        alert("Click on chart type");
+        return;
+      }
 
-    const newChart = {
-      id: newId,
-      chartType,
-      style: chartStyle,
-      ChartData: {
-        labels,
-        data: randomData,
-        color: "#A020F0",
-        number: Math.floor(Math.random() * 100),
-        title: "Total Sales",
-      },
-    };
-    setData((prev) => [...prev, newChart]);
+      const isValidChart = mainData.some(
+        (item) => item.chartType === chartType
+      );
+      if (!isValidChart) {
+        console.warn(`"${chartType}" is not a valid droppable chart type.`);
+        return;
+      }
+
+      const newId = Date.now();
+      const randomData = Array.from({ length: 7 }, () =>
+        Math.floor(Math.random() * 100)
+      );
+
+      const labels =
+        data.length > 0
+          ? data[0].ChartData.labels
+          : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
+
+      const chartStyle =
+        mainData.find((item) => item.chartType === chartType)?.style ||
+        "col-lg-3";
+
+      const newChart = {
+        id: newId,
+        chartType,
+        style: chartStyle,
+        ChartData: {
+          labels,
+          data: randomData,
+          color: "#A020F0",
+          number: Math.floor(Math.random() * 100),
+          title: "Total Sales",
+        },
+      };
+
+      setData((prev) => [...prev, newChart]);
+    } catch (error) {
+      console.error("An error occurred while handling the drop:", error);
+    }
   };
 
   const handleDragOver = (e) => {

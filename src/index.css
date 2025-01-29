@@ -11,6 +11,10 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
 		monospace;
 }
+.pointer{
+  cursor: pointer !important;
+}
+
 
 .dashboard-drop-area {
 	padding: 20px;
@@ -59,7 +63,7 @@ code {
 	text-align: center;
 	cursor: pointer;
 	height: 100%;
-  color: white;
+	color: white;
 }
 
 .dashboard-selected div,
@@ -83,6 +87,8 @@ code {
 	height: 195px;
 	transition: all 0.5s ease;
 	position: relative;
+	cursor: move;
+	padding: 10px;
 }
 
 .bin {
@@ -137,24 +143,24 @@ code {
 }
 
 .dashboard-label {
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  background-color: white;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.193);
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr;
-  gap: 10px;
-  padding: 20px;
-  transition: all 0.5s ease;
-  position: relative;
-  overflow: visible;
+	width: 100%;
+	height: 100%;
+	border-radius: 8px;
+	background-color: white;
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.193);
+	margin-top: 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto 1fr;
+	gap: 10px;
+	padding: 20px;
+	transition: all 0.5s ease;
+	position: relative;
+	overflow: visible;
 }
 
 .dashboard-label:hover .bin {
-  opacity: 100%;
+	opacity: 100%;
 }
 
 .dashboard-label-body {
