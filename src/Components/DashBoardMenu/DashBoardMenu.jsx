@@ -9,7 +9,7 @@ export default function DashBoardMenu({ mainData }) {
   const [choice, setChoice] = useState("ready");
 
   const data = mainData.filter((item) =>
-    choice === "ready" ? item.type === "templete" : item.type === "custom"
+    choice === "ready" ? item.type === "template" : item.type === "custom"
   );
   return (
     <div className="d-flex justify-content-center align-items-center">

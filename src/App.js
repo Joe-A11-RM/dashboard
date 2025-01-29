@@ -29,7 +29,10 @@ function App() {
           "June",
           "July",
         ],
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+        color: "#3B82F6",
+        number: Math.floor(Math.random() * 100),
+        title: "Revenue Growth",
       },
     },
     {
@@ -46,7 +49,10 @@ function App() {
           "June",
           "July",
         ],
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+        color: "#F87171",
+        number: Math.floor(Math.random() * 100),
+        title: "Customer Satisfaction",
       },
     },
     {
@@ -63,7 +69,10 @@ function App() {
           "June",
           "July",
         ],
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+        color: "#34D399",
+        number: Math.floor(Math.random() * 100),
+        title: "New Sign-Ups",
       },
     },
     {
@@ -80,24 +89,22 @@ function App() {
           "June",
           "July",
         ],
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+        color: "#F59E0B",
+        number: Math.floor(Math.random() * 100),
+        title: "Total Website Visits",
       },
     },
     {
       id: 5,
-      chartType: "LineChart",
+      chartType: "PieChart",
       style: "col-lg-3",
       ChartData: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
-        data: [65, 59, 80, 81, 56, 55, 40],
+        labels: ["Ahmed", "Mohamed", "Adham", "Foaad", "Shady"],
+        data: Array.from({ length: 5 }, () => Math.floor(Math.random() * 100)),
+        color: "#3B82F6",
+        number: Math.floor(Math.random() * 100),
+        title: "Emplpyees Performance",
       },
     },
     {
@@ -114,7 +121,10 @@ function App() {
           "June",
           "July",
         ],
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+        color: "#9333EA",
+        number: Math.floor(Math.random() * 100),
+        title: "Profit Margin",
       },
     },
     {
@@ -131,7 +141,10 @@ function App() {
           "June",
           "July",
         ],
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+        color: "#F43F5E",
+        number: Math.floor(Math.random() * 100),
+        title: "Customer Retention",
       },
     },
     {
@@ -148,7 +161,10 @@ function App() {
           "June",
           "July",
         ],
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+        color: "#10B981",
+        number: Math.floor(Math.random() * 100),
+        title: "Marketing Spend",
       },
     },
   ]);
@@ -158,28 +174,28 @@ function App() {
       chartType: "LabelChart",
       style: "col-lg-3",
       img: "labelchart.png",
-      type: "templete",
+      type: "template",
     },
     {
       id: 2,
       chartType: "LineChart",
       style: "col-lg-3",
       img: "labelchart.png",
-      type: "templete",
+      type: "template",
     },
     {
       id: 3,
       chartType: "BarChart",
       style: "col-lg-3",
       img: "labelchart.png",
-      type: "templete",
+      type: "template",
     },
     {
       id: 4,
       chartType: "PieChart",
       style: "col-lg-3",
       img: "labelchart.png",
-      type: "templete",
+      type: "template",
     },
     {
       id: 5,
@@ -256,6 +272,9 @@ function App() {
       ChartData: {
         labels,
         data: randomData,
+        color: "#A020F0",
+        number: Math.floor(Math.random() * 100),
+        title: "Total Sales",
       },
     };
     setData((prev) => [...prev, newChart]);
@@ -306,7 +325,7 @@ function App() {
               {data.map((i) => {
                 return (
                   <div key={i.id} className={i.style}>
-                    <Cards id={i.id} item={i} setData={setData} data={data} />
+                    <Cards item={i} setData={setData} data={data} />
                   </div>
                 );
               })}
