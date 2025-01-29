@@ -20,12 +20,11 @@ export default function DashBoardMenu({ mainData, customData }) {
 				<div className="container">
 					<div className="row ">
 						{data.map((item) => (
-							<div className="col-lg-4">
+							<div key={item.id} className="col-lg-4">
 								<div
-									key={item.id}
 									className="item-card"
 									draggable
-									onDragStart={(e) => handleDragStart(e, item)}
+									onDragStart={(e) => handleDragStart(e, item.chartType)}
 									style={{
 										padding: "10px",
 										margin: "5px 0",
@@ -35,7 +34,11 @@ export default function DashBoardMenu({ mainData, customData }) {
 										cursor: "grab",
 									}}
 								>
-									{item.value}
+									<img
+										src={item.img}
+										alt={item.chartType}
+										className="img-fluid"
+									/>
 								</div>
 							</div>
 						))}
