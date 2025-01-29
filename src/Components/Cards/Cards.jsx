@@ -44,20 +44,21 @@ export default function Cards({ id, item, setData, data }) {
       style={style}
       onPointerDown={handlePointerDown}
     >
-      {item.value === 1 ? (
+      {item.chartType === "LabelChart" ? (
         <LabelChart
           data={ChartData.data}
           labels={ChartData.labels}
           title="Numbers of total employees"
           number={15}
           color="#3B82F6"
+          onDelete={handleBinClick}
         />
       ) : (
         <div className="item-card">
           <div className="bin" onClick={handleBinClick}>
             <BiSolidTrashAlt />
           </div>
-          <div className="item-card-chart">{item.value}</div>
+          <div className="item-card-chart">{item.chartType}</div>
         </div>
       )}
     </div>
