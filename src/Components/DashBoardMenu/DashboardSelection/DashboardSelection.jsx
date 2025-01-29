@@ -1,4 +1,4 @@
-export default function DashboardSelection({ choice, setChoice }) {
+export default function DashboardSelection({ choice, setChoice, setShown }) {
 	return (
 		<div className="dashboard-selection row gx-0">
 			<div className="dashboard-selection-button col-lg-6">
@@ -8,7 +8,10 @@ export default function DashboardSelection({ choice, setChoice }) {
 							? "dashboard-selected-active"
 							: "dashboard-selected"
 					}`}
-					onClick={() => setChoice("ready")}
+					onClick={() => {
+						setChoice("ready");
+						setShown(false);
+					}}
 				>
 					<div>ready-to-use</div>
 				</div>
