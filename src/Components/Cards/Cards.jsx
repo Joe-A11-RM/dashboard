@@ -3,15 +3,11 @@ import { CSS } from "@dnd-kit/utilities";
 import { BiSolidTrashAlt } from "react-icons/bi";
 import React from "react";
 import LabelChart from "../Charts/LabelChart";
+import PieChart from "../Charts/PieChart";
 
-export default function Cards({ id, item, setData, data }) {
-  const ChartData = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    data: [65, 59, 80, 81, 56, 55, 40],
-  };
-
+export default function Cards({ item, setData, data }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
+    useSortable({ id: item.id });
   const customTransition = transition
     ? transition.replace("250ms", "600ms")
     : "transform 200ms ease";
@@ -27,7 +23,7 @@ export default function Cards({ id, item, setData, data }) {
 
   const handleBinClick = (e) => {
     e.stopPropagation();
-    removeWidget(id);
+    removeWidget(item.id);
   };
   const handlePointerDown = (e) => {
     if (e.target.closest(".bin")) {
@@ -46,11 +42,20 @@ export default function Cards({ id, item, setData, data }) {
     >
       {item.chartType === "LabelChart" ? (
         <LabelChart
-          data={ChartData.data}
-          labels={ChartData.labels}
-          title="Numbers of total employees"
-          number={15}
-          color="#3B82F6"
+          data={item.ChartData.data}
+          labels={item.ChartData.labels}
+          title={item.ChartData.title}
+          number={item.ChartData.number}
+          color={item.ChartData.color}
+          onDelete={handleBinClick}
+        />
+      ) : item.chartType === "PieChart" ? (
+        <PieChart
+          data={item.ChartData.data}
+          labels={item.ChartData.labels}
+          title={item.ChartData.title}
+          number={item.ChartData.number}
+          color={item.ChartData.color}
           onDelete={handleBinClick}
         />
       ) : (

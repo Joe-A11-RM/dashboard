@@ -11,7 +11,7 @@ export default function LabelChart({
   title,
   number,
   color,
-  onDelete
+  onDelete,
 }) {
   return (
     <>
