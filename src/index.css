@@ -17,7 +17,8 @@ code {
 
 
 .dashboard-drop-area {
-	padding: 20px;
+	padding: 10px;
+	min-height: 100vh;
 	margin-top: 20px;
 	max-height: fit-content;
 	background-color: #f8f9fa;
@@ -27,7 +28,7 @@ code {
 }
 
 .offcanvas {
-	width: 750px !important;
+	width: 450px !important;
 }
 
 .offcanvas-header {
@@ -148,7 +149,6 @@ code {
 	border-radius: 8px;
 	background-color: white;
 	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.193);
-	margin-top: 20px;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: auto 1fr;
@@ -194,7 +194,11 @@ code {
 	align-items: center;
 }
 
-
+.layout{
+	background-color: rgba(69, 91, 91, 0.233);
+	min-height: 1000px;
+	border-radius: 10px;
+}
 .react-grid-layout {
 	position: relative;
 	transition: height 200ms ease;
