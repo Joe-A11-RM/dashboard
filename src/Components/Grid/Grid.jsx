@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import Cards from "../Cards/Cards";
 import axios from "axios";
-import { ImDeviantart } from "react-icons/im";
+import Map from "../Map/Map";
 
 const ReactGridLayout = WidthProvider(Responsive);
 
@@ -67,7 +67,7 @@ export default function Grid() {
 		async function getDashboard() {
 			try {
 				const { data } = await axios.get(
-					`https://five-poets-give.loca.lt/api/v1/dashboard`
+					`https://metal-banks-wonder.loca.lt/api/v1/dashboard`
 				);
 				setDashboardTotal(data.dashboardResponse);
 			} catch (err) {
@@ -81,7 +81,7 @@ export default function Grid() {
 		async function getDashboard() {
 			try {
 				const { data } = await axios.get(
-					`https://five-poets-give.loca.lt/api/v1/dashboard/${id}`
+					`https://metal-banks-wonder.loca.lt/api/v1/dashboard/${id}`
 				);
 				console.log(data);
 				setApiStatus(data);

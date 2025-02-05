@@ -114,7 +114,6 @@ code {
 	z-index: 1;
 	opacity: 0;
 	transition: all 0.2s ease;
-	
 }
 
 .bin::before {
@@ -331,4 +330,20 @@ code {
 .react-grid-item > .react-resizable-handle.react-resizable-handle-s {
 	bottom: 0;
 	transform: rotate(45deg);
+}
+
+.map {
+	position: absolute;
+	top: 55px;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	
+}
+
+.map-container {
+	position: relative;
+	height: 100%;
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 8px;
 }

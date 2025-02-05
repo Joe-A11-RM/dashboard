@@ -2,6 +2,7 @@ import { BiSolidTrashAlt } from "react-icons/bi";
 import React from "react";
 import LabelChart from "../Charts/LabelChart";
 import PieChart from "../Charts/PieChart";
+import Map from "../Map/Map";
 
 export default function Cards({
 	key,
@@ -20,7 +21,7 @@ export default function Cards({
 	};
 
 	return (
-		<div key={key}>
+		<div className="h-100" key={key}>
 			{item.chartData.chartType === "LabelChart" ? (
 				<LabelChart
 					data={item.chartData.data}
@@ -39,6 +40,8 @@ export default function Cards({
 					color={item.chartData.color}
 					onDelete={handleDelete}
 				/>
+			) : item.chartData.chartType === "MapChart" ? (
+				<Map onDelete={handleDelete} title={item.chartData.title} />
 			) : (
 				<div className="item-card">
 					<button className="bin cancelSelectorName" onClick={handleDelete}>
