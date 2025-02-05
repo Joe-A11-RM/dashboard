@@ -28,7 +28,7 @@ const PieChart = ({ data, color, labels, title, style, onDelete }) => {
 
 	return (
 		<div className={`dashboard-label ${style}`}>
-			<div className="bin" onClick={onDelete}>
+			<div className="bin cancelSelectorName" onClick={onDelete}>
 				<BiSolidTrashAlt />
 			</div>
 			<div className="dashboard-label-body">
