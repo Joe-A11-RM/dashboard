@@ -7,11 +7,11 @@ import axios from "axios";
 const ReactGridLayout = WidthProvider(Responsive);
 
 export default function Grid() {
-	const [isDraggable, setIsDraggable] = useState(true);
-	const [id, setId] = useState(1);
-	let [data, setData] = useState([
-		{
-			id: 1,
+  const [isDraggable, setIsDraggable] = useState(true);
+  const [id, setId] = useState(1);
+  let [data, setData] = useState([
+    {
+      id: 1,
 
 			style: "col-lg-3",
 			chartData: {
@@ -301,8 +301,8 @@ export default function Grid() {
 			}
 		}
 
-		getDashboard();
-	}, [id]);
+    getDashboard();
+  }, [id]);
 
 	useEffect(() => {
 		if (staticData?.length > 0) {
