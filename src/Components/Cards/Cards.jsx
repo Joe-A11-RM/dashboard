@@ -4,6 +4,8 @@ import LabelChart from "../Charts/LabelChart";
 import PieChart from "../Charts/PieChart";
 import Map from "../Map/Map";
 import HeatMap from "../Charts/HeatMap";
+import AlertWidget from "../Charts/AlertWidget";
+import BarChart from "../Charts/BarChart";
 
 export default function Cards({ key, item, i, removeWidget, isDraggable }) {
   console.log("isDraggable", isDraggable);
@@ -17,31 +19,71 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
   return (
     <div className="h-100" key={key}>
       {item.chartData.chartType === "LabelChart" ? (
-        <LabelChart
-          data={item.chartData.data}
-          labels={item.chartData.labels}
-          title={item.chartData.title}
-          number={item.chartData.number}
-          color={item.chartData.color}
-          onDelete={handleDelete}
-        />
+        <div className={`dashboard-label`}>
+          <div className="bin cancelSelectorName" onClick={handleDelete}>
+            <BiSolidTrashAlt />
+          </div>
+          <LabelChart
+            data={item.chartData.data}
+            labels={item.chartData.labels}
+            title={item.chartData.title}
+            number={item.chartData.number}
+            color={item.chartData.color}
+          />
+        </div>
+      ) : item.chartData.chartType === "AlertWidget" ? (
+        <div className={`dashboard-label`}>
+          <div className="bin cancelSelectorName" onClick={handleDelete}>
+            <BiSolidTrashAlt />
+          </div>
+          <AlertWidget
+            data={item.chartData.data}
+            labels={item.chartData.labels}
+            title={item.chartData.title}
+            number={item.chartData.number}
+            color={item.chartData.color}
+          />
+        </div>
       ) : item.chartData.chartType === "PieChart" ? (
-        <PieChart
-          data={item.chartData.data}
-          labels={item.chartData.labels}
-          title={item.chartData.title}
-          number={item.chartData.number}
-          color={item.chartData.color}
-          onDelete={handleDelete}
-        />
+        <div className={`dashboard-label`}>
+          <div className="bin cancelSelectorName" onClick={handleDelete}>
+            <BiSolidTrashAlt />
+          </div>
+          <PieChart
+            data={item.chartData.data}
+            labels={item.chartData.labels}
+            title={item.chartData.title}
+            number={item.chartData.number}
+            color={item.chartData.color}
+          />
+        </div>
       ) : item.chartData.chartType === "MapChart" ? (
-        <Map onDelete={handleDelete} title={item.chartData.title} />
+        <div className={`dashboard-label`}>
+          <div className="bin cancelSelectorName" onClick={handleDelete}>
+            <BiSolidTrashAlt />
+          </div>
+          <Map title={item.chartData.title} />
+        </div>
       ) : item.chartData.chartType === "HeatMapChart" ? (
-        <HeatMap
-          onDelete={handleDelete}
-          title={item.chartData.title}
-          data={item.chartData.data}
-        />
+        <div className={`dashboard-label`}>
+          <div className="bin cancelSelectorName" onClick={handleDelete}>
+            <BiSolidTrashAlt />
+          </div>
+          <HeatMap title={item.chartData.title} data={item.chartData.data} />
+        </div>
+      ) : item.chartData.chartType === "BarChart" ? (
+        <div className={`Charts`}>
+          <div className="bin cancelSelectorName" onClick={handleDelete}>
+            <BiSolidTrashAlt />
+          </div>
+          <BarChart
+            data={item.chartData.data}
+            labels={item.chartData.labels}
+            title={item.chartData.title}
+            number={item.chartData.number}
+            color={item.chartData.color}
+          />
+        </div>
       ) : (
         <div className="item-card">
           <button className="bin cancelSelectorName" onClick={handleDelete}>

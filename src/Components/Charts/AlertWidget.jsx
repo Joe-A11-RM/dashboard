@@ -1,30 +1,29 @@
 import React from "react";
+import { CiWarning } from "react-icons/ci";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css"; // Import the skeleton styles
-import AreaChart from "./AreaChart";
 
-export default function LabelChart({
-  data,
-  labels,
-  style,
-  title,
-  number,
-  color,
-}) {
+export default function AlertWidget({ style, title, number, icon, color }) {
   return (
     <>
-      {data && labels ? (
+      {number && title ? (
         <>
           <div className="dashboard-label-body">
-            <h5 className="fs-16 fw-600">{title}</h5>
+            <div className="alert-widget">
+              <CiWarning
+                size={40}
+                className="alert-widget-icon"
+                style={{
+                  background: "#ffcc00",
+                  padding: "4px",
+                  borderRadius: "50%",
+                }}
+              />{" "}
+              <h5 className="m-0">{title}</h5>
+            </div>
           </div>
-          {/* Left Column: Number + Percentage */}
           <div className="dashboard-label-stats">
             <p>{number}</p>
-          </div>
-          {/* Right Column: Chart */}
-          <div className="dashboard-label-chart">
-            <AreaChart data={data} color={color} labels={labels} />
           </div>
         </>
       ) : (

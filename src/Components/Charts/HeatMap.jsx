@@ -36,10 +36,10 @@ export default function HeatMap({ title, onDelete, data }) {
             longitudeExtractor={(m) => m[1]}
             latitudeExtractor={(m) => m[0]}
             intensityExtractor={(m) => m[2]}
-            radius={30} // Adjust for heatmap spread
-            blur={20} // Smoothness of heat spots
-            max={300} // Max intensity based on nearbyPointsCount
-            minOpacity={0.5} // Transparency
+            radius={30}
+            blur={20}
+            max={300}
+            minOpacity={0.5}
           />
         </MapContainer>
       </div>
