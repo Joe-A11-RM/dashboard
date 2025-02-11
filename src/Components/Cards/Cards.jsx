@@ -12,8 +12,6 @@ export default function Cards({
 	setIsDraggable,
 	isDraggable,
 }) {
-	console.log("isDraggable", isDraggable);
-
 	const handleDelete = (e) => {
 		e.stopPropagation();
 		e.preventDefault();
@@ -47,7 +45,7 @@ export default function Cards({
 					<button className="bin cancelSelectorName" onClick={handleDelete}>
 						<BiSolidTrashAlt />
 					</button>
-					<div className="item-card-chart">{item.chartType}</div>
+					<div className="item-card-chart">{item.chartData.chartType}</div>
 				</div>
 			)}
 		</div>
