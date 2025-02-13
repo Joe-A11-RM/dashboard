@@ -329,7 +329,8 @@ export default function Grid() {
 		}
 	}, [apiStatus]);
 	const removeWidget = (id) => {
-		setLayout((prevLayout) => prevLayout.filter((item) => item.i !== id));
+		setOldLayout((prevLayout) => prevLayout.filter((item) => item.i !== String(id)));
+		setLayout((prevLayout) => prevLayout.filter((item) => item.i !== String(id)));
 	};
 	const handleDrop = (layout, layoutItem, event) => {
 		const chartType = event.dataTransfer.getData("chartType");

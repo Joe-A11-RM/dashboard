@@ -1,7 +1,6 @@
 import React from "react";
 import { BiSolidTrashAlt } from "react-icons/bi";
 import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
-import { HeatmapLayer } from "react-leaflet-heatmap-layer-v3";
 
 export default function HeatMap({ title, onDelete, data }) {
   const points = data.map((point) => [
@@ -31,7 +30,7 @@ export default function HeatMap({ title, onDelete, data }) {
           <ZoomControl position="bottomright" />
 
           <TileLayer url="https://mt0.google.com/vt/lyrs=m,&hl=en&x={x}&y={y}&z={z}&s=Ga" />
-          <HeatmapLayer
+          {/**<HeatmapLayer
             points={points}
             longitudeExtractor={(m) => m[1]}
             latitudeExtractor={(m) => m[0]}
@@ -40,7 +39,7 @@ export default function HeatMap({ title, onDelete, data }) {
             blur={20}
             max={300}
             minOpacity={0.5}
-          />
+          />**/}
         </MapContainer>
       </div>
     </div>
