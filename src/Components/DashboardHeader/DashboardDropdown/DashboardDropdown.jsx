@@ -1,5 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { dashboardcontext } from "../../../context/DashboardContext";
+import DashboardDropdownEditMode from "./DashboardDropdownEditMode";
+import AddDashboard from "../../DashboardModals/AddDashboard/AddDashboard";
+import DeleteDashboard from "../../DashboardModals/DeleteDashboard/DeleteDashboard";
+import EditDashboard from "../../DashboardModals/EditDashboard/EditDashboard";
+import DashboardDropdownMenu from "./DashboardDropdownMenu";
 
 export default function DashboardDropdown() {
 	let data = [
@@ -12,7 +17,9 @@ export default function DashboardDropdown() {
 		"pay dashboard",
 	];
 	const [shown, setIsShown] = useState(false);
+	const [modal, setModal] = useState({ type: "", value: false });
 	const [title, setTitle] = useState(data[0]);
+	const dropdownRef = useRef(null);
 	let { editMode } = useContext(dashboardcontext);
 	const handleClick = () => {
 		setIsShown(!shown);
@@ -21,18 +28,23 @@ export default function DashboardDropdown() {
 		setTitle(val);
 		setIsShown(false);
 	};
+
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+				setIsShown(false);
+			}
+		};
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [setIsShown]);
 	return (
 		<div className="dashboard-dropdown-layout">
 			<div className="dashboard-dropdown-main-title-layout">
 				<div className="dashboard-dropdown-main-title">{title}</div>
-				{editMode && (
-					<>
-						<img src="assets/Dark/Edit.svg" alt="edit" />
-						<img src="assets/Dark/Delete.svg" alt="delete" className="mx-3" />
-						<span className="me-3">|</span>
-						<div>Edit Mode</div>
-					</>
-				)}
+				{editMode && <DashboardDropdownEditMode />}
 			</div>
 			{!editMode && (
 				<div className="dropdown-arrow" onClick={handleClick}>
@@ -44,33 +56,27 @@ export default function DashboardDropdown() {
 				</div>
 			)}
 			{shown && (
-				<div className="dashboard-dropdown-menu">
-					<div className="dashboard-dropdown-values-layout ">
-						{data.map((i, index) => (
-							<>
-								<div
-									key={index}
-									className="dashboard-dropdown-value"
-									onClick={() => handleSelect(i)}
-								>
-									<div> {i} </div>
-									<div>
-										<img
-											src="assets/Dark/Edit.svg"
-											alt="edit"
-											className="me-1"
-										/>
-										<img src="assets/Dark/Delete.svg" alt="delete" />
-									</div>
-								</div>
-							</>
-						))}
-					</div>
-					<div className="dashboard-dropdown-value-new">
-						create new dashboard
-					</div>
-				</div>
+				<DashboardDropdownMenu
+					handleSelect={handleSelect}
+					ref={dropdownRef}
+					data={data}
+					setModal={setModal}
+				/>
 			)}
+			<AddDashboard
+				show={modal.value && modal.type === "add"}
+				onHide={() => setModal({ type: "add", value: false })}
+			/>
+			<DeleteDashboard
+				show={modal.value && modal.type === "delete"}
+				onHide={() => setModal({ type: "delete", value: false })}
+				text="dashboard"
+			/>
+			<EditDashboard
+				show={modal.value && modal.type === "edit"}
+				onHide={() => setModal({ type: "edit", value: false })}
+				text="dashboard"
+			/>
 		</div>
 	);
 }

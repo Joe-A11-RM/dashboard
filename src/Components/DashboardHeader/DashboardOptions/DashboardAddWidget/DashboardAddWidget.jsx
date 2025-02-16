@@ -2,16 +2,14 @@ import React, { useContext } from "react";
 import { dashboardcontext } from "../../../../context/DashboardContext";
 
 export default function DashboardAddWidget() {
-	let { setEditMode } = useContext(dashboardcontext);
+	let { setDashboardMenu } = useContext(dashboardcontext);
 	return (
-		<div className="dashboard-add-widget" onClick={() => setEditMode(true)}>
-			<img src="assets/Light/Edit.svg" alt="edit" />
-			<div className="text">Manage widgets</div>
-			<img
-				src="assets/Light/Arrow.svg"
-				style={{ transform: "rotate(360deg)" }}
-				alt="edit"
-			/>
+		<div
+			className="dashboard-cancel-btn"
+			onClick={() => setDashboardMenu(true)}
+		>
+			<img src="assets/Dark/Add.svg" alt="add" className="me-1" />
+			<div>Add widget</div>
 		</div>
 	);
 }

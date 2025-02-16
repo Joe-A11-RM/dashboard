@@ -7,7 +7,7 @@ import React from "react";
 export default function DashboardDate() {
 	const { RangePicker } = DatePicker;
 	return (
-		<div>
+		<div className="dashboard-date">
 			<Space direction="vertical" size={12}>
 				<RangePicker
 					ranges={{

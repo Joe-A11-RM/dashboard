@@ -1,21 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import DashboardAddWidget from "./DashboardHeader/DashboardOptions/DashboardAddWidget/DashboardAddWidget";
+import { dashboardcontext } from "../context/DashboardContext";
 
-const OffCanvasTemplate = ({
-	showDahsboardMenu,
-	setShowDahsboardMenu,
-	title,
-	scroll,
-	backdrop,
-	children,
-}) => {
-	const handleClose = () => setShowDahsboardMenu(false);
+const OffCanvasTemplate = ({ title, scroll, backdrop, children }) => {
+	let { dashboardMenu, setDashboardMenu } = useContext(dashboardcontext);
+	const handleClose = () => setDashboardMenu(false);
 
 	return (
 		<>
 			<Offcanvas
-				show={showDahsboardMenu}
+				show={dashboardMenu}
 				onHide={handleClose}
 				scroll={scroll ? "true" : "false"}
 				backdrop={backdrop ? true : false}

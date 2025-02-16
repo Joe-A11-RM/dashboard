@@ -8,8 +8,7 @@ export default function DashBoardMenu({
 	mainData,
 	choice,
 	setChoice,
-	setShowDahsboardMenu,
-	showDahsboardMenu,
+
 }) {
 	const handleDragStart = (e, item) => {
 		e.dataTransfer.setData("chartType", item);
@@ -70,8 +69,7 @@ export default function DashBoardMenu({
 				ButtonText={"Generate New Dashboard"}
 				title={"Select widgets"}
 				backdrop={false}
-				showDahsboardMenu={showDahsboardMenu}
-				setShowDahsboardMenu={setShowDahsboardMenu}
+				
 			>
 				<DashboardSelection
 					choice={choice}

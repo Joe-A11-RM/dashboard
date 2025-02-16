@@ -30,6 +30,11 @@ code {
 }
 
 .dashboard-header {
+	position: sticky;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 12;
 	padding-inline: 16px;
 	padding-block: 8px;
 	background-color: white;
@@ -52,6 +57,32 @@ code {
 	display: flex;
 	align-items: center;
 }
+
+.dashboard-dropdown-main-title-layout .icon-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
+.dashboard-dropdown-main-title-layout .icon-wrapper::before {
+	content: "";
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	background-color: #c0c0c02e;
+	border-radius: 50%;
+	transform: translate(-50%, -45%);
+	top: 50%;
+	left: 50%;
+	opacity: 0;
+	z-index: 100;
+	transition: all 0.4s ease;
+}
+
+.dashboard-dropdown-main-title-layout .icon-wrapper:hover::before {
+	opacity: 100%;
+	cursor: pointer;
+}
+
 .dashboard-dropdown-main-title {
 	font-size: 24px;
 	font-weight: 500;
@@ -147,11 +178,52 @@ code {
 	justify-content: space-between;
 }
 
-.dashboard-add-widget {
+.modal-button {
+	width: auto;
+	border-radius: 8px;
+	text-transform: capitalize;
+	padding-inline: 12px;
+	padding-block: 6px;
+}
+
+.modal-button-cancel {
+	border: 1px solid #c0c0c0;
+	color: #42526e;
+	margin-right: 8px;
+}
+
+.modal-button-create {
+	color: white;
+	background-color: #3f51b5;
+}
+
+.modal-button-create:hover {
+	background-color: #142797e2;
+	cursor: pointer;
+	transition: all 0.2s ease-in;
+}
+
+.modal-button-cancel:hover {
+	background-color: #c0c0c05a;
+	cursor: pointer;
+	transition: all 0.2s ease-in;
+}
+
+label {
+	color: #42526e;
+	font-weight: 500;
+}
+
+.dashboard-date {
+	transform: translateY(13%);
+}
+.dashboard-add-widget,
+.dashboard-save-widget {
 	width: 185px;
+	height: 40px;
 	border-radius: 8px;
 	padding-inline: 16px;
-	padding-block: 6px;
+	padding-block: 10px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -159,26 +231,46 @@ code {
 	color: white;
 	margin-left: 8px;
 	cursor: pointer;
+	transition: all 0.2s ease-out;
 }
-
+.dashboard-save-widget {
+	width: auto;
+}
 .dashboard-add-widget .text {
 	font-size: 14px;
 }
 
+.dashboard-cancel-btn {
+	height: 40px;
+	padding-block: 10px;
+	padding-inline: 16px;
+	border: 1px solid #75757529;
+	border-radius: 8px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	transition: all 0.2s ease-out;
+}
+.dashboard-save-widget:hover,
+.dashboard-add-widget:hover {
+	background-color: #142797e2;
+	cursor: pointer;
+	transition: all 0.2s ease-in;
+}
+
+.dashboard-cancel-btn:hover {
+	background-color: #c0c0c05a;
+	cursor: pointer;
+	transition: all 0.2s ease-in;
+}
+
 .react-grid-layout {
-	min-height: 100vh !important;
-	overflow: auto !important;
+	min-height: 100vh;
 }
 
 .dashboard-drop-area {
 	padding: 10px;
-
 	margin-top: 20px;
-	max-height: fit-content;
-	background-color: #f8f9fa;
-	overflow: hidden;
-	border: 2px dashed #007bff;
-	border: "2px dashed #007bff";
 }
 
 .offcanvas {
@@ -251,7 +343,8 @@ code {
 	-webkit-user-drag: none; /* Prevent dragging in Safari */
 }
 
-.bin {
+.bin,
+.edit {
 	position: absolute;
 	top: 15px;
 	right: 15px;
@@ -262,16 +355,20 @@ code {
 	align-items: center;
 	justify-content: center;
 	z-index: 1;
-	opacity: 0;
 	transition: all 0.2s ease;
 }
 
-.bin::before {
+.edit {
+	top: 15px;
+	right: 40px;
+}
+.bin::before,
+.edit::before {
 	content: "";
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background-color: #c0c0c0ad;
+	background-color: #c0c0c02e;
 	border-radius: 50%;
 	transform: translate(-50%, -50%);
 	top: 50%;
@@ -281,15 +378,13 @@ code {
 	transition: all 0.4s ease;
 }
 
-.bin:hover {
+.bin:hover,
+.edit:hover {
 	cursor: pointer;
 }
 
-.item-card:hover .bin {
-	opacity: 100%;
-}
-
-.bin:hover::before {
+.bin:hover::before,
+.edit:hover::before {
 	opacity: 100%;
 }
 
@@ -514,4 +609,22 @@ code {
 	transition: all 0.5s ease;
 	position: relative;
 	overflow: visible;
+}
+
+@media (max-width: 575.98px) {
+	.dashboard-header {
+		display: block !important;
+	}
+	.dashboard-dropdown-layout {
+		margin-bottom: 15px;
+	}
+}
+
+@media (max-width: 767.98px) {
+}
+
+@media (max-width: 991.98px) {
+}
+
+@media (max-width: 1199.98px) {
 }

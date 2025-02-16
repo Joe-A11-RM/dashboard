@@ -7,11 +7,11 @@ import axios from "axios";
 const ReactGridLayout = WidthProvider(Responsive);
 
 export default function Grid() {
-  const [isDraggable, setIsDraggable] = useState(true);
-  const [id, setId] = useState(1);
-  let [data, setData] = useState([
-    {
-      id: 1,
+	const [isDraggable, setIsDraggable] = useState(true);
+	const [id, setId] = useState(1);
+	let [data, setData] = useState([
+		{
+			id: 1,
 
 			style: "col-lg-3",
 			chartData: {
@@ -301,8 +301,8 @@ export default function Grid() {
 			}
 		}
 
-    getDashboard();
-  }, [id]);
+		getDashboard();
+	}, [id]);
 
 	useEffect(() => {
 		if (staticData?.length > 0) {
@@ -328,12 +328,36 @@ export default function Grid() {
 			setOldLayout(newLayout);
 		}
 	}, [apiStatus]);
+
+	
+
+	console.log("Layout", layout);
 	const removeWidget = (id) => {
-		setOldLayout((prevLayout) => prevLayout.filter((item) => item.i !== String(id)));
-		setLayout((prevLayout) => prevLayout.filter((item) => item.i !== String(id)));
+		setOldLayout((prevLayout) =>
+			prevLayout.filter((item) => item.i !== String(id))
+		);
+		setLayout((prevLayout) =>
+			prevLayout.filter((item) => item.i !== String(id))
+		);
 	};
 	const handleDrop = (layout, layoutItem, event) => {
 		const chartType = event.dataTransfer.getData("chartType");
+		const posX = (pos, width) => {
+			if (pos === 10) {
+				return 0;
+			} else if (pos < 10 && width >= 4) {
+				return pos + 4;
+			} else {
+				return 0;
+			}
+		};
+		const posY = (posX, posY) => {
+			if (posX >= 10) {
+				return posY + 1;
+			} else {
+				return posY;
+			}
+		};
 		console.log(chartType);
 		const id = layout.length + 1;
 		setLayout((prev) => [
@@ -344,6 +368,29 @@ export default function Grid() {
 				y: 0,
 				w: 12,
 				h: 2,
+				component: (
+					<Cards
+						i={String(id)}
+						item={data[0]}
+						setData={setData}
+						data={data}
+						layout={layout}
+						setlayout={setLayout}
+						removeWidget={removeWidget}
+						setIsDraggable={setIsDraggable}
+						isDraggable={isDraggable}
+					/>
+				),
+			},
+		]);
+		setOldLayout((prev) => [
+			...prev,
+			{
+				i: String(id),
+				x: posX(prev[prev.length - 1].x, prev[prev.length - 1].w),
+				y: posY(prev[prev.length - 1].x, prev[prev.length - 1].y),
+				w: 4,
+				h: 1,
 				component: (
 					<Cards
 						i={String(id)}
@@ -379,9 +426,9 @@ export default function Grid() {
 							w: 12,
 						};
 					}
-					if (item.x + item.w >= 12) {
+					if (item?.x + item.w >= 12) {
 						if (window.innerWidth < 993 && window.innerWidth > 768) {
-							if (item.x + item.w >= 10) {
+							if (item?.x + item.w >= 10) {
 								return {
 									...item,
 									x: 0,
@@ -389,7 +436,24 @@ export default function Grid() {
 								};
 							}
 						}
-
+						if (window.innerWidth < 1200 && window.innerWidth >= 993) {
+							if (item?.x + item.w >= 10) {
+								return {
+									...item,
+									x: 0,
+									y: item.y,
+								};
+							}
+						}
+						if (window.innerWidth < 1400 && window.innerWidth > 1200) {
+							if (item?.x + item.w >= 10) {
+								return {
+									...item,
+									x: 0,
+									y: item.y,
+								};
+							}
+						}
 						if (item.i < layout[index + 1]) {
 							return {
 								...item,
@@ -415,6 +479,7 @@ export default function Grid() {
 			}
 		}
 	};
+
 	return (
 		<div>
 			{dashboardTotal?.map((i) => (

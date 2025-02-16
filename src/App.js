@@ -7,7 +7,6 @@ import DashBoardMenu from "./Components/DashBoardMenu/DashBoardMenu";
 import WidgetSettings from "./Components/WidgetSettings/WidgetSettings";
 import Grid from "./Components/Grid/Grid";
 import DashboardContext from "./context/DashboardContext";
-
 function App() {
 	const [mainData, setMainData] = useState([
 		{
@@ -69,21 +68,15 @@ function App() {
 	]);
 	const [widgetSettings, setWidgetSettings] = useState(false);
 	const [choice, setChoice] = useState("ready");
-	const [showDahsboardMenu, setShowDahsboardMenu] = useState(false);
 	return (
 		<>
 			<DashboardContext>
 				<div className="App">
-					<Header
-						showDahsboardMenu={showDahsboardMenu}
-						setShowDahsboardMenu={setShowDahsboardMenu}
-					/>
+					<Header />
 					<DashBoardMenu
 						mainData={mainData}
 						choice={choice}
 						setChoice={setChoice}
-						showDahsboardMenu={showDahsboardMenu}
-						setShowDahsboardMenu={setShowDahsboardMenu}
 					/>
 
 					<WidgetSettings
