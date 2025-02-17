@@ -183,6 +183,7 @@ code {
 	border-radius: 8px;
 	text-transform: capitalize;
 	padding-inline: 12px;
+	border: none;
 	padding-block: 6px;
 }
 
@@ -212,6 +213,19 @@ code {
 label {
 	color: #42526e;
 	font-weight: 500;
+}
+
+.label-error {
+	color: #dc2626;
+}
+
+.form-error {
+	color: #dc2626;
+	border-color: #dc2626 !important;
+}
+
+.form-control.form-error::placeholder {
+	color: #dc2626;
 }
 
 .dashboard-date {

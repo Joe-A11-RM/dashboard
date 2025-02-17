@@ -23,10 +23,11 @@ export default function EditDashboard(props) {
 					class="form-control"
 					id="name"
 					placeholder="Dashboard Name"
+					value={props.name}
 				/>
 			</Modal.Body>
 			<Modal.Footer>
-				<ModalsButtons close={props.onHide} text="save"/>
+				<ModalsButtons close={props.onHide} text="save" />
 			</Modal.Footer>
 		</Modal>
 	);

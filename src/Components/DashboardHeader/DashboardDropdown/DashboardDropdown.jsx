@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { dashboardcontext } from "../../../context/DashboardContext";
 import DashboardDropdownEditMode from "./DashboardDropdownEditMode";
-import AddDashboard from "../../DashboardModals/AddDashboard/AddDashboard";
-import DeleteDashboard from "../../DashboardModals/DeleteDashboard/DeleteDashboard";
-import EditDashboard from "../../DashboardModals/EditDashboard/EditDashboard";
+
 import DashboardDropdownMenu from "./DashboardDropdownMenu";
 
 export default function DashboardDropdown() {
@@ -29,17 +27,6 @@ export default function DashboardDropdown() {
 		setIsShown(false);
 	};
 
-	useEffect(() => {
-		const handleClickOutside = (event) => {
-			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-				setIsShown(false);
-			}
-		};
-		document.addEventListener("mousedown", handleClickOutside);
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside);
-		};
-	}, [setIsShown]);
 	return (
 		<div className="dashboard-dropdown-layout">
 			<div className="dashboard-dropdown-main-title-layout">
@@ -61,22 +48,9 @@ export default function DashboardDropdown() {
 					ref={dropdownRef}
 					data={data}
 					setModal={setModal}
+					modal={modal}
 				/>
 			)}
-			<AddDashboard
-				show={modal.value && modal.type === "add"}
-				onHide={() => setModal({ type: "add", value: false })}
-			/>
-			<DeleteDashboard
-				show={modal.value && modal.type === "delete"}
-				onHide={() => setModal({ type: "delete", value: false })}
-				text="dashboard"
-			/>
-			<EditDashboard
-				show={modal.value && modal.type === "edit"}
-				onHide={() => setModal({ type: "edit", value: false })}
-				text="dashboard"
-			/>
 		</div>
 	);
 }

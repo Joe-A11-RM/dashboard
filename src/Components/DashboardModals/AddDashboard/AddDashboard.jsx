@@ -1,10 +1,25 @@
 import Modal from "react-bootstrap/Modal";
 import ModalsButtons from "../ModalsButtons/ModalsButtons";
 
-export default function AddDashboard(props) {
+export default function AddDashboard({
+	onHide,
+	show,
+	handleSubmit,
+	dashboardFormAction,
+	name,
+}) {
+	const formlabel =
+		dashboardFormAction.errors.name && dashboardFormAction.touched.name
+			? "form-label label-error"
+			: "form-label";
+	const formcontrol =
+		dashboardFormAction.errors.name && dashboardFormAction.touched.name
+			? "form-control form-error"
+			: "form-control";
 	return (
 		<Modal
-			{...props}
+			show={show}
+			onHide={onHide}
 			size="lg"
 			aria-labelledby="contained-modal-title-vcenter"
 			centered
@@ -14,20 +29,33 @@ export default function AddDashboard(props) {
 					Create New Dashboard
 				</Modal.Title>
 			</Modal.Header>
-			<Modal.Body>
-				<label for="name" class="form-label">
-					Name
-				</label>
-				<input
-					type="text"
-					class="form-control"
-					id="name"
-					placeholder="Dashboard Name"
-				/>
-			</Modal.Body>
-			<Modal.Footer>
-				<ModalsButtons close={props.onHide} text="create" />
-			</Modal.Footer>
+			<form onSubmit={handleSubmit}>
+				<Modal.Body>
+					<label htmlFor="name" className={formlabel}>
+						Name
+					</label>
+					<input
+						type="text"
+						className={formcontrol}
+						id="name"
+						placeholder="Dashboard Name"
+						onBlur={dashboardFormAction.handleBlur}
+						onChange={dashboardFormAction.handleChange}
+						errors={dashboardFormAction.errors.name}
+						touched={dashboardFormAction.touched.name}
+						value={name || ""}
+					/>
+					{dashboardFormAction.touched.name &&
+					dashboardFormAction.errors.name ? (
+						<div className="label-error mt-1">
+							{dashboardFormAction.errors.name}
+						</div>
+					) : null}
+				</Modal.Body>
+				<Modal.Footer>
+					<ModalsButtons close={onHide} text={name ? "save" : "create"} />
+				</Modal.Footer>
+			</form>
 		</Modal>
 	);
 }
