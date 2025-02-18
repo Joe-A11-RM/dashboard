@@ -149,6 +149,17 @@ code {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	transition: all 0.2s ease-in;
+}
+
+.dashboard-dropdown-menu img {
+	opacity: 100%;
+	transition: all 0.2s ease-in;
+}
+
+.dashboard-dropdown-menu img:hover {
+	opacity: 50%;
+	transition: all 0.2s ease-in;
 }
 
 .dashboard-dropdown-value:hover {
@@ -185,10 +196,12 @@ code {
 	padding-inline: 12px;
 	border: none;
 	padding-block: 6px;
+	
 }
 
 .modal-button-cancel {
 	border: 1px solid #c0c0c0;
+	background-color: white;
 	color: #42526e;
 	margin-right: 8px;
 }

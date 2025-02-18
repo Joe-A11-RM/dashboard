@@ -7,7 +7,11 @@ export default function ModalsButtons({ close, text, danger, id, action }) {
 	};
 	return (
 		<div className="d-flex align-items-center">
-			<button className="modal-button modal-button-cancel" onClick={close}>
+			<button
+				type="button"
+				className="modal-button modal-button-cancel"
+				onClick={close}
+			>
 				cancel
 			</button>
 			<button

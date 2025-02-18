@@ -7,6 +7,7 @@ export default function AddDashboard({
 	handleSubmit,
 	dashboardFormAction,
 	name,
+	modal,
 }) {
 	const formlabel =
 		dashboardFormAction.errors.name && dashboardFormAction.touched.name
@@ -20,13 +21,14 @@ export default function AddDashboard({
 		<Modal
 			show={show}
 			onHide={onHide}
+			onExit={onHide}
 			size="lg"
 			aria-labelledby="contained-modal-title-vcenter"
 			centered
 		>
 			<Modal.Header closeButton>
 				<Modal.Title id="contained-modal-title-vcenter">
-					Create New Dashboard
+					{modal.type === "add" ? "Create new dashboard" : "Edit dashboard"}
 				</Modal.Title>
 			</Modal.Header>
 			<form onSubmit={handleSubmit}>
@@ -43,7 +45,7 @@ export default function AddDashboard({
 						onChange={dashboardFormAction.handleChange}
 						errors={dashboardFormAction.errors.name}
 						touched={dashboardFormAction.touched.name}
-						value={name || ""}
+						value={dashboardFormAction.values.name || ""}
 					/>
 					{dashboardFormAction.touched.name &&
 					dashboardFormAction.errors.name ? (
@@ -53,7 +55,10 @@ export default function AddDashboard({
 					) : null}
 				</Modal.Body>
 				<Modal.Footer>
-					<ModalsButtons close={onHide} text={name ? "save" : "create"} />
+					<ModalsButtons
+						close={onHide}
+						text={modal.type === "add" ? "create" : "save changes"}
+					/>
 				</Modal.Footer>
 			</form>
 		</Modal>
