@@ -28,7 +28,9 @@ code {
 	background: #eaecf0 !important;
 	border-radius: 8px !important;
 }
-
+.grid-item{
+	background-color: white;
+}
 .dashboard-header {
 	position: sticky;
 	top: 0;

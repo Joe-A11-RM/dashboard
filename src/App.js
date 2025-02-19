@@ -7,6 +7,9 @@ import DashBoardMenu from "./Components/DashBoardMenu/DashBoardMenu";
 import WidgetSettings from "./Components/WidgetSettings/WidgetSettings";
 import Grid from "./Components/Grid/Grid";
 import DashboardContext from "./context/DashboardContext";
+import Gridtwo from "./Components/Grid/Gridtwo";
+import Gridthree from "./Components/Grid/Gridthree";
+import GridTwo from "./Components/Grid/Gridtwo";
 function App() {
 	const [mainData, setMainData] = useState([
 		{
@@ -83,6 +86,7 @@ function App() {
 						show={widgetSettings}
 						onHide={() => setWidgetSettings(false)}
 					/>
+
 					<Grid />
 				</div>
 			</DashboardContext>
