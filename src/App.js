@@ -87,7 +87,7 @@ function App() {
 						onHide={() => setWidgetSettings(false)}
 					/>
 
-					<Grid />
+					<Gridthree />
 				</div>
 			</DashboardContext>
 		</>
