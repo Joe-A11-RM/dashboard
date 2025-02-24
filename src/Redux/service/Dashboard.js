@@ -33,6 +33,18 @@ export const DashboardApi = createApi({
 				body: val,
 			}),
 		}),
+
+		getAllDashboardsWidgets: builder.query({
+			query: ({ id }) => `/dashboards/${id}/widget`,
+		}),
+
+		editDashboardWidgets: builder.mutation({
+			query: ({ id, val }) => ({
+				url: `/widget/${id}`,
+				method: "PATCH",
+				body: val,
+			}),
+		}),
 	}),
 });
 
@@ -41,4 +53,5 @@ export const {
 	useCreateDashboardMutation,
 	useEditDashboardMutation,
 	useDeleteDashboardMutation,
+	useGetAllDashboardsWidgetsQuery,
 } = DashboardApi;

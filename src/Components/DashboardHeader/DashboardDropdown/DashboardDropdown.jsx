@@ -33,7 +33,10 @@ export default function DashboardDropdown() {
 	const [shown, setIsShown] = useState(false);
 	const [title, setTitle] = useState();
 	const isFirstLoad = useRef(true);
-
+	console.log(dashboardInf);
+	useEffect(() => {
+		if (data) setDashboardInf(data?.response?.data[1]);
+	}, [data]);
 	const initialValues = {
 		name: dashboardInf ? dashboardInf?.name : "",
 	};
@@ -124,6 +127,7 @@ export default function DashboardDropdown() {
 	};
 	const handleSelect = (val) => {
 		setTitle(val);
+		setDashboardInf(val);
 	};
 	const truncateText = (text, maxLength = 18) => {
 		if (!text) return "";

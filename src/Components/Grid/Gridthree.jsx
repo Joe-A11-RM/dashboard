@@ -1,167 +1,172 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css"; // Required styles
 import Cards from "../Cards/Cards";
-import { useGetAllDashboardsWidgetsQuery } from "../../Redux/service/DashboardWidgets";
-import axios from "axios";
+import { useGetAllDashboardsWidgetsQuery } from "../../Redux/service/Dashboard";
+import { dashboardcontext } from "../../context/DashboardContext";
+import DashboardAddWidget from "../DashboardHeader/DashboardOptions/DashboardAddWidget/DashboardAddWidget";
 const ReactGridLayout = WidthProvider(Responsive);
 
 const staticData = [
-  {
-    id: 1,
-    chartData: {
-      chartType: "CountsOverview",
-      data: [
-        { label: "Users", total: "20" },
-        { label: "Vehicles", total: "20000" },
-        { label: "Drivers", total: "250" },
-      ],
-      title: "Counts Overview",
-    },
-    position: {
-      i: "1",
-      x: 0,
-      y: 0,
-      w: 6,
-      h: 1,
-    },
-  },
-  {
-    id: 2,
-    chartData: {
-      labels: ["Moving", "Idle", "Offline", "Stopped"],
-      chartType: "VehiclesStatus",
-      data: Array.from({ length: 4 }, () => Math.floor(Math.random() * 100)),
-      color: "#3B82F6",
-      number: Math.floor(Math.random() * 100),
-      title: "Vehicles Status",
-    },
-    position: {
-      i: "2",
-      x: 6,
-      y: 0,
-      w: 6,
-      h: 1,
-    },
-  },
-  {
-    id: 3,
-    chartData: {
-      labels: [
-        "Vehicle 01",
-        "Vehicle 01",
-        "Vehicle 01",
-        "Vehicle 01",
-        "Vehicle 01",
-        "Vehicle 01",
-        "Vehicle 01",
-        "Vehicle 01",
-        "Vehicle 01",
-        "Vehicle 01",
-        "Vehicle 01",
-        "Vehicle 01",
-      ],
-      chartType: "DistanceCoverage",
-      data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 100)),
-      color: "#3B82F6",
-      number: Math.floor(Math.random() * 100),
-      title: "Distance Analytics",
-    },
-    position: {
-      i: "3",
-      x: 0,
-      y: 1,
-      w: 12,
-      h: 1,
-    },
-  },
-  {
-    id: 5,
-    chartData: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      chartType: "LabelChart",
-      data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-      color: "#3B82F6",
-      number: Math.floor(Math.random() * 100),
-      title: "Growth Chart",
-    },
-    position: {
-      i: "5",
-      x: 0,
-      y: 1,
-      w: 3,
-      h: 1,
-    },
-  },
-  {
-    id: 6,
-    chartData: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      chartType: "LabelChart",
-      data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-      color: "#3B82F6",
-      number: Math.floor(Math.random() * 100),
-      title: "Growth Chart",
-    },
-    position: {
-      i: "6",
-      x: 3,
-      y: 1,
-      w: 3,
-      h: 1,
-    },
-  },
-  {
-    id: 7,
-    chartData: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      chartType: "LabelChart",
-      data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-      color: "#3B82F6",
-      number: Math.floor(Math.random() * 100),
-      title: "Growth Chart",
-    },
-    position: {
-      i: "7",
-      x: 10,
-      y: 1,
-      w: 2,
-      h: 1,
-    },
-  },
-  {
-    id: 8,
-    chartData: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      chartType: "LabelChart",
-      data: Array.from({ length: 8 }, () => Math.floor(Math.random() * 100)),
-      color: "#3B82F6",
-      number: Math.floor(Math.random() * 100),
-      title: "Growth Chart",
-    },
-    position: {
-      i: "8",
-      x: 10,
-      y: 1,
-      w: 2,
-      h: 1,
-    },
-  },
+	{
+		id: 1,
+		chartData: {
+			chartType: "CountsOverview",
+			data: [
+				{ label: "Users", total: "20" },
+				{ label: "Vehicles", total: "20000" },
+				{ label: "Drivers", total: "250" },
+			],
+			title: "Counts Overview",
+		},
+		position: {
+			i: "1",
+			x: 0,
+			y: 0,
+			w: 6,
+			h: 1,
+		},
+	},
+	{
+		id: 2,
+		chartData: {
+			labels: ["Moving", "Idle", "Offline", "Stopped"],
+			chartType: "VehiclesStatus",
+			data: Array.from({ length: 4 }, () => Math.floor(Math.random() * 100)),
+			color: "#3B82F6",
+			number: Math.floor(Math.random() * 100),
+			title: "Vehicles Status",
+		},
+		position: {
+			i: "2",
+			x: 6,
+			y: 0,
+			w: 6,
+			h: 1,
+		},
+	},
+	{
+		id: 3,
+		chartData: {
+			labels: [
+				"Vehicle 01",
+				"Vehicle 01",
+				"Vehicle 01",
+				"Vehicle 01",
+				"Vehicle 01",
+				"Vehicle 01",
+				"Vehicle 01",
+				"Vehicle 01",
+				"Vehicle 01",
+				"Vehicle 01",
+				"Vehicle 01",
+				"Vehicle 01",
+			],
+			chartType: "DistanceCoverage",
+			data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 100)),
+			color: "#3B82F6",
+			number: Math.floor(Math.random() * 100),
+			title: "Distance Analytics",
+		},
+		position: {
+			i: "3",
+			x: 0,
+			y: 1,
+			w: 12,
+			h: 1,
+		},
+	},
+	{
+		id: 5,
+		chartData: {
+			labels: ["January", "February", "March", "April", "May", "June", "July"],
+			chartType: "LabelChart",
+			data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+			color: "#3B82F6",
+			number: Math.floor(Math.random() * 100),
+			title: "Growth Chart",
+		},
+		position: {
+			i: "5",
+			x: 0,
+			y: 1,
+			w: 3,
+			h: 1,
+		},
+	},
+	{
+		id: 6,
+		chartData: {
+			labels: ["January", "February", "March", "April", "May", "June", "July"],
+			chartType: "LabelChart",
+			data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+			color: "#3B82F6",
+			number: Math.floor(Math.random() * 100),
+			title: "Growth Chart",
+		},
+		position: {
+			i: "6",
+			x: 3,
+			y: 1,
+			w: 3,
+			h: 1,
+		},
+	},
+	{
+		id: 7,
+		chartData: {
+			labels: ["January", "February", "March", "April", "May", "June", "July"],
+			chartType: "LabelChart",
+			data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+			color: "#3B82F6",
+			number: Math.floor(Math.random() * 100),
+			title: "Growth Chart",
+		},
+		position: {
+			i: "7",
+			x: 10,
+			y: 1,
+			w: 2,
+			h: 1,
+		},
+	},
+	{
+		id: 8,
+		chartData: {
+			labels: ["January", "February", "March", "April", "May", "June", "July"],
+			chartType: "LabelChart",
+			data: Array.from({ length: 8 }, () => Math.floor(Math.random() * 100)),
+			color: "#3B82F6",
+			number: Math.floor(Math.random() * 100),
+			title: "Growth Chart",
+		},
+		position: {
+			i: "8",
+			x: 10,
+			y: 1,
+			w: 2,
+			h: 1,
+		},
+	},
 ];
 
-const generateInitialTheme = (data) =>
-	data?.map((item) => ({
-		...item.position,
-		component: (
-			<Cards
-				key={item.id}
-				i={item.position.i}
-				item={item}
-				removeWidget={() => {}}
-			/>
-		),
-	}));
+const generateInitialTheme = (data) => {
+	return (
+		data.length > 0 &&
+		data?.map((item) => ({
+			...item.position,
+			component: (
+				<Cards
+					key={item.id}
+					i={item.position.i}
+					item={item}
+					removeWidget={() => {}}
+				/>
+			),
+		}))
+	);
+};
 
 export default function Gridthree() {
 	let [data, setData] = useState([
@@ -214,14 +219,21 @@ export default function Gridthree() {
 			},
 		},
 	]);
-	let { data: DashboardWidgets } = useGetAllDashboardsWidgetsQuery();
-	const [theme, setTheme] = useState(null); 
+	let { dashboardInf, editMode } = useContext(dashboardcontext);
+	let { data: DashboardWidgets } = useGetAllDashboardsWidgetsQuery(
+		{
+			id: dashboardInf?.id,
+		},
+		{ skip: !dashboardInf?.id }
+	);
+	const [theme, setTheme] = useState(null);
 
 	useEffect(() => {
-		if (DashboardWidgets?.response?.data) {
-			setTheme(generateInitialTheme(DashboardWidgets.response.data));
+		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
+			setTheme(generateInitialTheme(DashboardWidgets.response.data)); // ✅ Set fresh data
 		}
-	}, [DashboardWidgets]);
+	}, [dashboardInf?.id, DashboardWidgets]); // Depend on dashboardInf.id to trigger reset
+
 	const prevThemeLengthRef = useRef(theme?.length);
 	const removeWidget = (id) => {
 		setTheme((prev) => prev.filter((item) => item.i !== String(id)));
@@ -235,52 +247,63 @@ export default function Gridthree() {
 			let currentX = 0,
 				currentY = 0,
 				rowHeight = 0;
-			layouts[breakpoint] = themeData?.map(({ i, x, y, w, h }, index) => {
-				let newWidth =
-					breakpoint === "xs" ? 4 : Math.max(2, Math.floor((w / 12) * cols));
-				if (index === 0) {
-					currentX = 0;
-					currentY = 0;
-					rowHeight = h;
-				} else {
-					if (currentX + newWidth > cols) {
+			if (themeData?.length > 0) {
+				layouts[breakpoint] = themeData?.map(({ i, x, y, w, h }, index) => {
+					console.log("themeData[index]?.component?.props.item", i);
+					let newWidth =
+						breakpoint === "xs" ? 4 : Math.max(2, Math.floor((w / 12) * cols));
+					if (index === 0) {
 						currentX = 0;
-						currentY += rowHeight;
+						currentY = 0;
 						rowHeight = h;
+					} else {
+						if (currentX + newWidth > cols) {
+							currentX = 0;
+							currentY += rowHeight;
+							rowHeight = h;
+						}
 					}
-				}
-				let newPosition = {
-					i,
-					x: currentX,
-					y: currentY,
-					w: newWidth,
-					h,
-					component: (
-						<Cards
-							key={index}
-							i={index}
-							item={themeData[index]?.component?.props.item}
-							removeWidget={removeWidget}
-						/>
-					),
-				};
-				currentX += newWidth;
-				rowHeight = Math.max(rowHeight, h);
-				if (
-					index === themeData.length - 1 &&
-					prevThemeLength !== themeData.length
-				) {
-					console.log("Updating last item position!");
-					newPosition = {
+					let newPosition = {
 						i,
-						x: themeData[themeData.length - 1].x,
+						x: currentX,
 						y: currentY,
-						w: themeData[themeData.length - 1].w,
-						h: themeData[themeData.length - 1].h,
+						w: newWidth,
+						h,
+						component: (
+							<Cards
+								key={index}
+								i={index}
+								item={themeData[index]?.component?.props.item}
+								removeWidget={removeWidget}
+							/>
+						),
 					};
-				}
-				return newPosition;
-			});
+					currentX += newWidth;
+					rowHeight = Math.max(rowHeight, h);
+					if (
+						index === themeData.length - 1 &&
+						prevThemeLength !== themeData.length
+					) {
+						console.log("Updating last item position!");
+						newPosition = {
+							i,
+							x: themeData[themeData.length - 1].x,
+							y: currentY,
+							w: themeData[themeData.length - 1].w,
+							h: themeData[themeData.length - 1].h,
+							component: (
+								<Cards
+									key={index}
+									i={index}
+									item={themeData[themeData.length - 1]?.component?.props.item}
+									removeWidget={removeWidget}
+								/>
+							),
+						};
+					}
+					return newPosition;
+				});
+			}
 		});
 		if (layouts) {
 			["lg", "md"].forEach((breakpoint) => {
@@ -317,14 +340,26 @@ export default function Gridthree() {
 
 	const columnCounts = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
 	let [x, setX] = useState([]);
-	let [f, setF] = useState([]);
-	const layouts = generateLayouts(theme, columnCounts);
+	//const layouts = generateLayouts(theme, columnCounts);
 	useEffect(() => {
 		setX(generateLayouts(theme, columnCounts));
 	}, [theme]);
-	console.log("x", x);
 
-	const handleDrop = () => {
+	const handleDrop = (e) => {
+		//e.preventDefault(); // Prevent default browser behavior
+
+		// Ensure dataTransfer exists
+		if (!e.dataTransfer) {
+			console.error("Invalid drop event: No dataTransfer available.");
+			return;
+		}
+
+		// Check the dataTransfer type (should match what your sidebar sets)
+		const draggedData = e.dataTransfer.getData("widget"); // Ensure this key matches the sidebar
+		if (!draggedData) {
+			console.error("Drop rejected: No valid widget data found.");
+			return;
+		}
 		setX((prevX) => {
 			const updatedState = { ...prevX };
 
@@ -374,62 +409,72 @@ export default function Gridthree() {
 			return updatedState;
 		});
 	};
-
-	useEffect(() => {
-		if (x && x.lg?.length > 0) {
-			setF(x.lg);
-		}
-	}, [x]);
-
+	console.log("KIIIIIIIIIIIII", DashboardWidgets);
 	const j = () => {
+		let data = [];
+
 		if (window.innerWidth > 1200) {
-			return x?.lg?.map(({ i, component }) => (
-				<div key={i} className="grid-item">
-					{component}
-				</div>
-			));
+			data = x?.lg || [];
 		} else if (window.innerWidth > 996) {
-			return x?.md?.map(({ i, component }) => (
-				<div key={i} className="grid-item">
-					{component}
-				</div>
-			));
+			data = x?.md || [];
 		} else if (window.innerWidth > 768) {
-			return x?.sm?.map(({ i, component }) => (
-				<div key={i} className="grid-item">
-					{component}
-				</div>
-			));
+			data = x?.sm || [];
 		} else if (window.innerWidth > 480) {
-			return x?.xs?.map(({ i, component }) => (
-				<div key={i} className="grid-item">
-					{component}
-				</div>
-			));
+			data = x?.xs || [];
 		} else {
-			return x?.xss?.map(({ i, component }) => (
-				<div key={i} className="grid-item">
-					{component}
-				</div>
-			));
+			data = x?.xss || [];
 		}
+		// Return "No Data" if empty
+		if (data.length === 0) {
+			return (
+				<div className="no-data">
+					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis nemo
+					hic ullam eligendi iste? Qui aut, unde, ducimus autem exercitationem
+					fugiat iste vitae cupiditate voluptatum assumenda laborum hic quisquam
+					modi aperiam dolor aspernatur? Voluptatibus, laborum. Ipsa, magni sed
+					exercitationem libero voluptate vel esse facere porro. Totam cum atque
+					illum, illo, beatae asperiores magnam architecto reiciendis corrupti
+					assumenda sed laboriosam. Ab fugiat distinctio beatae est! Ducimus
+					laudantium deleniti ab libero. Veniam repellat sequi nobis molestias.
+					Eum dolorem libero officiis veniam nostrum est, nesciunt magni nulla
+					tempore excepturi provident expedita adipisci voluptate eligendi ab
+					rerum cupiditate quaerat distinctio, itaque eos? Ullam, sunt.
+				</div>
+			);
+		}
+
+		return data.map(({ i, component }) => (
+			<div key={i} className="grid-item">
+				{component}
+			</div>
+		));
 	};
 	return (
-		<div>
-			<ReactGridLayout
-				className="layout bg-body"
-				layouts={x}
-				cols={columnCounts}
-				breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-				isResizable={false}
-				isDroppable={true}
-				allowOverlap={false}
-				autoSize={true}
-				onDrop={handleDrop}
-				draggableCancel=".cancelSelectorName"
-			>
-				{j()}
-			</ReactGridLayout>
+		<div className="">
+			{DashboardWidgets?.response.data.length > 0 ? (
+				<ReactGridLayout
+					key={JSON.stringify(x)}
+					className="layout bg-body"
+					layouts={x}
+					cols={columnCounts}
+					rowHeight={400}
+					margin={[20, 20]}
+					breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+					isResizable={false}
+					isDroppable={editMode ? true : false}
+					isDraggable={editMode ? true : false}
+					allowOverlap={false}
+					autoSize={true}
+					onDrop={handleDrop}
+					draggableCancel=".cancelSelectorName"
+				>
+					{j()}
+				</ReactGridLayout>
+			) : (
+				<div className="vh-100 d-flex justify-content-center align-items-center">
+					<DashboardAddWidget />
+				</div>
+			)}
 		</div>
 	);
 }
