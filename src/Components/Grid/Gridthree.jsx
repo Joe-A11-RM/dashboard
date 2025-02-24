@@ -9,56 +9,38 @@ const staticData = [
   {
     id: 1,
     chartData: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      chartType: "LabelChart",
-      data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-      color: "#3B82F6",
-      number: Math.floor(Math.random() * 100),
-      title: "Growth Chart",
+      chartType: "CountsOverview",
+      data: [
+        { label: "Users", total: "20" },
+        { label: "Vehicles", total: "20000" },
+        { label: "Drivers", total: "250" },
+      ],
+      title: "Counts Overview",
     },
     position: {
       i: "1",
       x: 0,
       y: 0,
-      w: 3,
+      w: 6,
       h: 1,
-      static: true,
     },
   },
   {
     id: 2,
     chartData: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      chartType: "LabelChart",
-      data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+      labels: ["Moving", "Idle", "Offline", "Stopped"],
+      chartType: "VehiclesStatus",
+      data: Array.from({ length: 4 }, () => Math.floor(Math.random() * 100)),
       color: "#3B82F6",
       number: Math.floor(Math.random() * 100),
-      title: "Growth Chart",
+      title: "Vehicles Status",
     },
     position: {
       i: "2",
-      x: 3,
-      y: 0,
-      w: 3,
-      h: 1,
-    },
-  },
-  {
-    id: 3,
-    chartData: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      chartType: "PieChart",
-      data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-      color: "#3B82F6",
-      number: Math.floor(Math.random() * 100),
-      title: "Growth Chart",
-    },
-    position: {
-      i: "3",
       x: 6,
       y: 0,
-      w: 4,
-      h: 2,
+      w: 6,
+      h: 1,
     },
   },
   {
@@ -167,56 +149,6 @@ const generateInitialTheme = (data) =>
   }));
 
 export default function Gridthree() {
-  let [data, setData] = useState([
-    {
-      id: 1,
-
-      style: "col-lg-3",
-      chartData: {
-        chartType: "LabelChart",
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
-        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-        color: "#3B82F6",
-        number: Math.floor(Math.random() * 100),
-        title: "Chart #1",
-      },
-      postion: {
-        i: "1",
-        x: 0,
-        y: 0,
-        w: 3,
-        h: 1,
-      },
-    },
-    {
-      id: 1,
-      chartType: "PieChart",
-      style: "col-lg-3",
-      ChartData: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
-        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-        color: "#3B82F6",
-        number: Math.floor(Math.random() * 100),
-        title: "Revenue Growth",
-      },
-    },
-  ]);
   const [theme, setTheme] = useState(generateInitialTheme(staticData));
   const prevThemeLengthRef = useRef(theme?.length); // Store previous theme length
 
@@ -255,7 +187,7 @@ export default function Gridthree() {
             <Cards
               key={index}
               i={index}
-              item={data[0]}
+              item={themeData[index].component.props.item}
               removeWidget={removeWidget}
             />
           ),
@@ -359,7 +291,7 @@ export default function Gridthree() {
             <Cards
               key={`${breakpoint}-${newId}`}
               i={newId}
-              item={data[0]}
+              item={staticData[0]}
               removeWidget={removeWidget}
             />
           ),
@@ -429,6 +361,8 @@ export default function Gridthree() {
         autoSize={true}
         onDrop={handleDrop}
         draggableCancel=".cancelSelectorName"
+        margin={[20, 20]}
+        rowHeight={400}
       >
         {j()}
       </ReactGridLayout>
