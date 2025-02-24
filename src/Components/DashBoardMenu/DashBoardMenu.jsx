@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import OffCanvasTemplate from "../OffCanvas";
 import DashboardSelection from "./DashboardSelection/DashboardSelection";
 import DashboardDiagrams from "./DashboardDiagarms/DashboardDiagrams";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import DashboardWidgetTypes from "./DashboardWidgetTypes/DashboardWidgetTypes";
+import { dashboardcontext } from "../../context/DashboardContext";
+import DashboardWidgetContent from "./DashboardWidgetContent/DashboardWidgetContent";
 
-export default function DashBoardMenu({
-	mainData,
-	choice,
-	setChoice,
-
-}) {
+export default function DashBoardMenu({ mainData, choice, setChoice }) {
 	const handleDragStart = (e, item) => {
 		e.dataTransfer.setData("chartType", item);
 	};
@@ -62,43 +60,12 @@ export default function DashBoardMenu({
 			/>
 		</>
 	);
-
+	let { dashboardTypeWidget } = useContext(dashboardcontext);
 	return (
 		<div className="d-flex justify-content-center align-items-center">
-			<OffCanvasTemplate
-				ButtonText={"Generate New Dashboard"}
-				title={"Select widgets"}
-				backdrop={false}
-				
-			>
-				<DashboardSelection
-					choice={choice}
-					setChoice={setChoice}
-					setShown={setShown}
-				/>
-
-				<div className="container">
-					{choice === "custom" && shown.value && (
-						<>
-							<div
-								className="d-flex align-items-center pointer"
-								onClick={() => {
-									setShown({ value: false, type: "" });
-								}}
-							>
-								<FaArrowLeftLong />
-								<div className="ms-2">Back</div>
-							</div>
-						</>
-					)}
-					<div className="row ">
-						{choice === "custom" && !shown.value && renderStaticDiagrams()}
-						{(choice === "custom" && shown.value) ||
-						(choice === "ready" && !shown.value)
-							? renderDraggableCards(data, shown.type)
-							: null}
-					</div>
-				</div>
+			<OffCanvasTemplate ButtonText={"Generate New Dashboard"} backdrop={false}>
+				{dashboardTypeWidget.value === false && <DashboardWidgetTypes />}
+				{dashboardTypeWidget.value === true && <DashboardWidgetContent />}
 			</OffCanvasTemplate>
 		</div>
 	);
