@@ -4,7 +4,7 @@ import ReactApexChart from "react-apexcharts";
 const BarChart = ({ data, labels }) => {
   const [series] = useState([
     {
-        data: data,
+      data: data,
     },
   ]);
 
