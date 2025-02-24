@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
-const PieChart = ({ data, color, labels, title, style, onDelete }) => {
-  console.log("TITLE"  , title)
+const PieChart = ({ data, color, labels, title, style, subTitle }) => {
   const [series] = useState(data);
 
   const [options] = useState({
     chart: {
-      width: 340,
+      width: 430,
       type: "pie",
     },
     labels: labels,
+    colors: color,
     responsive: [
       {
         breakpoint: 480,
@@ -28,15 +28,12 @@ const PieChart = ({ data, color, labels, title, style, onDelete }) => {
 
   return (
     <>
-      <div className="dashboard-label-body">
-        <h5 className="fs-16 fw-600">{title}</h5>
-      </div>
-      <div id="chart">
+      <div id="chart" className="pie-chart">
         <ReactApexChart
           options={options}
           series={series}
           type="pie"
-          width={340}
+          width={430}
         />
       </div>
       <div id="html-dist"></div>

@@ -1,38 +1,21 @@
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
-// series: [
-//   {
-//     name: "Net Profit",
-//     data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-//   },
-//   {
-//     name: "Revenue",
-//     data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-//   },
-//   {
-//     name: "Free Cash Flow",
-//     data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
-//   },
-// ],
-
-const BarChart = ({ data, color, labels, chartName }) => {
+const BarChart = ({ data, labels }) => {
   const [series] = useState([
     {
-      name: "Net Profit",
-      data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
+        data: data,
     },
   ]);
 
   const [options] = useState({
     chart: {
       type: "bar",
-      height: 350,
+      height: 200,
     },
     plotOptions: {
       bar: {
-        horizontal: false,
-        columnWidth: "55%",
+        columnWidth: "25%",
         borderRadius: 5,
         borderRadiusApplication: "end",
       },
@@ -65,20 +48,19 @@ const BarChart = ({ data, color, labels, chartName }) => {
       },
     },
     grid: {
-      show: false,
+      show: true,
     },
   });
 
-  const [state, setState] = React.useState({});
-
   return (
-      <div id="chart" style={{ width: "100%", height: "100%" }}>
-        <ReactApexChart
-          options={options}
-          series={series}
-          type="bar"
-        />
-      </div>
+    <div id="chart" style={{ width: "100%", height: "100%" }}>
+      <ReactApexChart
+        options={options}
+        series={series}
+        type="bar"
+        height={300}
+      />
+    </div>
   );
 };
 
