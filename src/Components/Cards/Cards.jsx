@@ -138,6 +138,21 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
             subTitle="Total Vehicles: 100"
           />
         </Widget>
+      ) : item.chartData.chartType === "DistanceCoverage" ? (
+        <Widget
+          editMode={editMode}
+          handleDelete={handleDelete}
+          title={item.chartData.title}
+          subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
+        >
+          <BarChart
+            data={item.chartData.data}
+            labels={item.chartData.labels}
+            title={item.chartData.title}
+            number={item.chartData.number}
+            color={item.chartData.color}
+          />
+        </Widget>
       ) : (
         <div className="item-card">
           <button className="bin cancelSelectorName" onClick={handleDelete}>
