@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
 const PieChart = ({ data, color, labels, title, style, onDelete }) => {
+  console.log("TITLE"  , title)
   const [series] = useState(data);
 
   const [options] = useState({

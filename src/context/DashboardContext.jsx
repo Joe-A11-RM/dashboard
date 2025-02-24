@@ -5,7 +5,10 @@ export default function DashboardContext({ children }) {
 	const [dashboardMenu, setDashboardMenu] = useState(false);
 	const [modal, setModal] = useState({ type: "", value: false });
 	const [dashboardInf, setDashboardInf] = useState();
-	console.log(modal);
+	const [dashboardTypeWidget, setDashboardTypeWidget] = useState({
+		type: "",
+		value: false,
+	});
 	return (
 		<>
 			<dashboardcontext.Provider
@@ -18,6 +21,8 @@ export default function DashboardContext({ children }) {
 					setModal,
 					dashboardInf,
 					setDashboardInf,
+					dashboardTypeWidget,
+					setDashboardTypeWidget,
 				}}
 			>
 				{children}

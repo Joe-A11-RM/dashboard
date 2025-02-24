@@ -17,7 +17,7 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 
 	return (
 		<div className="h-100" key={key}>
-			{item.chartData.chartType === "LabelChart" ? (
+			{item.chartData.chartType === "CountsOverview" ? (
 				<div className={`dashboard-label`}>
 					{editMode && (
 						<div className="d-flex">
@@ -58,7 +58,7 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 						color={item.chartData.color}
 					/>
 				</div>
-			) : item.chartData.chartType === "PieChart" ? (
+			) : item.chartData.chartType === "Pie-Chart" ? (
 				<div className={`dashboard-label`}>
 					{editMode && (
 						<div className="d-flex">
@@ -107,9 +107,9 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 				</div>
 			) : (
 				<div className="item-card">
-					<button className="bin cancelSelectorName" onClick={handleDelete}>
+					<div className="bin cancelSelectorName" onClick={handleDelete}>
 						<img src="assets/Dark/Delete.svg" alt="delete" />
-					</button>
+					</div>
 					<div className="item-card-chart">{item.chartType}</div>
 				</div>
 			)}
