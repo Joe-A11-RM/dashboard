@@ -35,7 +35,7 @@ export default function DashboardDropdown() {
 	const isFirstLoad = useRef(true);
 	console.log(dashboardInf);
 	useEffect(() => {
-		if (data) setDashboardInf(data?.response?.data[1]);
+		if (data) setDashboardInf(data?.response?.data[0]);
 	}, [data]);
 	const initialValues = {
 		name: dashboardInf ? dashboardInf?.name : "",

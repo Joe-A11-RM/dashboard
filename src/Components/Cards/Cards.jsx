@@ -1,9 +1,6 @@
 import React, { useContext } from "react";
-import LabelChart from "../Charts/LabelChart";
 import PieChart from "../Charts/PieChart";
 import Map from "../Map/Map";
-import HeatMap from "../Charts/HeatMap";
-import AlertWidget from "../Charts/AlertWidget";
 import BarChart from "../Charts/BarChart";
 import { dashboardcontext } from "../../context/DashboardContext";
 import Widget from "../Widget/Widget";
@@ -14,9 +11,9 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 	const handleDelete = (e) => {
 		e.stopPropagation();
 		e.preventDefault();
-		removeWidget(i);
+		removeWidget(item.id);
 	};
-	console.log("ITEM" , item)
+	console.log("ITEM", item);
 
 	return (
 		<div className="h-100" key={key}>
@@ -27,11 +24,12 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 					</div>
 					<Map title={item.chartData.title} />
 				</div>
-			) : item.chartData.chartType === "Pie-Chart" ? (
+			) : item.chartData.chartType === "PieChart" ? (
 				<Widget
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
+					id={item.id}
 				>
 					<PieChart
 						data={item.chartData.data}
@@ -47,6 +45,7 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
+					id={item.id}
 				>
 					<CountsOverview
 						data={item.chartData.data}
@@ -62,6 +61,7 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
+					id={item.id}
 					subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
 				>
 					<BarChart
@@ -73,10 +73,13 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 					/>
 				</Widget>
 			) : (
-				<div className="item-card">
-					<button className="bin cancelSelectorName" onClick={handleDelete}>
+				<div
+					className="item-card"
+					style={{ cursor: editMode ? "move" : "default" }}
+				>
+					<div className="bin cancelSelectorName" onClick={handleDelete}>
 						<img src="assets/Dark/Delete.svg" alt="delete" />
-					</button>
+					</div>
 					<div className="item-card-chart">{item.chartType}</div>
 				</div>
 			)}

@@ -1,155 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css"; // Required styles
 import Cards from "../Cards/Cards";
-import { useGetAllDashboardsWidgetsQuery } from "../../Redux/service/Dashboard";
+import {
+	useDeleteDashboardWidgetsMutation,
+	useEditDashboardWidgetsMutation,
+	useGetAllDashboardsWidgetsQuery,
+} from "../../Redux/service/Dashboard";
 import { dashboardcontext } from "../../context/DashboardContext";
 import DashboardAddWidget from "../DashboardHeader/DashboardOptions/DashboardAddWidget/DashboardAddWidget";
 const ReactGridLayout = WidthProvider(Responsive);
-
-const staticData = [
-	{
-		id: 1,
-		chartData: {
-			chartType: "CountsOverview",
-			data: [
-				{ label: "Users", total: "20" },
-				{ label: "Vehicles", total: "20000" },
-				{ label: "Drivers", total: "250" },
-			],
-			title: "Counts Overview",
-		},
-		position: {
-			i: "1",
-			x: 0,
-			y: 0,
-			w: 6,
-			h: 1,
-		},
-	},
-	{
-		id: 2,
-		chartData: {
-			labels: ["Moving", "Idle", "Offline", "Stopped"],
-			chartType: "VehiclesStatus",
-			data: Array.from({ length: 4 }, () => Math.floor(Math.random() * 100)),
-			color: "#3B82F6",
-			number: Math.floor(Math.random() * 100),
-			title: "Vehicles Status",
-		},
-		position: {
-			i: "2",
-			x: 6,
-			y: 0,
-			w: 6,
-			h: 1,
-		},
-	},
-	{
-		id: 3,
-		chartData: {
-			labels: [
-				"Vehicle 01",
-				"Vehicle 01",
-				"Vehicle 01",
-				"Vehicle 01",
-				"Vehicle 01",
-				"Vehicle 01",
-				"Vehicle 01",
-				"Vehicle 01",
-				"Vehicle 01",
-				"Vehicle 01",
-				"Vehicle 01",
-				"Vehicle 01",
-			],
-			chartType: "DistanceCoverage",
-			data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 100)),
-			color: "#3B82F6",
-			number: Math.floor(Math.random() * 100),
-			title: "Distance Analytics",
-		},
-		position: {
-			i: "3",
-			x: 0,
-			y: 1,
-			w: 12,
-			h: 1,
-		},
-	},
-	{
-		id: 5,
-		chartData: {
-			labels: ["January", "February", "March", "April", "May", "June", "July"],
-			chartType: "LabelChart",
-			data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-			color: "#3B82F6",
-			number: Math.floor(Math.random() * 100),
-			title: "Growth Chart",
-		},
-		position: {
-			i: "5",
-			x: 0,
-			y: 1,
-			w: 3,
-			h: 1,
-		},
-	},
-	{
-		id: 6,
-		chartData: {
-			labels: ["January", "February", "March", "April", "May", "June", "July"],
-			chartType: "LabelChart",
-			data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-			color: "#3B82F6",
-			number: Math.floor(Math.random() * 100),
-			title: "Growth Chart",
-		},
-		position: {
-			i: "6",
-			x: 3,
-			y: 1,
-			w: 3,
-			h: 1,
-		},
-	},
-	{
-		id: 7,
-		chartData: {
-			labels: ["January", "February", "March", "April", "May", "June", "July"],
-			chartType: "LabelChart",
-			data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-			color: "#3B82F6",
-			number: Math.floor(Math.random() * 100),
-			title: "Growth Chart",
-		},
-		position: {
-			i: "7",
-			x: 10,
-			y: 1,
-			w: 2,
-			h: 1,
-		},
-	},
-	{
-		id: 8,
-		chartData: {
-			labels: ["January", "February", "March", "April", "May", "June", "July"],
-			chartType: "LabelChart",
-			data: Array.from({ length: 8 }, () => Math.floor(Math.random() * 100)),
-			color: "#3B82F6",
-			number: Math.floor(Math.random() * 100),
-			title: "Growth Chart",
-		},
-		position: {
-			i: "8",
-			x: 10,
-			y: 1,
-			w: 2,
-			h: 1,
-		},
-	},
-];
 
 const generateInitialTheme = (data) => {
 	return (
@@ -169,7 +31,7 @@ const generateInitialTheme = (data) => {
 };
 
 export default function Gridthree() {
-	let [data, setData] = useState([
+	let [data] = useState([
 		{
 			id: 1,
 
@@ -219,28 +81,39 @@ export default function Gridthree() {
 			},
 		},
 	]);
-	let { dashboardInf, editMode } = useContext(dashboardcontext);
-	let { data: DashboardWidgets } = useGetAllDashboardsWidgetsQuery(
+	let { dashboardInf, editMode, saveChanges, setSaveChanges } =
+		useContext(dashboardcontext);
+	let { data: DashboardWidgets, refetch } = useGetAllDashboardsWidgetsQuery(
 		{
 			id: dashboardInf?.id,
 		},
 		{ skip: !dashboardInf?.id }
 	);
+	let [editDashboardWidget] = useEditDashboardWidgetsMutation();
+	let [deleDashboardWidget, { status }] = useDeleteDashboardWidgetsMutation();
 	const [theme, setTheme] = useState(null);
 
+	const [updatedWidgets, setUpdatedWidgets] = useState();
 	useEffect(() => {
-		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
-			setTheme(generateInitialTheme(DashboardWidgets.response.data)); // ✅ Set fresh data
+		if (
+			!DashboardWidgets?.response?.data ||
+			!Array.isArray(DashboardWidgets.response.data)
+		) {
+			console.error("Invalid data structure:", DashboardWidgets);
+			return;
 		}
-	}, [dashboardInf?.id, DashboardWidgets]); // Depend on dashboardInf.id to trigger reset
+		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
+			setTheme(generateInitialTheme(DashboardWidgets.response.data));
+		}
+	}, [dashboardInf?.id, DashboardWidgets]);
 
 	const prevThemeLengthRef = useRef(theme?.length);
 	const removeWidget = (id) => {
-		setTheme((prev) => prev.filter((item) => item.i !== String(id)));
+		//setTheme((prev) => prev.filter((item) => item.i !== String(id)));
+		deleDashboardWidget(id);
 	};
 
 	const generateLayouts = (themeData, columnCounts) => {
-		console.log("Theme Data", themeData);
 		const layouts = {};
 		let prevThemeLength = prevThemeLengthRef.current;
 		Object.entries(columnCounts).forEach(([breakpoint, cols]) => {
@@ -249,12 +122,11 @@ export default function Gridthree() {
 				rowHeight = 0;
 			if (themeData?.length > 0) {
 				layouts[breakpoint] = themeData?.map(({ i, x, y, w, h }, index) => {
-					console.log("themeData[index]?.component?.props.item", i);
 					let newWidth =
 						breakpoint === "xs" ? 4 : Math.max(2, Math.floor((w / 12) * cols));
 					if (index === 0) {
-						currentX = 0;
-						currentY = 0;
+						currentX = x;
+						currentY = y;
 						rowHeight = h;
 					} else {
 						if (currentX + newWidth > cols) {
@@ -284,12 +156,11 @@ export default function Gridthree() {
 						index === themeData.length - 1 &&
 						prevThemeLength !== themeData.length
 					) {
-						console.log("Updating last item position!");
 						newPosition = {
 							i,
 							x: themeData[themeData.length - 1].x,
 							y: currentY,
-							w: themeData[themeData.length - 1].w,
+							w: newWidth,
 							h: themeData[themeData.length - 1].h,
 							component: (
 								<Cards
@@ -409,7 +280,81 @@ export default function Gridthree() {
 			return updatedState;
 		});
 	};
-	console.log("KIIIIIIIIIIIII", DashboardWidgets);
+
+	const handleDrag = (e) => {
+		console.log("e", e);
+		const updatedWidgets = e.map((item) => ({
+			position: {
+				i: item.i,
+				x: item.x,
+				y: item.y,
+				w: item.w,
+				h: item.h,
+			},
+		}));
+
+		setUpdatedWidgets(updatedWidgets);
+	};
+	const differentWidgets = updatedWidgets
+		?.map((updatedItem) => {
+			const matchedWidget = DashboardWidgets.response.data?.find(
+				(widget) => widget.position.i === updatedItem.position.i
+			);
+
+			if (matchedWidget) {
+				const { x, y, w, h } = matchedWidget.position;
+				const updatedPos = updatedItem.position;
+				if (
+					x !== updatedPos.x ||
+					y !== updatedPos.y ||
+					w !== updatedPos.w ||
+					h !== updatedPos.h
+				) {
+					return {
+						id: matchedWidget.id,
+						position: updatedPos,
+					};
+				}
+			}
+
+			return null;
+		})
+		.filter((widget) => widget !== null);
+	console.log("updatedWidgets", updatedWidgets);
+	console.log("differentWidgets", differentWidgets);
+	console.log("X", x);
+	console.log("DashboardWidget", DashboardWidgets?.response.data);
+	useEffect(() => {
+		if (saveChanges && differentWidgets.length > 0) {
+			const updatePromises = differentWidgets.map((i) =>
+				editDashboardWidget({ id: i?.id, val: i.position })
+			);
+			Promise.allSettled(updatePromises)
+				.then((results) => {
+					const hasErrors = results.some(
+						(result) => result.status === "rejected"
+					);
+
+					if (hasErrors) {
+						console.error("Some API calls failed:", results);
+					} else {
+						console.log("All API calls were successful.");
+					}
+
+					setSaveChanges(false);
+				})
+				.catch((error) => {
+					console.error("Unexpected error in API calls:", error);
+					setSaveChanges(false);
+				});
+		}
+	}, [saveChanges]);
+	useEffect(() => {
+		if (status === "fulfilled") {
+			refetch();
+		}
+	}, [status, refetch]);
+
 	const j = () => {
 		let data = [];
 
@@ -465,6 +410,7 @@ export default function Gridthree() {
 					isDraggable={editMode ? true : false}
 					allowOverlap={false}
 					autoSize={true}
+					onDragStop={handleDrag}
 					onDrop={handleDrop}
 					draggableCancel=".cancelSelectorName"
 				>

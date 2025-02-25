@@ -42,6 +42,14 @@ export const DashboardApi = createApi({
 			query: ({ id, val }) => ({
 				url: `/widget/${id}`,
 				method: "PATCH",
+				body: { position: val },
+			}),
+		}),
+
+		deleteDashboardWidgets: builder.mutation({
+			query: (val) => ({
+				url: `/widget/${val}`,
+				method: "DELETE",
 				body: val,
 			}),
 		}),
@@ -54,4 +62,6 @@ export const {
 	useEditDashboardMutation,
 	useDeleteDashboardMutation,
 	useGetAllDashboardsWidgetsQuery,
+	useEditDashboardWidgetsMutation,
+	useDeleteDashboardWidgetsMutation,
 } = DashboardApi;
