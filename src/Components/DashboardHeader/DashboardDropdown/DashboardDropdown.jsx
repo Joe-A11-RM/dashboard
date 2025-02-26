@@ -15,32 +15,31 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 export default function DashboardDropdown() {
-  let { data, error, refetch } = useGetAllDashboardsQuery();
-  let [createDashboard, { status: CreationStatus, reset: ResetCreate }] =
-    useCreateDashboardMutation();
-  let [editDashboard, { status: EditStatus, reset: ResetEdit }] =
-    useEditDashboardMutation();
-  let [deleteDashboard, { status: DeletionStatus, reset: ResetDelete }] =
-    useDeleteDashboardMutation();
-  let {
-    editMode,
-    setEditMode,
-    modal,
-    setModal,
-    dashboardInf,
-    setDashboardInf,
-  } = useContext(dashboardcontext);
-  const [shown, setIsShown] = useState(false);
-  const [title, setTitle] = useState();
-  const isFirstLoad = useRef(true);
-  console.log(dashboardInf);
-  useEffect(() => {
-    if (data) setDashboardInf(data?.response?.data[1]);
-  }, [data]);
-  const initialValues = {
-    name: dashboardInf ? dashboardInf?.name : "",
-  };
-
+	let { data, error, refetch } = useGetAllDashboardsQuery();
+	let [createDashboard, { status: CreationStatus, reset: ResetCreate }] =
+		useCreateDashboardMutation();
+	let [editDashboard, { status: EditStatus, reset: ResetEdit }] =
+		useEditDashboardMutation();
+	let [deleteDashboard, { status: DeletionStatus, reset: ResetDelete }] =
+		useDeleteDashboardMutation();
+	let {
+		editMode,
+		setEditMode,
+		modal,
+		setModal,
+		dashboardInf,
+		setDashboardInf,
+	} = useContext(dashboardcontext);
+	const [shown, setIsShown] = useState(false);
+	const [title, setTitle] = useState();
+	const isFirstLoad = useRef(true);
+	console.log(dashboardInf);
+	useEffect(() => {
+		if (data) setDashboardInf(data?.response?.data[0]);
+	}, [data]);
+	const initialValues = {
+		name: dashboardInf ? dashboardInf?.name : "",
+	};
   const validSchema = Yup.object({
     name: Yup.string()
       .required("Name is required")

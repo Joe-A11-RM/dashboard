@@ -69,9 +69,9 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
         </Widget>
       ) : (
         <div className="item-card">
-          <button className="bin cancelSelectorName" onClick={handleDelete}>
-            <img src="assets/Dark/Delete.svg" alt="delete" />
-          </button>
+					<div className="bin cancelSelectorName" onClick={handleDelete}>
+						<img src="assets/Dark/Delete.svg" alt="delete" />
+					</div>
           <div className="item-card-chart">{item.chartType}</div>
         </div>
       )}

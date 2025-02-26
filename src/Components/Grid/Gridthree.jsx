@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
@@ -31,68 +32,155 @@ const generateInitialTheme = (data) => {
 export default function Gridthree() {
   const [createdWidgets, setCreatedWidgets] = useState([]); // Store widgets in state
   const [createWidget] = useCreateWidgetMutation();
-  let [data, setData] = useState([
-    {
-      id: 1,
-      chartData: {
-        chartType: "LabelChart",
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
-        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-        color: "#3B82F6",
-        number: Math.floor(Math.random() * 100),
-        title: "Chart #1",
-      },
-      postion: {
-        i: "1",
-        x: 0,
-        y: 0,
-        w: 3,
-        h: 1,
-      },
-    },
-    {
-      id: 1,
-      style: "col-lg-3",
-      chartData: {
-        chartType: "PieChart",
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
-        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-        color: "#3B82F6",
-        number: Math.floor(Math.random() * 100),
-        title: "Revenue Growth",
-      },
-    },
-  ]);
-  let { dashboardInf, editMode } = useContext(dashboardcontext);
-  let { data: DashboardWidgets } = useGetAllDashboardsWidgetsQuery(
-    {
-      id: dashboardInf?.id,
-    },
-    { skip: !dashboardInf?.id }
-  );
-  const [theme, setTheme] = useState(null);
+	let [data] = useState([
+		{
+			id: 1,
 
-  useEffect(() => {
-    if (DashboardWidgets?.response?.data && dashboardInf?.id) {
-      setTheme(generateInitialTheme(DashboardWidgets.response.data)); // ✅ Set fresh data
-    }
-  }, [dashboardInf?.id, DashboardWidgets]); // Depend on dashboardInf.id to trigger reset
+			style: "col-lg-3",
+			chartData: {
+				chartType: "LabelChart",
+				labels: [
+					"January",
+					"February",
+					"March",
+					"April",
+					"May",
+					"June",
+					"July",
+				],
+				data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+				color: "#3B82F6",
+				number: Math.floor(Math.random() * 100),
+				title: "Chart #1",
+			},
+			postion: {
+				i: "1",
+				x: 0,
+				y: 0,
+				w: 3,
+				h: 1,
+			},
+		},
+		{
+			id: 1,
+			style: "col-lg-3",
+			chartData: {
+				chartType: "PieChart",
+				labels: [
+					"January",
+					"February",
+					"March",
+					"April",
+					"May",
+					"June",
+					"July",
+				],
+				data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
+				color: "#3B82F6",
+				number: Math.floor(Math.random() * 100),
+				title: "Revenue Growth",
+			},
+		},
+	]);
+	let { dashboardInf, editMode, saveChanges, setSaveChanges } =
+		useContext(dashboardcontext);
+	let { data: DashboardWidgets, refetch } = useGetAllDashboardsWidgetsQuery(
+		{
+			id: dashboardInf?.id,
+		},
+		{ skip: !dashboardInf?.id }
+	);
+	let [editDashboardWidget] = useEditDashboardWidgetsMutation();
+	let [deleDashboardWidget, { status }] = useDeleteDashboardWidgetsMutation();
+	const [theme, setTheme] = useState(null);
+
+	const [updatedWidgets, setUpdatedWidgets] = useState();
+	useEffect(() => {
+		if (
+			!DashboardWidgets?.response?.data ||
+			!Array.isArray(DashboardWidgets.response.data)
+		) {
+			console.error("Invalid data structure:", DashboardWidgets);
+			return;
+		}
+		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
+			setTheme(generateInitialTheme(DashboardWidgets.response.data));
+		}
+	}, [dashboardInf?.id, DashboardWidgets]);
+
+	const prevThemeLengthRef = useRef(theme?.length);
+	const removeWidget = (id) => {
+		//setTheme((prev) => prev.filter((item) => item.i !== String(id)));
+		deleDashboardWidget(id);
+	};
+
+	const generateLayouts = (themeData, columnCounts) => {
+		const layouts = {};
+		let prevThemeLength = prevThemeLengthRef.current;
+		Object.entries(columnCounts).forEach(([breakpoint, cols]) => {
+			let currentX = 0,
+				currentY = 0,
+				rowHeight = 0;
+			if (themeData?.length > 0) {
+				layouts[breakpoint] = themeData?.map(({ i, x, y, w, h }, index) => {
+					let newWidth =
+						breakpoint === "xs" ? 4 : Math.max(2, Math.floor((w / 12) * cols));
+					if (index === 0) {
+						currentX = x;
+						currentY = y;
+						rowHeight = h;
+					} else {
+						if (currentX + newWidth > cols) {
+							currentX = 0;
+							currentY += rowHeight;
+							rowHeight = h;
+						}
+					}
+					let newPosition = {
+						i,
+						x: currentX,
+						y: currentY,
+						w: newWidth,
+						h,
+						component: (
+							<Cards
+								key={index}
+								i={index}
+								item={themeData[index]?.component?.props.item}
+								removeWidget={removeWidget}
+							/>
+						),
+					};
+					currentX += newWidth;
+					rowHeight = Math.max(rowHeight, h);
+					if (
+						index === themeData.length - 1 &&
+						prevThemeLength !== themeData.length
+					) {
+						newPosition = {
+							i,
+							x: themeData[themeData.length - 1].x,
+							y: currentY,
+							w: newWidth,
+							h: themeData[themeData.length - 1].h,
+							component: (
+								<Cards
+									key={index}
+									i={index}
+									item={themeData[themeData.length - 1]?.component?.props.item}
+									removeWidget={removeWidget}
+								/>
+							),
+						};
+					}
+					return newPosition;
+				});
+			}
+		});
+		if (layouts) {
+			["lg", "md"].forEach((breakpoint) => {
+				if (layouts[breakpoint]) {
+					const y0Items = layouts[breakpoint].filter((item) => item.y === 0);
 
   const prevThemeLengthRef = useRef(theme?.length);
   const removeWidget = (id) => {
@@ -289,8 +377,87 @@ export default function Gridthree() {
     }
   };
 
-  const j = () => {
-    let data = [];
+
+			return updatedState;
+		});
+	};
+
+	const handleDrag = (e) => {
+		console.log("e", e);
+		const updatedWidgets = e.map((item) => ({
+			position: {
+				i: item.i,
+				x: item.x,
+				y: item.y,
+				w: item.w,
+				h: item.h,
+			},
+		}));
+
+		setUpdatedWidgets(updatedWidgets);
+	};
+	const differentWidgets = updatedWidgets
+		?.map((updatedItem) => {
+			const matchedWidget = DashboardWidgets.response.data?.find(
+				(widget) => widget.position.i === updatedItem.position.i
+			);
+
+			if (matchedWidget) {
+				const { x, y, w, h } = matchedWidget.position;
+				const updatedPos = updatedItem.position;
+				if (
+					x !== updatedPos.x ||
+					y !== updatedPos.y ||
+					w !== updatedPos.w ||
+					h !== updatedPos.h
+				) {
+					return {
+						id: matchedWidget.id,
+						position: updatedPos,
+					};
+				}
+			}
+
+			return null;
+		})
+		.filter((widget) => widget !== null);
+	console.log("updatedWidgets", updatedWidgets);
+	console.log("differentWidgets", differentWidgets);
+	console.log("X", x);
+	console.log("DashboardWidget", DashboardWidgets?.response.data);
+	useEffect(() => {
+		if (saveChanges && differentWidgets.length > 0) {
+			const updatePromises = differentWidgets.map((i) =>
+				editDashboardWidget({ id: i?.id, val: i.position })
+			);
+			Promise.allSettled(updatePromises)
+				.then((results) => {
+					const hasErrors = results.some(
+						(result) => result.status === "rejected"
+					);
+
+					if (hasErrors) {
+						console.error("Some API calls failed:", results);
+					} else {
+						console.log("All API calls were successful.");
+					}
+
+					setSaveChanges(false);
+				})
+				.catch((error) => {
+					console.error("Unexpected error in API calls:", error);
+					setSaveChanges(false);
+				});
+		}
+	}, [saveChanges]);
+	useEffect(() => {
+		if (status === "fulfilled") {
+			refetch();
+		}
+	}, [status, refetch]);
+
+	const j = () => {
+		let data = [];
 
     if (window.innerWidth > 1200) {
       data = x?.lg || [];
@@ -322,7 +489,8 @@ export default function Gridthree() {
       );
     }
 
-    return data.map(({ i, component }) => (
+
+return data.map(({ i, component }) => (
       <div key={i} className="grid-item">
         {component}
       </div>

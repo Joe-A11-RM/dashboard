@@ -38,13 +38,20 @@ export const DashboardApi = createApi({
       query: ({ id }) => `/dashboards/${id}/widget`,
     }),
 
-    editDashboardWidgets: builder.mutation({
-      query: ({ id, val }) => ({
-        url: `/widget/${id}`,
-        method: "PATCH",
-        body: val,
-      }),
-    }),
+		editDashboardWidgets: builder.mutation({
+			query: ({ id, val }) => ({
+				url: `/widget/${id}`,
+				method: "PATCH",
+				body: { position: val },
+			}),
+		}),
+		deleteDashboardWidgets: builder.mutation({
+			query: (val) => ({
+				url: `/widget/${val}`,
+				method: "DELETE",
+				body: val,
+			}),
+		}),
     createWidget: builder.mutation({
       query: ({ id, val }) => ({
         url: `/dashboards/${id}/widget`,
@@ -55,15 +62,17 @@ export const DashboardApi = createApi({
     getSignleWidget: builder.query({
       query: ({ id }) => `/widget/${id}`,
     }),
-  }),
+	}),
 });
 
 export const {
-  useGetAllDashboardsQuery,
-  useCreateDashboardMutation,
-  useEditDashboardMutation,
-  useDeleteDashboardMutation,
-  useGetAllDashboardsWidgetsQuery,
+	useGetAllDashboardsQuery,
+	useCreateDashboardMutation,
+	useEditDashboardMutation,
+	useDeleteDashboardMutation,
+	useGetAllDashboardsWidgetsQuery,
+	useEditDashboardWidgetsMutation,
+	useDeleteDashboardWidgetsMutation,
   useCreateWidgetMutation,
   useGetSignleWidgetQuery,
 } = DashboardApi;

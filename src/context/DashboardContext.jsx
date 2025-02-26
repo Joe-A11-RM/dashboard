@@ -2,6 +2,7 @@ import React, { createContext, useState } from "react";
 export const dashboardcontext = createContext();
 export default function DashboardContext({ children }) {
 	const [editMode, setEditMode] = useState(false);
+	const [isCancel, setIsCancelled] = useState(false);
 	const [dashboardMenu, setDashboardMenu] = useState(false);
 	const [modal, setModal] = useState({ type: "", value: false });
 	const [dashboardInf, setDashboardInf] = useState();
@@ -9,6 +10,7 @@ export default function DashboardContext({ children }) {
 		type: "",
 		value: false,
 	});
+	const [saveChanges, setSaveChanges] = useState(false);
 	return (
 		<>
 			<dashboardcontext.Provider
@@ -23,6 +25,10 @@ export default function DashboardContext({ children }) {
 					setDashboardInf,
 					dashboardTypeWidget,
 					setDashboardTypeWidget,
+					saveChanges,
+					setSaveChanges,
+					isCancel,
+					setIsCancelled,
 				}}
 			>
 				{children}
