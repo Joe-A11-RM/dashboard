@@ -14,7 +14,7 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
     removeWidget(i);
   };
   return (
-    <div className="h-100" key={key}>
+    <div className="h-100 radius-8" key={key}>
       {item.chartData.chartType === "MapChart" ? (
         <div className={`dashboard-label`}>
           <div className="bin cancelSelectorName" onClick={handleDelete}>
@@ -69,9 +69,9 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
         </Widget>
       ) : (
         <div className="item-card">
-					<div className="bin cancelSelectorName" onClick={handleDelete}>
-						<img src="assets/Dark/Delete.svg" alt="delete" />
-					</div>
+          <div className="bin cancelSelectorName" onClick={handleDelete}>
+            <img src="assets/Dark/Delete.svg" alt="delete" />
+          </div>
           <div className="item-card-chart">{item.chartType}</div>
         </div>
       )}

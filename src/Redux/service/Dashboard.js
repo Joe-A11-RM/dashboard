@@ -38,41 +38,41 @@ export const DashboardApi = createApi({
       query: ({ id }) => `/dashboards/${id}/widget`,
     }),
 
-		editDashboardWidgets: builder.mutation({
-			query: ({ id, val }) => ({
-				url: `/widget/${id}`,
-				method: "PATCH",
-				body: { position: val },
-			}),
-		}),
-		deleteDashboardWidgets: builder.mutation({
-			query: (val) => ({
-				url: `/widget/${val}`,
-				method: "DELETE",
-				body: val,
-			}),
-		}),
-    createWidget: builder.mutation({
+    editDashboardWidgets: builder.mutation({
       query: ({ id, val }) => ({
-        url: `/dashboards/${id}/widget`,
-        method: "POST",
+        url: `/widget/${id}`,
+        method: "PATCH",
+        body: { position: val },
+      }),
+    }),
+    deleteDashboardWidgets: builder.mutation({
+      query: (val) => ({
+        url: `/widget/${val}`,
+        method: "DELETE",
         body: val,
       }),
     }),
-    getSignleWidget: builder.query({
+    createWidget: builder.mutation({
+      query: ({ id, val }) => ({
+        url: `/dashboards/${id}/widget/replace`,
+        method: "POST",
+        body: { widgets: val },
+      }),
+    }),
+    getSingleWidget: builder.query({
       query: ({ id }) => `/widget/${id}`,
     }),
-	}),
+  }),
 });
 
 export const {
-	useGetAllDashboardsQuery,
-	useCreateDashboardMutation,
-	useEditDashboardMutation,
-	useDeleteDashboardMutation,
-	useGetAllDashboardsWidgetsQuery,
-	useEditDashboardWidgetsMutation,
-	useDeleteDashboardWidgetsMutation,
+  useGetAllDashboardsQuery,
+  useCreateDashboardMutation,
+  useEditDashboardMutation,
+  useDeleteDashboardMutation,
+  useGetAllDashboardsWidgetsQuery,
+  useEditDashboardWidgetsMutation,
+  useDeleteDashboardWidgetsMutation,
   useCreateWidgetMutation,
-  useGetSignleWidgetQuery,
+  useLazyGetSingleWidgetQuery,
 } = DashboardApi;
