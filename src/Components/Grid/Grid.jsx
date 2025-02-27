@@ -310,6 +310,7 @@ export default function Grid() {
     );
   };
   const handleDrop = (layout, layoutItem, event) => {
+    console.log(event);
     const chartType = event.dataTransfer.getData("chartType");
     const posX = (pos, width) => {
       console.log("poX", pos);

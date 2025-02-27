@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
 import OffCanvasTemplate from "../OffCanvas";
-import DashboardSelection from "./DashboardSelection/DashboardSelection";
 import DashboardDiagrams from "./DashboardDiagarms/DashboardDiagrams";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import DashboardWidgetTypes from "./DashboardWidgetTypes/DashboardWidgetTypes";
 import { dashboardcontext } from "../../context/DashboardContext";
 import DashboardWidgetContent from "./DashboardWidgetContent/DashboardWidgetContent";
