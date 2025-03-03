@@ -2,8 +2,7 @@ import React from "react";
 import Count from "./Count";
 
 const CountsOverview = ({ data, number }) => {
-	console.log("Data", data);
-	console.log("number", number);
+
 	return (
 		<div className="countsOverview">
 			{data?.map((i, index) => (

@@ -7,7 +7,7 @@ import Widget from "../Widget/Widget";
 import CountsOverview from "../Charts/static/CountsOverview";
 
 export default function Cards({ key, item, i, removeWidget, isDraggable }) {
-	console.log("itemAAAAAAAA", item);
+	//console.log("Item", item);
 	let { editMode } = useContext(dashboardcontext);
 	const handleDelete = (e) => {
 		e.stopPropagation();

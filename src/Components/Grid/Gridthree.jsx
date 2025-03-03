@@ -5,12 +5,13 @@ import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css"; // Required styles
 import Cards from "../Cards/Cards";
 import {
+	useCreateWidgetMutation,
 	useDeleteDashboardWidgetsMutation,
 	useEditDashboardWidgetsMutation,
 	useGetAllDashboardsWidgetsQuery,
+	useLazyGetSingleWidgetQuery,
 } from "../../Redux/service/Dashboard";
 import { dashboardcontext } from "../../context/DashboardContext";
-import DashboardAddWidget from "../DashboardHeader/DashboardOptions/DashboardAddWidget/DashboardAddWidget";
 const ReactGridLayout = WidthProvider(Responsive);
 
 const generateInitialTheme = (data) => {
@@ -21,7 +22,7 @@ const generateInitialTheme = (data) => {
 			component: (
 				<Cards
 					key={item.id}
-					i={item.position.i}
+					i={item?.position.i}
 					item={item}
 					removeWidget={() => {}}
 				/>
@@ -31,57 +32,15 @@ const generateInitialTheme = (data) => {
 };
 
 export default function Gridthree() {
-	let [data] = useState([
-		{
-			id: 1,
+	const [createWidget] = useCreateWidgetMutation();
+	const [fetchSingle] = useLazyGetSingleWidgetQuery();
+	const [allWidgets, setAllWidgets] = useState();
+	let [editDashboardWidget] = useEditDashboardWidgetsMutation();
+	let [deleDashboardWidget, { status }] = useDeleteDashboardWidgetsMutation();
+	const [theme, setTheme] = useState(null);
 
-			style: "col-lg-3",
-			chartData: {
-				chartType: "LabelChart",
-				labels: [
-					"January",
-					"February",
-					"March",
-					"April",
-					"May",
-					"June",
-					"July",
-				],
-				data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-				color: "#3B82F6",
-				number: Math.floor(Math.random() * 100),
-				title: "Chart #1",
-			},
-			postion: {
-				i: "1",
-				x: 0,
-				y: 0,
-				w: 3,
-				h: 1,
-			},
-		},
-		{
-			id: 1,
-			style: "col-lg-3",
-			chartData: {
-				chartType: "PieChart",
-				labels: [
-					"January",
-					"February",
-					"March",
-					"April",
-					"May",
-					"June",
-					"July",
-				],
-				data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-				color: "#3B82F6",
-				number: Math.floor(Math.random() * 100),
-				title: "Revenue Growth",
-			},
-		},
-	]);
-	let { dashboardInf, editMode, saveChanges, setSaveChanges } =
+	const [updatedWidgets, setUpdatedWidgets] = useState();
+	let { dashboardInf, editMode, setEditMode, saveChanges, setSaveChanges } =
 		useContext(dashboardcontext);
 	let { data: DashboardWidgets, refetch } = useGetAllDashboardsWidgetsQuery(
 		{
@@ -89,11 +48,16 @@ export default function Gridthree() {
 		},
 		{ skip: !dashboardInf?.id }
 	);
-	let [editDashboardWidget] = useEditDashboardWidgetsMutation();
-	let [deleDashboardWidget, { status }] = useDeleteDashboardWidgetsMutation();
-	const [theme, setTheme] = useState(null);
+	useEffect(() => {
+		if (DashboardWidgets?.response?.data.length > 0) {
+			const widgets = DashboardWidgets?.response.data.map((item) => ({
+				widgetId: item.widgetId,
+				position: item.position,
+			}));
+			setAllWidgets(widgets);
+		}
+	}, [DashboardWidgets]);
 
-	const [updatedWidgets, setUpdatedWidgets] = useState();
 	useEffect(() => {
 		if (
 			!DashboardWidgets?.response?.data ||
@@ -109,7 +73,7 @@ export default function Gridthree() {
 
 	const prevThemeLengthRef = useRef(theme?.length);
 	const removeWidget = (id) => {
-		//setTheme((prev) => prev.filter((item) => item.i !== String(id)));
+		setAllWidgets((prev) => prev.filter((item) => item.id !== String(id)));
 		deleDashboardWidget(id);
 	};
 
@@ -213,24 +177,46 @@ export default function Gridthree() {
 	let [x, setX] = useState([]);
 	//const layouts = generateLayouts(theme, columnCounts);
 	useEffect(() => {
-		setX(generateLayouts(theme, columnCounts));
+		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
+			if (Object.keys(DashboardWidgets?.response?.data).length === 0) {
+				setX([]);
+			} else {
+				setX(generateLayouts(theme, columnCounts));
+			}
+		}
 	}, [theme]);
 
-	const handleDrop = (e) => {
-		//e.preventDefault(); // Prevent default browser behavior
+	useEffect(() => {
+		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
+			if (Object.keys(DashboardWidgets?.response?.data).length === 0) {
+				setX([]);
+			} else {
+				setTheme(generateInitialTheme(DashboardWidgets.response.data));
+			}
+		}
+	}, [dashboardInf?.id, DashboardWidgets]);
 
-		// Ensure dataTransfer exists
+	const handleDrop = async (layout, layoutItem, e) => {
+		e.preventDefault();
 		if (!e.dataTransfer) {
 			console.error("Invalid drop event: No dataTransfer available.");
 			return;
 		}
-
-		// Check the dataTransfer type (should match what your sidebar sets)
-		const draggedData = e.dataTransfer.getData("widget"); // Ensure this key matches the sidebar
+		const draggedData = e.dataTransfer.getData("widget");
 		if (!draggedData) {
 			console.error("Drop rejected: No valid widget data found.");
 			return;
 		}
+		const { widgetId, w, h } = JSON.parse(draggedData);
+		const { data: singleWidgetData } = await fetchSingle({ id: widgetId });
+		if (!singleWidgetData || !singleWidgetData.response) {
+			console.error("Failed to fetch widget data.");
+			return;
+		}
+		const widgetData = singleWidgetData.response.data[0]; // Extracting actual data
+		let newX = 0;
+		let newY = 0;
+
 		setX((prevX) => {
 			const updatedState = { ...prevX };
 
@@ -239,21 +225,14 @@ export default function Gridthree() {
 				const lastItem =
 					prevItems.length > 0 ? prevItems[prevItems.length - 1] : null;
 
-				let newX = 0;
-				let newY = 0;
-
 				if (lastItem) {
 					newX =
 						lastItem.x + lastItem.w >= columnCounts[breakpoint]
 							? 0
 							: lastItem.x + lastItem.w;
-
-					// Count how many items exist with the current Y value
 					const sameYCount = prevItems.filter(
 						(item) => item.y === lastItem.y
 					).length;
-
-					// If 4 items already exist at lastItem.y, increase Y; otherwise, keep it the same
 					newY = sameYCount >= 4 ? lastItem.y + 1 : lastItem.y;
 				}
 
@@ -262,27 +241,73 @@ export default function Gridthree() {
 					i: newId,
 					x: newX,
 					y: newY,
-					w: Math.max(2, Math.floor((3 / 12) * columnCounts[breakpoint])), // Adjust width based on columns
-					h: 1,
+					w: w,
+					h: h,
 					component: (
 						<Cards
 							key={`${breakpoint}-${newId}`}
 							i={newId}
-							item={data[0]}
+							item={widgetData}
 							removeWidget={removeWidget}
 						/>
 					),
 				};
-
 				updatedState[breakpoint] = [...prevItems, newItem];
 			});
 
 			return updatedState;
 		});
+		const newI = allWidgets.length + 1;
+		setAllWidgets((prevWidgets = []) => [
+			...prevWidgets,
+			{
+				widgetId,
+				position: { i: `${newI}`, x: newX, y: newY, w, h },
+			},
+		]);
 	};
 
+	const handleSave = () => {
+		try {
+			/**setAllWidgets((prevWidgets) => {
+				const updatedWidgets = prevWidgets.map((widget) => {
+					const updatedWidget = differentWidgets.find(
+						(diff) => diff.position.i === widget.position.i
+					);
+
+					return updatedWidget &&
+						(updatedWidget.position.x !== widget.position.x ||
+							updatedWidget.position.y !== widget.position.y)
+						? updatedWidget
+						: widget;
+				});
+
+				createWidget({
+					id: dashboardInf?.id,
+					val: updatedWidgets,
+				});
+
+				return updatedWidgets;
+			});**/
+			createWidget({
+				id: dashboardInf?.id,
+				val: allWidgets,
+			});
+			refetch();
+			setEditMode(false);
+		} catch (err) {
+			console.error("Error saving widget:", err);
+		}
+	};
+
+	useEffect(() => {
+		if (saveChanges) {
+			handleSave();
+			setSaveChanges(false);
+		}
+	}, [saveChanges]);
+
 	const handleDrag = (e) => {
-		console.log("e", e);
 		const updatedWidgets = e.map((item) => ({
 			position: {
 				i: item.i,
@@ -294,67 +319,25 @@ export default function Gridthree() {
 		}));
 
 		setUpdatedWidgets(updatedWidgets);
+
+		// Update allWidgets based on updatedWidgets
+		setAllWidgets((prevWidgets) =>
+			prevWidgets.map((widget) => {
+				const updatedWidget = updatedWidgets.find(
+					(updated) => updated.position.i === widget.position.i
+				);
+				return updatedWidget
+					? { ...widget, position: updatedWidget.position }
+					: widget;
+			})
+		);
 	};
-	const differentWidgets = updatedWidgets
-		?.map((updatedItem) => {
-			const matchedWidget = DashboardWidgets.response.data?.find(
-				(widget) => widget.position.i === updatedItem.position.i
-			);
 
-			if (matchedWidget) {
-				const { x, y, w, h } = matchedWidget.position;
-				const updatedPos = updatedItem.position;
-				if (
-					x !== updatedPos.x ||
-					y !== updatedPos.y ||
-					w !== updatedPos.w ||
-					h !== updatedPos.h
-				) {
-					return {
-						id: matchedWidget.id,
-						position: updatedPos,
-					};
-				}
-			}
-
-			return null;
-		})
-		.filter((widget) => widget !== null);
-	console.log("updatedWidgets", updatedWidgets);
-	console.log("differentWidgets", differentWidgets);
-	console.log("X", x);
-	console.log("DashboardWidget", DashboardWidgets?.response.data);
-	useEffect(() => {
-		if (saveChanges && differentWidgets.length > 0) {
-			const updatePromises = differentWidgets.map((i) =>
-				editDashboardWidget({ id: i?.id, val: i.position })
-			);
-			Promise.allSettled(updatePromises)
-				.then((results) => {
-					const hasErrors = results.some(
-						(result) => result.status === "rejected"
-					);
-
-					if (hasErrors) {
-						console.error("Some API calls failed:", results);
-					} else {
-						console.log("All API calls were successful.");
-					}
-
-					setSaveChanges(false);
-				})
-				.catch((error) => {
-					console.error("Unexpected error in API calls:", error);
-					setSaveChanges(false);
-				});
-		}
-	}, [saveChanges]);
 	useEffect(() => {
 		if (status === "fulfilled") {
 			refetch();
 		}
 	}, [status, refetch]);
-
 	const j = () => {
 		let data = [];
 
@@ -369,6 +352,7 @@ export default function Gridthree() {
 		} else {
 			data = x?.xss || [];
 		}
+		console.log("Data", x);
 		// Return "No Data" if empty
 		if (data.length === 0) {
 			return (
@@ -396,31 +380,25 @@ export default function Gridthree() {
 	};
 	return (
 		<div className="">
-			{DashboardWidgets?.response.data.length > 0 ? (
-				<ReactGridLayout
-					key={JSON.stringify(x)}
-					className="layout bg-body"
-					layouts={x}
-					cols={columnCounts}
-					rowHeight={400}
-					margin={[20, 20]}
-					breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-					isResizable={false}
-					isDroppable={editMode ? true : false}
-					isDraggable={editMode ? true : false}
-					allowOverlap={false}
-					autoSize={true}
-					onDragStop={handleDrag}
-					onDrop={handleDrop}
-					draggableCancel=".cancelSelectorName"
-				>
-					{j()}
-				</ReactGridLayout>
-			) : (
-				<div className="vh-100 d-flex justify-content-center align-items-center">
-					<DashboardAddWidget />
-				</div>
-			)}
+			<ReactGridLayout
+				key={JSON.stringify(x.i)}
+				className="layout"
+				layouts={x}
+				cols={columnCounts}
+				rowHeight={400}
+				margin={[20, 20]}
+				breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+				isResizable={false}
+				isDroppable={editMode ? true : false}
+				isDraggable={editMode ? true : false}
+				allowOverlap={false}
+				autoSize={true}
+				onDragStop={handleDrag}
+				onDrop={handleDrop}
+				draggableCancel=".cancelSelectorName"
+			>
+				{j()}
+			</ReactGridLayout>
 		</div>
 	);
 }
