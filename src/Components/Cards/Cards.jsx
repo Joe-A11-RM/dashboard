@@ -61,8 +61,8 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 					subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
 				>
 					<BarChart
-						data={item.chartData.data}
-						labels={item.chartData.labels}
+						data={[10,20,30,40,50,60,70,80,90,100]}
+						labels={["A","B","C","D","E","F","G","H","I","J"]}
 						title={item.chartData.title}
 						number={item.chartData.number}
 						color={item.chartData.color}

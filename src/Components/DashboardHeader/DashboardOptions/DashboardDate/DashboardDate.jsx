@@ -10,6 +10,7 @@ export default function DashboardDate() {
 		<div className="dashboard-date">
 			<Space direction="vertical" size={12}>
 				<RangePicker
+					style={{ height: "40px", borderColor: "#3f51b5", cursor: "pointer" }}
 					ranges={{
 						Today: [dayjs().startOf("day"), dayjs().endOf("day")],
 						Yesterday: [
@@ -27,7 +28,13 @@ export default function DashboardDate() {
 					}}
 					value={[dayjs().startOf("day"), dayjs().endOf("day")]}
 					suffixIcon={
-						<CalendarFilled style={{ color: "#757575CC", fontSize: "16px" }} />
+						<CalendarFilled
+							style={{
+								color: "#757575CC",
+								fontSize: "16px",
+								cursor: "pointer",
+							}}
+						/>
 					}
 				/>
 			</Space>
