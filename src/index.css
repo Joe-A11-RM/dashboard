@@ -255,7 +255,11 @@ label {
 }
 
 .dashboard-date {
-  transform: translateY(13%);
+  height: 40px !important;
+  cursor: pointer;
+}
+.ant-space .css-dev-only-do-not-override-1yacf91 .ant-space-vertical , .ant-space-item{
+  height: 40px !important;
 }
 .dashboard-add-widget,
 .dashboard-save-widget {

@@ -78,101 +78,89 @@ export default function Gridthree() {
 
   const generateLayouts = (themeData, columnCounts) => {
     const layouts = {};
-    let prevThemeLength = prevThemeLengthRef.current;
     Object.entries(columnCounts).forEach(([breakpoint, cols]) => {
       let currentX = 0,
         currentY = 0,
         rowHeight = 0;
       if (themeData?.length > 0) {
-        layouts[breakpoint] = themeData?.map(({ i, x, y, w, h }, index) => {
-          let newWidth =
-            breakpoint === "xs" ? 4 : Math.max(2, Math.floor((w / 12) * cols));
-          if (index === 0) {
-            currentX = x;
-            currentY = y;
-            rowHeight = h;
-          } else {
-            if (currentX + newWidth > cols) {
-              currentX = 0;
-              currentY += rowHeight;
-              rowHeight = h;
+        layouts[breakpoint] = themeData.map(
+          ({ i, x, y, w, h, component }, index) => {
+            let newWidth;
+            switch (breakpoint) {
+              case "4k":
+              case "2k":
+                newWidth = 3;
+                break;
+              case "lg":
+                newWidth = 4;
+                break;
+              case "md":
+                newWidth = 5;
+                break;
+              case "sm":
+                newWidth = 6;
+                break;
+              case "xs":
+              case "xss":
+                newWidth = 4;
+                break;
+              default:
+                newWidth = Math.max(2, Math.floor((w / 12) * cols));
             }
-          }
-          let newPosition = {
-            i,
-            x: currentX,
-            y: currentY,
-            w: newWidth,
-            h,
-            component: (
-              <Cards
-                key={index}
-                i={index}
-                item={themeData[index]?.component?.props.item}
-                removeWidget={removeWidget}
-              />
-            ),
-          };
-          currentX += newWidth;
-          rowHeight = Math.max(rowHeight, h);
-          if (
-            index === themeData.length - 1 &&
-            prevThemeLength !== themeData.length
-          ) {
-            newPosition = {
+            //console.log("component", component.props.item.chartData.chartType);
+            /*if (component.props.item.chartData.chartType === "BarChart") {
+							newWidth = w - 4;
+						}*/
+            if (index === 0) {
+              currentX = 0;
+              currentY = 0;
+              rowHeight = h;
+            } else {
+              if (currentX + newWidth > cols) {
+                // Move to next row
+                currentX = 0;
+                currentY += rowHeight;
+                rowHeight = h;
+              }
+            }
+
+            // ✅ Set proper position for each card
+            let newPosition = {
               i,
-              x: themeData[themeData.length - 1].x,
-              y: currentY,
+              x: x, //currentX
+              y: y, //currentY
               w: newWidth,
-              h: themeData[themeData.length - 1].h,
+              h,
               component: (
                 <Cards
                   key={index}
                   i={index}
-                  item={themeData[themeData.length - 1]?.component?.props.item}
+                  item={themeData[index]?.component?.props.item}
                   removeWidget={removeWidget}
                 />
               ),
             };
+
+            currentX += newWidth; // ✅ Move x forward for next card
+            rowHeight = Math.max(rowHeight, h);
+
+            return newPosition;
           }
-          return newPosition;
-        });
+        );
       }
     });
-    if (layouts) {
-      ["lg", "md"].forEach((breakpoint) => {
-        if (layouts[breakpoint]) {
-          const y0Items = layouts[breakpoint].filter((item) => item.y === 0);
-
-          // Dynamically determine the next y value based on the max height in y0Items
-          const maxHeight = Math.max(...y0Items.map((item) => item.h), 0);
-          const yNextItems = layouts[breakpoint].filter(
-            (item) => item.y === maxHeight
-          );
-
-          y0Items.forEach((y0Item) => {
-            yNextItems.forEach((yNextItem, index) => {
-              if (y0Item.x === yNextItem.x) {
-                if (y0Item.h > yNextItem.h) {
-                  // Move x position
-                  yNextItem.x = y0Item.w + yNextItem.x;
-
-                  // Find the next item in yNextItems
-                  if (index + 1 < yNextItems.length) {
-                    const nextItem = yNextItems[index + 1];
-                    nextItem.x = 0; // Set x to 0
-                  }
-                }
-              }
-            });
-          });
-        }
-      });
-    }
     return layouts;
   };
 
-  const columnCounts = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
+  const columnCounts = {
+    "4k": 12, // 4K screens
+    "2k": 12, // 2K screens
+    lg: 12, // Laptop
+    md: 10, // Medium
+    sm: 6, // Small
+    xs: 4, // Extra small
+    xxs: 2, // Tiny screens
+  };
   let [x, setX] = useState([]);
   //const layouts = generateLayouts(theme, columnCounts);
   useEffect(() => {
@@ -184,16 +172,6 @@ export default function Gridthree() {
       }
     }
   }, [theme]);
-
-  useEffect(() => {
-    if (DashboardWidgets?.response?.data && dashboardInf?.id) {
-      if (Object.keys(DashboardWidgets?.response?.data).length === 0) {
-        setX([]);
-      } else {
-        setTheme(generateInitialTheme(DashboardWidgets.response.data));
-      }
-    }
-  }, [dashboardInf?.id, DashboardWidgets]);
 
   const handleDrop = async (layout, layoutItem, e) => {
     e.preventDefault();
@@ -339,7 +317,6 @@ export default function Gridthree() {
         </div>
       );
     }
-
     return data.map(({ i, component }) => (
       <div key={i} className="grid-item">
         {component}
@@ -355,7 +332,15 @@ export default function Gridthree() {
         cols={columnCounts}
         rowHeight={400}
         margin={[20, 20]}
-        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+        breakpoints={{
+          "4k": 2560,
+          "2k": 2048,
+          lg: 1200,
+          md: 996,
+          sm: 768,
+          xs: 480,
+          xxs: 0,
+        }}
         isResizable={false}
         isDroppable={editMode ? true : false}
         isDraggable={editMode ? true : false}
