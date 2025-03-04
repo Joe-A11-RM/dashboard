@@ -73,6 +73,7 @@ export default function Gridthree() {
   const prevThemeLengthRef = useRef(theme?.length);
   const removeWidget = (id) => {
     setAllWidgets((prev) => prev.filter((item) => item.id !== String(id)));
+    if (id === "1" || id === "2" || id === "3" || id === "4") return;
     deleDashboardWidget(id);
   };
 
