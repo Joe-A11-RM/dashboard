@@ -38,6 +38,11 @@ code {
   border-radius: 8px;
   border: 1px solid #e7e7e7;
 }
+.empty-dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .dashboard-header {
   position: sticky;
   top: 0;
@@ -783,6 +788,11 @@ label {
   transition: all 0.5s ease;
   position: relative;
   overflow: visible;
+}
+.widget-img-conatiner {
+  max-width: 250px;
+  max-height: 250px;
+  object-fit: cover;
 }
 
 @media (max-width: 575.98px) {
