@@ -605,7 +605,7 @@ label {
   flex-direction: column;
   justify-content: center;
   align-items: start;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 8px;
   background-color: #fafafa;
   border: 1px solid #f4f4f4;
@@ -823,7 +823,7 @@ label {
   }
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 1370px) {
   .count {
     padding: 5px 10px;
   }
