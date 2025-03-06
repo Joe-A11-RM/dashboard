@@ -7,11 +7,11 @@ import Cards from "../Cards/Cards";
 import {
 	useCreateWidgetMutation,
 	useDeleteDashboardWidgetsMutation,
+	useEditDashboardWidgetsMutation,
 	useGetAllDashboardsWidgetsQuery,
 	useLazyGetSingleWidgetQuery,
 } from "../../Redux/service/Dashboard";
 import { dashboardcontext } from "../../context/DashboardContext";
-import DashboardAddWidget from "../buttons/AddWidget";
 const ReactGridLayout = WidthProvider(Responsive);
 
 const generateInitialTheme = (data) => {
@@ -35,9 +35,11 @@ export default function Gridthree() {
 	const [createWidget] = useCreateWidgetMutation();
 	const [fetchSingle] = useLazyGetSingleWidgetQuery();
 	const [allWidgets, setAllWidgets] = useState();
+	let [editDashboardWidget] = useEditDashboardWidgetsMutation();
 	let [deleDashboardWidget, { status }] = useDeleteDashboardWidgetsMutation();
 	const [theme, setTheme] = useState(null);
 
+	const [updatedWidgets, setUpdatedWidgets] = useState();
 	let { dashboardInf, editMode, setEditMode, saveChanges, setSaveChanges } =
 		useContext(dashboardcontext);
 	let { data: DashboardWidgets, refetch } = useGetAllDashboardsWidgetsQuery(
@@ -47,22 +49,21 @@ export default function Gridthree() {
 		{ skip: !dashboardInf?.id }
 	);
 	useEffect(() => {
-		let widgets = [];
 		if (DashboardWidgets?.response?.data.length > 0) {
-			widgets = DashboardWidgets?.response?.data.map((item) => ({
+			const widgets = DashboardWidgets?.response.data.map((item) => ({
 				widgetId: item.widgetId,
 				position: item.position,
 			}));
+			setAllWidgets(widgets);
 		}
-		setAllWidgets(widgets);
-	}, [dashboardInf, DashboardWidgets]);
+	}, [DashboardWidgets]);
 
 	useEffect(() => {
 		if (
 			!DashboardWidgets?.response?.data ||
 			!Array.isArray(DashboardWidgets.response.data)
 		) {
-			console.log("no data:", DashboardWidgets);
+			console.error("Invalid data structure:", DashboardWidgets);
 			return;
 		}
 		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
@@ -73,20 +74,15 @@ export default function Gridthree() {
 	const prevThemeLengthRef = useRef(theme?.length);
 	const removeWidget = (id) => {
 		setAllWidgets((prev) => prev.filter((item) => item.id !== String(id)));
-		if (id === "1" || id === "2" || id === "3" || id === "4") return;
 		deleDashboardWidget(id);
 	};
-	console.log("Theme", theme);
+
 	const generateLayouts = (themeData, columnCounts) => {
 		const layouts = {};
-
 		Object.entries(columnCounts).forEach(([breakpoint, cols]) => {
 			let currentX = 0,
 				currentY = 0,
-				rowHeight = 0,
-				itemsInRow = 0,
-				rowLimit = 0; // Number of items per row before moving to next y
-
+				rowHeight = 0;
 			if (themeData?.length > 0) {
 				layouts[breakpoint] = themeData.map(
 					({ i, x, y, w, h, component }, index) => {
@@ -112,42 +108,28 @@ export default function Gridthree() {
 							default:
 								newWidth = Math.max(2, Math.floor((w / 12) * cols));
 						}
-
-						rowLimit = newWidth === 3 ? 4 : 3;
-
+						//console.log("component", component.props.item.chartData.chartType);
+						/*if (component.props.item.chartData.chartType === "BarChart") {
+							newWidth = w - 4;
+						}*/
 						if (index === 0) {
-							currentX = ["md"].includes(breakpoint) ? 0 : x; // Take x from themeData
+							currentX = 0;
 							currentY = 0;
 							rowHeight = h;
 						} else {
 							if (currentX + newWidth > cols) {
 								// Move to next row
 								currentX = 0;
-								currentY += rowHeight; // Increment Y correctly
-								if (["md"].includes(breakpoint)) {
-									itemsInRow = 0;
-								}
+								currentY += rowHeight;
+								rowHeight = h;
 							}
 						}
 
-						if (["4k", "2k"].includes(breakpoint)) {
-							currentX = Math.floor(currentX / 3) * 3; // Force multiples of 3
-						}
-
-						if (["lg"].includes(breakpoint)) {
-							currentX = x; // Force multiples of 3
-							currentY = y; // Force multiples of 3
-						}
-						if (itemsInRow >= rowLimit) {
-							currentX = ["lg"].includes(breakpoint) ? x : 0;
-							currentY = ["lg"].includes(breakpoint) ? y : +1;
-							itemsInRow = 0;
-						}
-
+						// ✅ Set proper position for each card
 						let newPosition = {
 							i,
-							x: currentX,
-							y: currentY,
+							x: x, //currentX
+							y: y, //currentY
 							w: newWidth,
 							h,
 							component: (
@@ -160,15 +142,14 @@ export default function Gridthree() {
 							),
 						};
 
-						currentX += newWidth;
-						itemsInRow++;
+						currentX += newWidth; // ✅ Move x forward for next card
+						rowHeight = Math.max(rowHeight, h);
 
 						return newPosition;
 					}
 				);
 			}
 		});
-
 		return layouts;
 	};
 
@@ -193,6 +174,16 @@ export default function Gridthree() {
 		}
 	}, [theme]);
 
+	useEffect(() => {
+		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
+			if (Object.keys(DashboardWidgets?.response?.data).length === 0) {
+				setX([]);
+			} else {
+				setTheme(generateInitialTheme(DashboardWidgets.response.data));
+			}
+		}
+	}, [dashboardInf?.id, DashboardWidgets]);
+
 	const handleDrop = async (layout, layoutItem, e) => {
 		e.preventDefault();
 		if (!e.dataTransfer) {
@@ -204,90 +195,65 @@ export default function Gridthree() {
 			console.error("Drop rejected: No valid widget data found.");
 			return;
 		}
-
-		let newX = 0;
-		let newY = 0;
 		const { widgetId, w, h } = JSON.parse(draggedData);
 		const { data: singleWidgetData } = await fetchSingle({ id: widgetId });
 		if (!singleWidgetData || !singleWidgetData.response) {
 			console.error("Failed to fetch widget data.");
 			return;
 		}
-		const widgetData = singleWidgetData.response.data[0];
+		const widgetData = singleWidgetData.response.data[0]; // Extracting actual data
+		let newX = 0;
+		let newY = 0;
 
 		setX((prevX) => {
 			const updatedState = { ...prevX };
 
 			Object.keys(columnCounts).forEach((breakpoint) => {
 				const prevItems = prevX[breakpoint] || [];
+				const lastItem =
+					prevItems.length > 0 ? prevItems[prevItems.length - 1] : null;
 
-				// **Find the maximum y level**
-				const maxY =
-					prevItems.length > 0
-						? Math.max(...prevItems.map((item) => item.y))
-						: 0;
-
-				// **Find the highest x position at max y**
-				const itemsAtMaxY = prevItems.filter((item) => item.y === maxY);
-				const maxX =
-					itemsAtMaxY.length > 0
-						? Math.max(...itemsAtMaxY.map((item) => item.x))
-						: 0;
-
-				// **Set newX beside the last item at maxY, otherwise reset to 0 if row is full**
-				let newX = maxX + w < columnCounts[breakpoint] ? maxX + w : 0;
-				let newY = newX === 0 ? maxY + 1 : maxY; // Move to a new row if the current row is full
-
-				// Generate a unique `i` value
-				const existingIds = new Set(prevItems.map((item) => item.i));
-				let newId = 1;
-				while (existingIds.has(String(newId))) {
-					newId++;
+				if (lastItem) {
+					newX =
+						lastItem.x + lastItem.w >= columnCounts[breakpoint]
+							? 0
+							: lastItem.x + lastItem.w;
+					const sameYCount = prevItems.filter(
+						(item) => item.y === lastItem.y
+					).length;
+					newY = sameYCount >= 4 ? lastItem.y + 1 : lastItem.y;
 				}
 
+				const newId = String(prevItems.length + 1);
 				const newItem = {
-					i: String(newId),
+					i: newId,
 					x: newX,
 					y: newY,
 					w: w,
 					h: h,
 					component: (
 						<Cards
-							key={newId}
+							key={`${breakpoint}-${newId}`}
 							i={newId}
 							item={widgetData}
 							removeWidget={removeWidget}
 						/>
 					),
 				};
-
 				updatedState[breakpoint] = [...prevItems, newItem];
 			});
 
 			return updatedState;
 		});
-
-		setAllWidgets((prevWidgets = []) => {
-			const existingIds = new Set(
-				prevWidgets.map((widget) => widget.position.i)
-			);
-			let newI = 1;
-			while (existingIds.has(String(newI))) {
-				newI++;
-			}
-
-			return [
-				...prevWidgets,
-				{
-					widgetId,
-					position: { i: String(newI), x: newX, y: newY, w, h },
-				},
-			];
-		});
+		const newI = allWidgets.length + 1;
+		setAllWidgets((prevWidgets = []) => [
+			...prevWidgets,
+			{
+				widgetId,
+				position: { i: `${newI}`, x: newX, y: newY, w, h },
+			},
+		]);
 	};
-
-	console.log("xx", x);
-	console.log("allWidgets", allWidgets);
 
 	const handleSave = () => {
 		try {
@@ -319,6 +285,9 @@ export default function Gridthree() {
 				h: item.h,
 			},
 		}));
+
+		setUpdatedWidgets(updatedWidgets);
+
 		// Update allWidgets based on updatedWidgets
 		setAllWidgets((prevWidgets) =>
 			prevWidgets.map((widget) => {
@@ -331,7 +300,8 @@ export default function Gridthree() {
 			})
 		);
 	};
-
+	console.log("AllWidgets", allWidgets);
+	console.log("Updated widget", updatedWidgets);
 	useEffect(() => {
 		if (status === "fulfilled") {
 			refetch();
@@ -339,7 +309,6 @@ export default function Gridthree() {
 	}, [status, refetch]);
 	const j = () => {
 		let data = [];
-
 		if (window.innerWidth > 1200) {
 			data = x?.lg || [];
 		} else if (window.innerWidth > 996) {
@@ -351,17 +320,26 @@ export default function Gridthree() {
 		} else {
 			data = x?.xss || [];
 		}
+		console.log("Data", x);
+		// Return "No Data" if empty
 		if (data.length === 0) {
 			return (
-				<div
-					key="no-data"
-					className="empty-dashboard"
-					data-grid={{ i: "no-data", x: 0, y: 0, w: 12, h: 1, static: true }}
-				>
-					<DashboardAddWidget />
+				<div className="no-data">
+					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis nemo
+					hic ullam eligendi iste? Qui aut, unde, ducimus autem exercitationem
+					fugiat iste vitae cupiditate voluptatum assumenda laborum hic quisquam
+					modi aperiam dolor aspernatur? Voluptatibus, laborum. Ipsa, magni sed
+					exercitationem libero voluptate vel esse facere porro. Totam cum atque
+					illum, illo, beatae asperiores magnam architecto reiciendis corrupti
+					assumenda sed laboriosam. Ab fugiat distinctio beatae est! Ducimus
+					laudantium deleniti ab libero. Veniam repellat sequi nobis molestias.
+					Eum dolorem libero officiis veniam nostrum est, nesciunt magni nulla
+					tempore excepturi provident expedita adipisci voluptate eligendi ab
+					rerum cupiditate quaerat distinctio, itaque eos? Ullam, sunt.
 				</div>
 			);
 		}
+
 		return data.map(({ i, component }) => (
 			<div key={i} className="grid-item">
 				{component}
