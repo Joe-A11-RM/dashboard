@@ -92,7 +92,7 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 						</>
 					)}
 				</Widget>
-			) : item.chartData.chartType === "SpeedDetails" ? (
+			) : item.chartData.chartType === "SpeedDetailsChart" ? (
 				<Widget
 					editMode={editMode}
 					handleDelete={handleDelete}
@@ -101,8 +101,8 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 				>
 					<StackedBarChart
 						data={[
-							{ name: "max-speed", data: item.chartData.data },
-							{ name: "avg-speed", data: item.chartData.data },
+							{ name: item.chartData.data[0].name, data: item.chartData.data[0].data },
+							{ name: item.chartData.data[1].name, data: item.chartData.data[1].data },
 						]}
 						labels={item.chartData.labels}
 						title={item.chartData.title}
