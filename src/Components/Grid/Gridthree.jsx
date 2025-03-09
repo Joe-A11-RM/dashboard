@@ -5,84 +5,40 @@ import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css"; // Required styles
 import Cards from "../Cards/Cards";
 import {
-  useCreateWidgetMutation,
-  useGetAllDashboardsWidgetsQuery,
+	useCreateWidgetMutation,
+	useDeleteDashboardWidgetsMutation,
+	useGetAllDashboardsWidgetsQuery,
+	useLazyGetSingleWidgetQuery,
 } from "../../Redux/service/Dashboard";
 import { dashboardcontext } from "../../context/DashboardContext";
-import DashboardAddWidget from "../DashboardHeader/DashboardOptions/DashboardAddWidget/DashboardAddWidget";
+import DashboardAddWidget from "../buttons/AddWidget";
 const ReactGridLayout = WidthProvider(Responsive);
 
 const generateInitialTheme = (data) => {
-  return (
-    data.length > 0 &&
-    data?.map((item) => ({
-      ...item.position,
-      component: (
-        <Cards
-          key={item.id}
-          i={item.position.i}
-          item={item}
-          removeWidget={() => {}}
-        />
-      ),
-    }))
-  );
+	return (
+		data.length > 0 &&
+		data?.map((item) => ({
+			...item.position,
+			component: (
+				<Cards
+					key={item.id}
+					i={item?.position.i}
+					item={item}
+					removeWidget={() => {}}
+				/>
+			),
+		}))
+	);
 };
 
 export default function Gridthree() {
-  const [createdWidgets, setCreatedWidgets] = useState([]); // Store widgets in state
-  const [createWidget] = useCreateWidgetMutation();
-	let [data] = useState([
-		{
-			id: 1,
+	const [createWidget] = useCreateWidgetMutation();
+	const [fetchSingle] = useLazyGetSingleWidgetQuery();
+	const [allWidgets, setAllWidgets] = useState();
+	let [deleDashboardWidget, { status }] = useDeleteDashboardWidgetsMutation();
+	const [theme, setTheme] = useState(null);
 
-			style: "col-lg-3",
-			chartData: {
-				chartType: "LabelChart",
-				labels: [
-					"January",
-					"February",
-					"March",
-					"April",
-					"May",
-					"June",
-					"July",
-				],
-				data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-				color: "#3B82F6",
-				number: Math.floor(Math.random() * 100),
-				title: "Chart #1",
-			},
-			postion: {
-				i: "1",
-				x: 0,
-				y: 0,
-				w: 3,
-				h: 1,
-			},
-		},
-		{
-			id: 1,
-			style: "col-lg-3",
-			chartData: {
-				chartType: "PieChart",
-				labels: [
-					"January",
-					"February",
-					"March",
-					"April",
-					"May",
-					"June",
-					"July",
-				],
-				data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100)),
-				color: "#3B82F6",
-				number: Math.floor(Math.random() * 100),
-				title: "Revenue Growth",
-			},
-		},
-	]);
-	let { dashboardInf, editMode, saveChanges, setSaveChanges } =
+	let { dashboardInf, editMode, setEditMode, saveChanges, setSaveChanges } =
 		useContext(dashboardcontext);
 	let { data: DashboardWidgets, refetch } = useGetAllDashboardsWidgetsQuery(
 		{
@@ -90,18 +46,26 @@ export default function Gridthree() {
 		},
 		{ skip: !dashboardInf?.id }
 	);
-	let [editDashboardWidget] = useEditDashboardWidgetsMutation();
-	let [deleDashboardWidget, { status }] = useDeleteDashboardWidgetsMutation();
-	const [theme, setTheme] = useState(null);
+	useEffect(() => {
+		let widgets = [];
+		if (DashboardWidgets?.response?.data.length > 0) {
+			widgets = DashboardWidgets?.response?.data.map((item) => ({
+				widgetId: item.widgetId,
+				position: item.position,
+			}));
+		}
+		setAllWidgets(widgets);
+	}, [dashboardInf, DashboardWidgets]);
 
-	const [updatedWidgets, setUpdatedWidgets] = useState();
 	useEffect(() => {
 		if (
 			!DashboardWidgets?.response?.data ||
 			!Array.isArray(DashboardWidgets.response.data)
 		) {
-			console.error("Invalid data structure:", DashboardWidgets);
-			return;
+			if (!DashboardWidgets?.response?.data || !dashboardInf?.id) {
+				setTheme(null);
+				return;
+			}
 		}
 		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
 			setTheme(generateInitialTheme(DashboardWidgets.response.data));
@@ -110,280 +74,251 @@ export default function Gridthree() {
 
 	const prevThemeLengthRef = useRef(theme?.length);
 	const removeWidget = (id) => {
-		//setTheme((prev) => prev.filter((item) => item.i !== String(id)));
+		setAllWidgets((prev) => prev.filter((item) => item.id !== String(id)));
+		if (id === "1" || id === "2" || id === "3" || id === "4") return;
 		deleDashboardWidget(id);
 	};
-
+	console.log("Theme", theme);
 	const generateLayouts = (themeData, columnCounts) => {
 		const layouts = {};
-		let prevThemeLength = prevThemeLengthRef.current;
+
 		Object.entries(columnCounts).forEach(([breakpoint, cols]) => {
 			let currentX = 0,
 				currentY = 0,
-				rowHeight = 0;
+				rowHeight = 0,
+				itemsInRow = 0,
+				rowLimit = 0; // Number of items per row before moving to next y
+
 			if (themeData?.length > 0) {
-				layouts[breakpoint] = themeData?.map(({ i, x, y, w, h }, index) => {
-					let newWidth =
-						breakpoint === "xs" ? 4 : Math.max(2, Math.floor((w / 12) * cols));
-					if (index === 0) {
-						currentX = x;
-						currentY = y;
-						rowHeight = h;
-					} else {
-						if (currentX + newWidth > cols) {
-							currentX = 0;
-							currentY += rowHeight;
-							rowHeight = h;
+				layouts[breakpoint] = themeData.map(
+					({ i, x, y, w, h, component }, index) => {
+						let newWidth;
+						switch (breakpoint) {
+							case "4k":
+							case "2k":
+								newWidth = 3;
+								break;
+							case "lg":
+								newWidth = 4;
+								break;
+							case "md":
+								newWidth = 5;
+								break;
+							case "sm":
+								newWidth = 6;
+								break;
+							case "xs":
+							case "xss":
+								newWidth = 4;
+								break;
+							default:
+								newWidth = Math.max(2, Math.floor((w / 12) * cols));
 						}
-					}
-					let newPosition = {
-						i,
-						x: currentX,
-						y: currentY,
-						w: newWidth,
-						h,
-						component: (
-							<Cards
-								key={index}
-								i={index}
-								item={themeData[index]?.component?.props.item}
-								removeWidget={removeWidget}
-							/>
-						),
-					};
-					currentX += newWidth;
-					rowHeight = Math.max(rowHeight, h);
-					if (
-						index === themeData.length - 1 &&
-						prevThemeLength !== themeData.length
-					) {
-						newPosition = {
+
+						rowLimit = newWidth === 3 ? 4 : 3;
+
+						if (index === 0) {
+							currentX = ["md"].includes(breakpoint) ? 0 : x; // Take x from themeData
+							currentY = 0;
+							rowHeight = h;
+						} else {
+							if (currentX + newWidth > cols) {
+								// Move to next row
+								currentX = 0;
+								currentY += rowHeight; // Increment Y correctly
+								if (["md"].includes(breakpoint)) {
+									itemsInRow = 0;
+								}
+							}
+						}
+
+						if (["4k", "2k"].includes(breakpoint)) {
+							currentX = Math.floor(currentX / 3) * 3; // Force multiples of 3
+						}
+
+						if (["lg"].includes(breakpoint)) {
+							currentX = x; // Force multiples of 3
+							currentY = y; // Force multiples of 3
+						}
+						if (itemsInRow >= rowLimit) {
+							currentX = ["lg"].includes(breakpoint) ? x : 0;
+							currentY = ["lg"].includes(breakpoint) ? y : +1;
+							itemsInRow = 0;
+						}
+
+						let newPosition = {
 							i,
-							x: themeData[themeData.length - 1].x,
+							x: currentX,
 							y: currentY,
 							w: newWidth,
-							h: themeData[themeData.length - 1].h,
+							h,
 							component: (
 								<Cards
 									key={index}
 									i={index}
-									item={themeData[themeData.length - 1]?.component?.props.item}
+									item={themeData[index]?.component?.props.item}
 									removeWidget={removeWidget}
 								/>
 							),
 						};
+
+						currentX += newWidth;
+						itemsInRow++;
+
+						return newPosition;
 					}
-					return newPosition;
-				});
+				);
 			}
 		});
-		if (layouts) {
-			["lg", "md"].forEach((breakpoint) => {
-				if (layouts[breakpoint]) {
-					const y0Items = layouts[breakpoint].filter((item) => item.y === 0);
 
-  const prevThemeLengthRef = useRef(theme?.length);
-  const removeWidget = (id) => {
-    setTheme((prev) => prev.filter((item) => item.i !== String(id)));
-  };
+		return layouts;
+	};
 
-  const generateLayouts = (themeData, columnCounts) => {
-    console.log("Theme Data", themeData);
-    const layouts = {};
-    let prevThemeLength = prevThemeLengthRef.current;
-    Object.entries(columnCounts).forEach(([breakpoint, cols]) => {
-      let currentX = 0,
-        currentY = 0,
-        rowHeight = 0;
-      if (themeData?.length > 0) {
-        layouts[breakpoint] = themeData?.map(({ i, x, y, w, h }, index) => {
-          console.log("themeData[index]?.component?.props.item", i);
-          let newWidth =
-            breakpoint === "xs" ? 4 : Math.max(2, Math.floor((w / 12) * cols));
-          if (index === 0) {
-            currentX = 0;
-            currentY = 0;
-            rowHeight = h;
-          } else {
-            if (currentX + newWidth > cols) {
-              currentX = 0;
-              currentY += rowHeight;
-              rowHeight = h;
-            }
-          }
-          let newPosition = {
-            i,
-            x: currentX,
-            y: currentY,
-            w: newWidth,
-            h,
-            component: (
-              <Cards
-                key={index}
-                i={index}
-                item={themeData[index]?.component?.props.item}
-                removeWidget={removeWidget}
-              />
-            ),
-          };
-          currentX += newWidth;
-          rowHeight = Math.max(rowHeight, h);
-          if (
-            index === themeData.length - 1 &&
-            prevThemeLength !== themeData.length
-          ) {
-            console.log("Updating last item position!");
-            newPosition = {
-              i,
-              x: themeData[themeData.length - 1].x,
-              y: currentY,
-              w: themeData[themeData.length - 1].w,
-              h: themeData[themeData.length - 1].h,
-              component: (
-                <Cards
-                  key={index}
-                  i={index}
-                  item={themeData[themeData.length - 1]?.component?.props.item}
-                  removeWidget={removeWidget}
-                />
-              ),
-            };
-          }
-          return newPosition;
-        });
-      }
-    });
-    if (layouts) {
-      ["lg", "md"].forEach((breakpoint) => {
-        if (layouts[breakpoint]) {
-          const y0Items = layouts[breakpoint].filter((item) => item.y === 0);
+	const columnCounts = {
+		"4k": 12, // 4K screens
+		"2k": 12, // 2K screens
+		lg: 12, // Laptop
+		md: 10, // Medium
+		sm: 6, // Small
+		xs: 4, // Extra small
+		xxs: 2, // Tiny screens
+	};
+	let [x, setX] = useState([]);
+	//const layouts = generateLayouts(theme, columnCounts);
+	useEffect(() => {
+		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
+			if (DashboardWidgets.status.message === "No Widgets Available!") {
+				setX([]);
+			} else {
+				setX(generateLayouts(theme, columnCounts));
+			}
+		}
+	}, [theme]);
 
-          // Dynamically determine the next y value based on the max height in y0Items
-          const maxHeight = Math.max(...y0Items.map((item) => item.h), 0);
-          const yNextItems = layouts[breakpoint].filter(
-            (item) => item.y === maxHeight
-          );
+	const handleDrop = async (layout, layoutItem, e) => {
+		e.preventDefault();
+		if (!e.dataTransfer) {
+			console.error("Invalid drop event: No dataTransfer available.");
+			return;
+		}
+		const draggedData = e.dataTransfer.getData("widget");
+		if (!draggedData) {
+			console.error("Drop rejected: No valid widget data found.");
+			return;
+		}
 
-          y0Items.forEach((y0Item) => {
-            yNextItems.forEach((yNextItem, index) => {
-              if (y0Item.x === yNextItem.x) {
-                if (y0Item.h > yNextItem.h) {
-                  // Move x position
-                  yNextItem.x = y0Item.w + yNextItem.x;
+		let newX = 0;
+		let newY = 0;
+		const { widgetId, w, h } = JSON.parse(draggedData);
+		const { data: singleWidgetData } = await fetchSingle({ id: widgetId });
+		if (!singleWidgetData || !singleWidgetData.response) {
+			console.error("Failed to fetch widget data.");
+			return;
+		}
+		const widgetData = singleWidgetData.response.data[0];
 
-                  // Find the next item in yNextItems
-                  if (index + 1 < yNextItems.length) {
-                    const nextItem = yNextItems[index + 1];
-                    nextItem.x = 0; // Set x to 0
-                  }
-                }
-              }
-            });
-          });
-        }
-      });
-    }
-    return layouts;
-  };
+		setX((prevX) => {
+			const updatedState = { ...prevX };
+			Object.keys(columnCounts).forEach((breakpoint) => {
+				const prevItems = prevX[breakpoint] || [];
 
-  const columnCounts = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
-  let [x, setX] = useState([]);
-  //const layouts = generateLayouts(theme, columnCounts);
-  useEffect(() => {
-    setX(generateLayouts(theme, columnCounts));
-  }, [theme]);
+				// **Find the maximum y level**
+				const maxY =
+					prevItems.length > 0
+						? Math.max(...prevItems.map((item) => item.y))
+						: 0;
+				console.log("maxY", maxY);
 
-  const handleDrop = (layout, layoutItem, e) => {
-    e.preventDefault();
-    if (!e.dataTransfer) {
-      console.error("Invalid drop event: No dataTransfer available.");
-      return;
-    }
-    const draggedData = e.dataTransfer.getData("widget");
-    if (!draggedData) {
-      console.error("Drop rejected: No valid widget data found.");
-      return;
-    }
-    const { widgetId, w, h } = JSON.parse(draggedData);
+				// **Find the highest x position at max y**
+				const itemsAtMaxY = prevItems.filter((item) => item.y === maxY);
+				const maxX =
+					itemsAtMaxY.length > 0
+						? Math.max(...itemsAtMaxY.map((item) => item.x))
+						: 0;
+				console.log("maxX", maxX);
+				console.log("w", w);
 
-    let newX = 0;
-    let newY = 0;
+				// **Set newX beside the last item at maxY, otherwise reset to 0 if row is full**
+				let newX =
+					maxX + w < columnCounts[breakpoint]
+						? x.length === 0
+							? 0
+							: maxX + w
+						: 0;
+				let newY = newX === 0 ? maxY + 1 : maxY; // Move to a new row if the current row is full
+				console.log("NewX", newX);
+				// Generate a unique `i` value
+				const existingIds = new Set(prevItems.map((item) => item.i));
+				let newId = 1;
+				while (existingIds.has(String(newId))) {
+					newId++;
+				}
 
-    setX((prevX) => {
-      const updatedState = { ...prevX };
+				const newItem = {
+					i: String(newId),
+					x: newX,
+					y: newY,
+					w: w,
+					h: h,
+					component: (
+						<Cards
+							key={newId}
+							i={newId}
+							item={widgetData}
+							removeWidget={removeWidget}
+						/>
+					),
+				};
 
-      Object.keys(columnCounts).forEach((breakpoint) => {
-        const prevItems = prevX[breakpoint] || [];
-        const lastItem =
-          prevItems.length > 0 ? prevItems[prevItems.length - 1] : null;
-
-        if (lastItem) {
-          newX =
-            lastItem.x + lastItem.w >= columnCounts[breakpoint]
-              ? 0
-              : lastItem.x + lastItem.w;
-          const sameYCount = prevItems.filter(
-            (item) => item.y === lastItem.y
-          ).length;
-          newY = sameYCount >= 4 ? lastItem.y + 1 : lastItem.y;
-        }
-
-        const newId = String(prevItems.length + 1);
-        const newItem = {
-          i: newId,
-          x: newX,
-          y: newY,
-          w: w, // Adjust width based on columns
-          h: h,
-          component: (
-            <Cards
-              key={`${breakpoint}-${newId}`}
-              i={newId}
-              item={data[0]}
-              removeWidget={removeWidget}
-            />
-          ),
-        };
-        updatedState[breakpoint] = [...prevItems, newItem];
-      });
-
-      return updatedState;
-    });
-    const newI = Math.floor(Math.random() * 100);
-    const newWidget = {
-      widgetId,
-      position: {
-        i: newI,
-        w: w,
-        h: h,
-        x: newX,
-        y: newY,
-      },
-    };
-    setCreatedWidgets((prevWidgets) => [
-      ...prevWidgets,
-      {
-        widgetId,
-        position: { i: newI, x: newX, y: newY, w, h },
-      },
-    ]);
-  };
-
-  const handleSave = () => {
-    try {
-      createWidget({ id: dashboardInf?.id, val: { widgets: createdWidgets } });
-    } catch (err) {
-      console.error("Error saving widget");
-    }
-  };
-
+				updatedState[breakpoint] = [...prevItems, newItem];
+			});
 
 			return updatedState;
 		});
+
+		setAllWidgets((prevWidgets = []) => {
+			const existingIds = new Set(
+				prevWidgets.map((widget) => widget.position.i)
+			);
+			let newI = 1;
+			while (existingIds.has(String(newI))) {
+				newI++;
+			}
+
+			return [
+				...prevWidgets,
+				{
+					widgetId,
+					position: { i: String(newI), x: newX, y: newY, w, h },
+				},
+			];
+		});
 	};
 
+	console.log("xx", x);
+	console.log("allWidgets", allWidgets);
+
+	const handleSave = () => {
+		try {
+			createWidget({
+				id: dashboardInf?.id,
+				val: allWidgets,
+			});
+			refetch();
+			setEditMode(false);
+		} catch (err) {
+			console.error("Error saving widget:", err);
+		}
+	};
+
+	useEffect(() => {
+		if (saveChanges) {
+			handleSave();
+			setSaveChanges(false);
+		}
+	}, [saveChanges]);
+
 	const handleDrag = (e) => {
-		console.log("e", e);
 		const updatedWidgets = e.map((item) => ({
 			position: {
 				i: item.i,
@@ -393,129 +328,84 @@ export default function Gridthree() {
 				h: item.h,
 			},
 		}));
-
-		setUpdatedWidgets(updatedWidgets);
+		// Update allWidgets based on updatedWidgets
+		setAllWidgets((prevWidgets) =>
+			prevWidgets.map((widget) => {
+				const updatedWidget = updatedWidgets.find(
+					(updated) => updated.position.i === widget.position.i
+				);
+				return updatedWidget
+					? { ...widget, position: updatedWidget.position }
+					: widget;
+			})
+		);
 	};
-	const differentWidgets = updatedWidgets
-		?.map((updatedItem) => {
-			const matchedWidget = DashboardWidgets.response.data?.find(
-				(widget) => widget.position.i === updatedItem.position.i
-			);
 
-			if (matchedWidget) {
-				const { x, y, w, h } = matchedWidget.position;
-				const updatedPos = updatedItem.position;
-				if (
-					x !== updatedPos.x ||
-					y !== updatedPos.y ||
-					w !== updatedPos.w ||
-					h !== updatedPos.h
-				) {
-					return {
-						id: matchedWidget.id,
-						position: updatedPos,
-					};
-				}
-			}
-
-			return null;
-		})
-		.filter((widget) => widget !== null);
-	console.log("updatedWidgets", updatedWidgets);
-	console.log("differentWidgets", differentWidgets);
-	console.log("X", x);
-	console.log("DashboardWidget", DashboardWidgets?.response.data);
-	useEffect(() => {
-		if (saveChanges && differentWidgets.length > 0) {
-			const updatePromises = differentWidgets.map((i) =>
-				editDashboardWidget({ id: i?.id, val: i.position })
-			);
-			Promise.allSettled(updatePromises)
-				.then((results) => {
-					const hasErrors = results.some(
-						(result) => result.status === "rejected"
-					);
-
-					if (hasErrors) {
-						console.error("Some API calls failed:", results);
-					} else {
-						console.log("All API calls were successful.");
-					}
-
-					setSaveChanges(false);
-				})
-				.catch((error) => {
-					console.error("Unexpected error in API calls:", error);
-					setSaveChanges(false);
-				});
-		}
-	}, [saveChanges]);
 	useEffect(() => {
 		if (status === "fulfilled") {
 			refetch();
 		}
 	}, [status, refetch]);
-
 	const j = () => {
 		let data = [];
 
-    if (window.innerWidth > 1200) {
-      data = x?.lg || [];
-    } else if (window.innerWidth > 996) {
-      data = x?.md || [];
-    } else if (window.innerWidth > 768) {
-      data = x?.sm || [];
-    } else if (window.innerWidth > 480) {
-      data = x?.xs || [];
-    } else {
-      data = x?.xss || [];
-    }
-    // Return "No Data" if empty
-    if (data.length === 0) {
-      return (
-        <div className="no-data">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis nemo
-          hic ullam eligendi iste? Qui aut, unde, ducimus autem exercitationem
-          fugiat iste vitae cupiditate voluptatum assumenda laborum hic quisquam
-          modi aperiam dolor aspernatur? Voluptatibus, laborum. Ipsa, magni sed
-          exercitationem libero voluptate vel esse facere porro. Totam cum atque
-          illum, illo, beatae asperiores magnam architecto reiciendis corrupti
-          assumenda sed laboriosam. Ab fugiat distinctio beatae est! Ducimus
-          laudantium deleniti ab libero. Veniam repellat sequi nobis molestias.
-          Eum dolorem libero officiis veniam nostrum est, nesciunt magni nulla
-          tempore excepturi provident expedita adipisci voluptate eligendi ab
-          rerum cupiditate quaerat distinctio, itaque eos? Ullam, sunt.
-        </div>
-      );
-    }
-
-
-return data.map(({ i, component }) => (
-      <div key={i} className="grid-item">
-        {component}
-      </div>
-    ));
-  };
-  return (
-    <div className="">
-      <ReactGridLayout
-        key={JSON.stringify(x)}
-        className="layout bg-body"
-        layouts={x}
-        cols={columnCounts}
-        rowHeight={400}
-        margin={[20, 20]}
-        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-        isResizable={false}
-        isDroppable={editMode ? true : false}
-        isDraggable={editMode ? true : false}
-        allowOverlap={false}
-        autoSize={true}
-        onDrop={handleDrop}
-        draggableCancel=".cancelSelectorName"
-      >
-        {j()}
-      </ReactGridLayout>
-    </div>
-  );
+		if (window.innerWidth > 1200) {
+			data = x?.lg || [];
+		} else if (window.innerWidth > 996) {
+			data = x?.md || [];
+		} else if (window.innerWidth > 768) {
+			data = x?.sm || [];
+		} else if (window.innerWidth > 480) {
+			data = x?.xs || [];
+		} else {
+			data = x?.xss || [];
+		}
+		if (data.length === 0) {
+			return (
+				<div
+					key="no-data"
+					className="empty-dashboard"
+					data-grid={{ i: "no-data", x: 0, y: 0, w: 12, h: 1, static: true }}
+				>
+					<DashboardAddWidget />
+				</div>
+			);
+		}
+		return data.map(({ i, component }) => (
+			<div key={i} className="grid-item">
+				{component}
+			</div>
+		));
+	};
+	return (
+		<div className="">
+			<ReactGridLayout
+				key={JSON.stringify(x.i)}
+				className="layout"
+				layouts={x}
+				cols={columnCounts}
+				rowHeight={400}
+				margin={[20, 20]}
+				breakpoints={{
+					"4k": 2560,
+					"2k": 2048,
+					lg: 1200,
+					md: 996,
+					sm: 768,
+					xs: 480,
+					xxs: 0,
+				}}
+				isResizable={false}
+				isDroppable={editMode ? true : false}
+				isDraggable={editMode ? true : false}
+				allowOverlap={false}
+				autoSize={true}
+				onDragStop={handleDrag}
+				onDrop={handleDrop}
+				draggableCancel=".cancelSelectorName"
+			>
+				{j()}
+			</ReactGridLayout>
+		</div>
+	);
 }

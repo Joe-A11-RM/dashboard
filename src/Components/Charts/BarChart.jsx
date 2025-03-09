@@ -12,6 +12,9 @@ const BarChart = ({ data, labels }) => {
     chart: {
       type: "bar",
       height: 200,
+      toolbar: {
+        show: false,
+      },
     },
     plotOptions: {
       bar: {
