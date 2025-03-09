@@ -25,8 +25,12 @@ export default function DashboardWidgetTypesCard({
       }}
       style={{ cursor: dashboardTypeWidget.value && "grab" }}
     >
-      <div className="widget-img-conatiner">
-        <img src={`assets/Widgets/${img}.svg`} alt={img} />
+      <div>
+        <img
+          src={`assets/Widgets/${img}.svg`}
+          alt={img}
+          className="widget-img-conatiner"
+        />
       </div>
       <div className="widget-description">
         <div className="widget-description-head">{title}</div>

@@ -1,20 +1,21 @@
 import React from "react";
 import Count from "./Count";
 
-const CountsOverview = () => {
-  return (
-    <div className="countsOverview">
-      <Count title="Users" number="20" />
-      <Count title="Vehicles" number="20000" />
-      <Count title="Drivers" number="250" />
-      <Count title="Sectors" number="8" />
-      <Count title="Projects" number="11" />
-      <Count title="Companies" number="6" />
-      <Count title="Service lines" number="8" />
-      <Count title="Projects" number="11" />
-      <Count title="Companies" number="6" />
-    </div>
-  );
+const CountsOverview = ({ data, number }) => {
+
+	return (
+		<div className="countsOverview">
+			{data?.map((i, index) => (
+				<Count key={index} title={i?.label} number={i?.totalCount} />
+			))}
+
+			<Count title="Sectors" number="0" />
+			<Count title="Projects" number="0" />
+			<Count title="Companies" number="0" />
+			<Count title="Service lines" number="0" />
+			<Count title="Projects" number="0" />
+		</div>
+	);
 };
 
 export default CountsOverview;
