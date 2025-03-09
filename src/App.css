@@ -17,7 +17,6 @@
   color: #334155;
 }
 .pageClaseName {
-  padding: 2px;
   border-radius: 50%;
   color: #334155;
   width: 20px;
@@ -54,7 +53,6 @@
   color: inherit !important;
 }
 .paginationButton {
-  padding: 2px;
   border-radius: 50%;
   color: #334155;
   width: 20px;
@@ -77,7 +75,6 @@
   text-align: center;
 }
 .pageBreakClassName {
-  padding: 2px;
   border-radius: 50%;
   color: #334155;
   width: 20px;

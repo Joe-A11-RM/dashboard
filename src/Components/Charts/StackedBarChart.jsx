@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
-const BarChart = ({ data, labels }) => {
-  const [series] = useState([
-    {
-      data: data,
-    },
-  ]);
+const StackedBarChart = ({ data, labels }) => {
+  console.log(data);
+  const [series] = useState(data);
 
   const [options] = useState({
     chart: {
       type: "bar",
       height: 200,
+      stacked: true,
       toolbar: {
         show: false,
       },
     },
-    colors: ["#5E5CA9"],
+    colors: ["#A7B4F6", "#07418C"],
     plotOptions: {
       bar: {
         columnWidth: "25%",
@@ -27,7 +25,7 @@ const BarChart = ({ data, labels }) => {
     stroke: {
       show: true,
       width: 2,
-      colors: ["#5E5CA9"],
+      colors: ["#A7B4F6", "#07418C"],
     },
     dataLabels: {
       enabled: false,
@@ -68,4 +66,4 @@ const BarChart = ({ data, labels }) => {
   );
 };
 
-export default BarChart;
+export default StackedBarChart;
