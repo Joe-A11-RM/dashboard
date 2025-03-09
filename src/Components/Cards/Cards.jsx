@@ -89,7 +89,33 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
             </>
           )}
         </Widget>
-      ) : item.chartData.chartType === "SpeedDetails" ? (
+      ) : item.chartData.chartType === "EngineHoursBarChart" ? (
+        <Widget
+          editMode={editMode}
+          handleDelete={handleDelete}
+          title={item.chartData.title}
+          subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
+        >
+          <BarChart
+            data={item.chartData.data}
+            labels={item.chartData.labels}
+            title={item.chartData.title}
+            number={item.chartData.number}
+            color={item.chartData.color}
+          />
+          {item.chartData.pagination && (
+            <>
+              <Pagination
+                page={1}
+                totalPages={20}
+                onPageChange={() => console.log("Page Change")}
+                setLimit={() => console.log("Limit Change")}
+                unit="Vehicles"
+              />
+            </>
+          )}
+        </Widget>
+      ) : item.chartData.chartType === "SpeedDetailsChart" ? (
         <Widget
           editMode={editMode}
           handleDelete={handleDelete}
