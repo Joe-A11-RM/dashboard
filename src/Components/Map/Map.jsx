@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
 	MapContainer,
 	Marker,
@@ -23,7 +23,6 @@ export default function Map() {
 
 		return () => clearInterval(interval);
 	}, [refetch, isUninitialized]);
-	
 
 	return (
 		<div className="map">

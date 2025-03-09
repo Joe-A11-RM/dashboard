@@ -66,6 +66,9 @@ export const DashboardApi = createApi({
 		getMapData: builder.query({
 			query: () => "/getTrackingMapData",
 		}),
+		getVehicleDetails: builder.query({
+			query: () => "/getVehiclesDetails",
+		}),
 	}),
 });
 
@@ -80,4 +83,5 @@ export const {
 	useCreateWidgetMutation,
 	useLazyGetSingleWidgetQuery,
 	useGetMapDataQuery,
+	useGetVehicleDetailsQuery,
 } = DashboardApi;
