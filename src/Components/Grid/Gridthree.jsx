@@ -57,18 +57,20 @@ export default function Gridthree() {
     setAllWidgets(widgets);
   }, [dashboardInf, DashboardWidgets]);
 
-  useEffect(() => {
-    if (
-      !DashboardWidgets?.response?.data ||
-      !Array.isArray(DashboardWidgets.response.data)
-    ) {
-      console.log("no data:", DashboardWidgets);
-      return;
-    }
-    if (DashboardWidgets?.response?.data && dashboardInf?.id) {
-      setTheme(generateInitialTheme(DashboardWidgets.response.data));
-    }
-  }, [dashboardInf?.id, DashboardWidgets]);
+	useEffect(() => {
+		if (
+			!DashboardWidgets?.response?.data ||
+			!Array.isArray(DashboardWidgets.response.data)
+		) {
+			if (!DashboardWidgets?.response?.data || !dashboardInf?.id) {
+				setTheme(null);
+				return;
+			}
+		}
+		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
+			setTheme(generateInitialTheme(DashboardWidgets.response.data));
+		}
+	}, [dashboardInf?.id, DashboardWidgets]);
 
   const prevThemeLengthRef = useRef(theme?.length);
   const removeWidget = (id) => {
@@ -172,26 +174,26 @@ export default function Gridthree() {
     return layouts;
   };
 
-  const columnCounts = {
-    "4k": 12, // 4K screens
-    "2k": 12, // 2K screens
-    lg: 12, // Laptop
-    md: 10, // Medium
-    sm: 6, // Small
-    xs: 4, // Extra small
-    xxs: 2, // Tiny screens
-  };
-  let [x, setX] = useState([]);
-  //const layouts = generateLayouts(theme, columnCounts);
-  useEffect(() => {
-    if (DashboardWidgets?.response?.data && dashboardInf?.id) {
-      if (Object.keys(DashboardWidgets?.response?.data).length === 0) {
-        setX([]);
-      } else {
-        setX(generateLayouts(theme, columnCounts));
-      }
-    }
-  }, [theme]);
+	const columnCounts = {
+		"4k": 12, // 4K screens
+		"2k": 12, // 2K screens
+		lg: 12, // Laptop
+		md: 10, // Medium
+		sm: 6, // Small
+		xs: 4, // Extra small
+		xxs: 2, // Tiny screens
+	};
+	let [x, setX] = useState([]);
+	//const layouts = generateLayouts(theme, columnCounts);
+	useEffect(() => {
+		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
+			if (DashboardWidgets.status.message === "No Widgets Available!") {
+				setX([]);
+			} else {
+				setX(generateLayouts(theme, columnCounts));
+			}
+		}
+	}, [theme]);
 
   const handleDrop = async (layout, layoutItem, e) => {
     e.preventDefault();
@@ -215,35 +217,42 @@ export default function Gridthree() {
     }
     const widgetData = singleWidgetData.response.data[0];
 
-    setX((prevX) => {
-      const updatedState = { ...prevX };
+		setX((prevX) => {
+			const updatedState = { ...prevX };
+			Object.keys(columnCounts).forEach((breakpoint) => {
+				const prevItems = prevX[breakpoint] || [];
 
-      Object.keys(columnCounts).forEach((breakpoint) => {
-        const prevItems = prevX[breakpoint] || [];
+				// **Find the maximum y level**
+				const maxY =
+					prevItems.length > 0
+						? Math.max(...prevItems.map((item) => item.y))
+						: 0;
+				console.log("maxY", maxY);
 
-        // **Find the maximum y level**
-        const maxY =
-          prevItems.length > 0
-            ? Math.max(...prevItems.map((item) => item.y))
-            : 0;
+				// **Find the highest x position at max y**
+				const itemsAtMaxY = prevItems.filter((item) => item.y === maxY);
+				const maxX =
+					itemsAtMaxY.length > 0
+						? Math.max(...itemsAtMaxY.map((item) => item.x))
+						: 0;
+				console.log("maxX", maxX);
+				console.log("w", w);
 
-        // **Find the highest x position at max y**
-        const itemsAtMaxY = prevItems.filter((item) => item.y === maxY);
-        const maxX =
-          itemsAtMaxY.length > 0
-            ? Math.max(...itemsAtMaxY.map((item) => item.x))
-            : 0;
-
-        // **Set newX beside the last item at maxY, otherwise reset to 0 if row is full**
-        let newX = maxX + w < columnCounts[breakpoint] ? maxX + w : 0;
-        let newY = newX === 0 ? maxY + 1 : maxY; // Move to a new row if the current row is full
-
-        // Generate a unique `i` value
-        const existingIds = new Set(prevItems.map((item) => item.i));
-        let newId = 1;
-        while (existingIds.has(String(newId))) {
-          newId++;
-        }
+				// **Set newX beside the last item at maxY, otherwise reset to 0 if row is full**
+				let newX =
+					maxX + w < columnCounts[breakpoint]
+						? x.length === 0
+							? 0
+							: maxX + w
+						: 0;
+				let newY = newX === 0 ? maxY + 1 : maxY; // Move to a new row if the current row is full
+				console.log("NewX", newX);
+				// Generate a unique `i` value
+				const existingIds = new Set(prevItems.map((item) => item.i));
+				let newId = 1;
+				while (existingIds.has(String(newId))) {
+					newId++;
+				}
 
         const newItem = {
           i: String(newId),

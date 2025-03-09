@@ -6,6 +6,7 @@ import { dashboardcontext } from "../../context/DashboardContext";
 import Widget from "../Widget/Widget";
 import CountsOverview from "../Charts/static/CountsOverview";
 import Pagination from "../Helper/Pagination";
+import StackedBarChart from "../Charts/StackedBarChart";
 
 export default function Cards({ key, item, i, removeWidget, isDraggable }) {
   //console.log("Item", item);
@@ -17,7 +18,15 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
   };
   return (
     <div className="h-100 radius-8" key={key}>
-      {item.chartData.chartType === "MapChart" ? (
+      {item.chartData.chartType === "TrackingMapPositions" ? (
+        <Widget
+          editMode={editMode}
+          handleDelete={handleDelete}
+          title={item.chartData.title}
+        >
+          <Map title={item.chartData.title} />
+        </Widget>
+      ) : item.chartData.chartType === "MapChart" ? (
         <div className={`dashboard-label`}>
           <div className="bin cancelSelectorName" onClick={handleDelete}>
             <img src="assets/Dark/Delete.svg" alt="delete" />
