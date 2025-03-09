@@ -1,0 +1,69 @@
+const generateLayouts = (themeData, columnCounts) => {
+		const layouts = {};
+		let prevThemeLength = prevThemeLengthRef.current;
+		Object.entries(columnCounts).forEach(([breakpoint, cols]) => {
+			let currentX = 0,
+				currentY = 0,
+				rowHeight = 0;
+			if (themeData?.length > 0) {
+				layouts[breakpoint] = themeData?.map(({ i, x, y, w, h }, index) => {
+					let newWidth =
+						breakpoint === "xs" ? 4 : Math.max(2, Math.floor((w / 12) * cols));
+					switch (breakpoint) {
+						case "4k":
+						case "2k":
+							newWidth = 3;
+							break;
+						case "lg":
+							newWidth = 4;
+
+							break;
+						case "md":
+							newWidth = 5;
+							break;
+						case "sm":
+							newWidth = 6;
+							break;
+						case "xs":
+						case "xss":
+							newWidth = 4;
+							break;
+						default:
+							newWidth = Math.max(2, Math.floor((w / 12) * cols));
+					}
+					if (index === 0) {
+						currentX = x;
+						currentY = y;
+						rowHeight = h;
+					} else {
+						if (currentX + newWidth > cols) {
+							currentX = 0;
+							currentY += rowHeight;
+							rowHeight = h;
+						}
+					}
+					let newPosition = {
+						i,
+						x: currentX,
+						y: currentY,
+						w: newWidth,
+						h,
+						component: (
+							<Cards
+								key={index}
+								i={index}
+								item={themeData[index]?.component?.props.item}
+								removeWidget={removeWidget}
+							/>
+						),
+					};
+					currentX += newWidth;
+					rowHeight = Math.max(rowHeight, h);
+
+					return newPosition;
+				});
+			}
+		});
+
+		return layouts;
+	};
