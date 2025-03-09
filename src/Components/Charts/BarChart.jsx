@@ -1,3 +1,4 @@
+import { Pagination } from "antd";
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
@@ -16,6 +17,7 @@ const BarChart = ({ data, labels }) => {
         show: false,
       },
     },
+    colors: ["#5E5CA9"],
     plotOptions: {
       bar: {
         columnWidth: "25%",
@@ -26,7 +28,7 @@ const BarChart = ({ data, labels }) => {
     stroke: {
       show: true,
       width: 2,
-      colors: ["transparent"],
+      colors: ["#5E5CA9"],
     },
     dataLabels: {
       enabled: false,
@@ -40,14 +42,14 @@ const BarChart = ({ data, labels }) => {
     },
     tooltip: {
       y: {
-        formatter: function (val) {
-          return "$ " + val + " thousands";
-        },
+        // formatter: function (val) {
+        //   return "$ " + val + " thousands";
+        // },
       },
     },
     yaxis: {
       title: {
-        text: "$ (thousands)",
+        // text: "$ (thousands)",
       },
     },
     grid: {
@@ -56,12 +58,12 @@ const BarChart = ({ data, labels }) => {
   });
 
   return (
-    <div id="chart" style={{ width: "100%", height: "100%" }}>
+    <div id="chart" style={{ width: "100%" }}>
       <ReactApexChart
         options={options}
         series={series}
         type="bar"
-        height={300}
+        height={240}
       />
     </div>
   );

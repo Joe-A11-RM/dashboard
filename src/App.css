@@ -1,1 +1,86 @@
+.paginationContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  border-top: #e4e5e7 1px solid;
+  padding-top: 2px;
+  text-decoration: none !important;
+  height: 100px;
+}
+.itemsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  font-size: 12px;
+  color: #334155;
+}
+.pageClaseName {
+  padding: 2px;
+  border-radius: 50%;
+  color: #334155;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 12px;
+}
 
+.pageClaseName:hover {
+  background-color: #3b3887;
+  color: white;
+}
+
+.activeClassName {
+  background-color: #3b3887;
+  color: white;
+}
+.mr-3 {
+  margin-right: 3px;
+}
+.itemsSelect {
+  padding: 2px;
+  border-radius: 8px;
+  border: 1px solid #d3d3d3;
+  font-size: 12px;
+}
+.pagination {
+  display: flex;
+  flex-direction: row;
+  margin: 1px;
+}
+.pagination a {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+.paginationButton {
+  padding: 2px;
+  border-radius: 50%;
+  color: #334155;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 12px;
+}
+.paginationButton:hover {
+  background-color: #3b3887;
+  color: white;
+}
+.pageLinkClassName {
+  text-decoration: none !important; /* Remove underline */
+  color: inherit !important; /* Inherit color from parent */
+  padding: 2px;
+  border-radius: 50%;
+  color: #334155;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+}
+.pageBreakClassName {
+  padding: 2px;
+  border-radius: 50%;
+  color: #334155;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+}
