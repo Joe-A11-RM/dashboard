@@ -16,13 +16,14 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 	};
 	return (
 		<div className="h-100 radius-8" key={key}>
-			{item.chartData.chartType === "MapChart" ? (
-				<div className={`dashboard-label`}>
-					<div className="bin cancelSelectorName" onClick={handleDelete}>
-						<img src="assets/Dark/Delete.svg" alt="delete" />
-					</div>
+			{item.chartData.chartType === "TrackingMapPositions" ? (
+				<Widget
+					editMode={editMode}
+					handleDelete={handleDelete}
+					title={item.chartData.title}
+				>
 					<Map title={item.chartData.title} />
-				</div>
+				</Widget>
 			) : item.chartData.chartType === "PieChart" ? (
 				<Widget
 					editMode={editMode}
@@ -61,8 +62,22 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
 					subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
 				>
 					<BarChart
-						data={[10,20,30,40,50,60,70,80,90,100]}
-						labels={["A","B","C","D","E","F","G","H","I","J"]}
+						data={item.chartData.data}
+						labels={item.chartData.labels}
+						title={item.chartData.title}
+						number={item.chartData.number}
+						color={item.chartData.color}
+					/>
+				</Widget>
+			) : item.chartData.chartType === "EngineHoursBarChart" ? (
+				<Widget
+					editMode={editMode}
+					handleDelete={handleDelete}
+					title={item.chartData.title}
+				>
+					<BarChart
+						data={item.chartData.data}
+						labels={item.chartData.labels}
 						title={item.chartData.title}
 						number={item.chartData.number}
 						color={item.chartData.color}

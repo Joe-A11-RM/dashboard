@@ -62,8 +62,10 @@ export default function Gridthree() {
 			!DashboardWidgets?.response?.data ||
 			!Array.isArray(DashboardWidgets.response.data)
 		) {
-			console.log("no data:", DashboardWidgets);
-			return;
+			if (!DashboardWidgets?.response?.data || !dashboardInf?.id) {
+				setTheme(null);
+				return;
+			}
 		}
 		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
 			setTheme(generateInitialTheme(DashboardWidgets.response.data));
@@ -185,7 +187,7 @@ export default function Gridthree() {
 	//const layouts = generateLayouts(theme, columnCounts);
 	useEffect(() => {
 		if (DashboardWidgets?.response?.data && dashboardInf?.id) {
-			if (Object.keys(DashboardWidgets?.response?.data).length === 0) {
+			if (DashboardWidgets.status.message === "No Widgets Available!") {
 				setX([]);
 			} else {
 				setX(generateLayouts(theme, columnCounts));
@@ -217,7 +219,6 @@ export default function Gridthree() {
 
 		setX((prevX) => {
 			const updatedState = { ...prevX };
-
 			Object.keys(columnCounts).forEach((breakpoint) => {
 				const prevItems = prevX[breakpoint] || [];
 
@@ -226,6 +227,7 @@ export default function Gridthree() {
 					prevItems.length > 0
 						? Math.max(...prevItems.map((item) => item.y))
 						: 0;
+				console.log("maxY", maxY);
 
 				// **Find the highest x position at max y**
 				const itemsAtMaxY = prevItems.filter((item) => item.y === maxY);
@@ -233,11 +235,18 @@ export default function Gridthree() {
 					itemsAtMaxY.length > 0
 						? Math.max(...itemsAtMaxY.map((item) => item.x))
 						: 0;
+				console.log("maxX", maxX);
+				console.log("w", w);
 
 				// **Set newX beside the last item at maxY, otherwise reset to 0 if row is full**
-				let newX = maxX + w < columnCounts[breakpoint] ? maxX + w : 0;
+				let newX =
+					maxX + w < columnCounts[breakpoint]
+						? x.length === 0
+							? 0
+							: maxX + w
+						: 0;
 				let newY = newX === 0 ? maxY + 1 : maxY; // Move to a new row if the current row is full
-
+				console.log("NewX", newX);
 				// Generate a unique `i` value
 				const existingIds = new Set(prevItems.map((item) => item.i));
 				let newId = 1;
