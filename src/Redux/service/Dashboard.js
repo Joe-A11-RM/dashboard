@@ -78,6 +78,10 @@ export const DashboardApi = createApi({
       query: ({ offset, limit }) =>
         `/getSpeedDetails?offset=${offset}&limit=${limit}`,
     }),
+    getVehicleDetails: builder.query({
+      query: ({ offset, limit }) =>
+        `/getVehiclesDetails?offset=${offset}&limit=${limit}`,
+    }),
   }),
 });
 
@@ -95,4 +99,5 @@ export const {
   useLazyGetDistanceCoverageDataQuery,
   useLazyGetEngineHoursDataQuery,
   useLazyGetSpeedDetailsQuery,
+  useLazyGetVehicleDetailsQuery,
 } = DashboardApi;

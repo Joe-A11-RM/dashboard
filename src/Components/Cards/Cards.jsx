@@ -11,7 +11,9 @@ import {
   useLazyGetDistanceCoverageDataQuery,
   useLazyGetEngineHoursDataQuery,
   useLazyGetSpeedDetailsQuery,
+  useLazyGetVehicleDetailsQuery,
 } from "../../Redux/service/Dashboard";
+import VehicleTableDetails from "../Table/VehicleTableDetails";
 
 export default function Cards({ key, item, i, removeWidget, isDraggable }) {
   let { editMode } = useContext(dashboardcontext);
@@ -28,6 +30,7 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
     triggerEngineFetch,
     { isLoading: engineLoading, isError: engineError },
   ] = useLazyGetEngineHoursDataQuery();
+  const [triggerVehicleDetails] = useLazyGetVehicleDetailsQuery();
 
   useEffect(() => {
     if (item.chartData.chartType === "BarChart" && currentPage !== prevPage) {
@@ -57,6 +60,18 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
     ) {
       const offset = (currentPage - 1) * limit;
       triggerEngineFetch({ offset, limit }).then((response) => {
+        if (response?.data?.response?.data) {
+          setChartData(response.data.response.data);
+        }
+        setPrevPage(currentPage);
+      });
+    }
+    if (
+      item.chartData.chartType === "vehicletabledetails" &&
+      currentPage !== prevPage
+    ) {
+      const offset = (currentPage - 1) * limit;
+      triggerVehicleDetails({ offset, limit }).then((response) => {
         if (response?.data?.response?.data) {
           setChartData(response.data.response.data);
         }
@@ -213,13 +228,27 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
             </>
           )}
         </Widget>
+      ) : item.chartData.chartType === "vehicletabledetails" ? (
+        <Widget
+          editMode={editMode}
+          handleDelete={handleDelete}
+          title="Vehicles Table"
+        >
+          <VehicleTableDetails rows={chartData.data} />
+          {item.chartData.pagination && (
+            <>
+              <Pagination
+                page={currentPage}
+                totalPages={chartData.pagination.totalPages}
+                onPageChange={(page) => setCurrentPage(page)}
+                setLimit={(newLimit) => setLimit(newLimit)}
+                unit="Vehicles"
+              />
+            </>
+          )}
+        </Widget>
       ) : (
-        <div className="item-card">
-          <div className="bin cancelSelectorName" onClick={handleDelete}>
-            <img src="assets/Dark/Delete.svg" alt="delete" />
-          </div>
-          <div className="item-card-chart">{item.chartType}</div>
-        </div>
+        <></>
       )}
     </div>
   );
