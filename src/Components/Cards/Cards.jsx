@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PieChart from "../Charts/PieChart";
 import Map from "../Map/Map";
 import BarChart from "../Charts/BarChart";
@@ -7,10 +7,64 @@ import Widget from "../Widget/Widget";
 import CountsOverview from "../Charts/static/CountsOverview";
 import Pagination from "../Helper/Pagination";
 import StackedBarChart from "../Charts/StackedBarChart";
+import {
+  useLazyGetDistanceCoverageDataQuery,
+  useLazyGetEngineHoursDataQuery,
+  useLazyGetSpeedDetailsQuery,
+} from "../../Redux/service/Dashboard";
 
 export default function Cards({ key, item, i, removeWidget, isDraggable }) {
-  //console.log("Item", item);
   let { editMode } = useContext(dashboardcontext);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [prevPage, setPrevPage] = useState(currentPage);
+  const [limit, setLimit] = useState(5);
+  const [chartData, setChartData] = useState(item.chartData);
+  const [triggerFetch, { isLoading: distanceLoading, isError: distanceError }] =
+    useLazyGetDistanceCoverageDataQuery();
+  const [triggerSpeedFetch, { isLoading: speedLoading, isError: speedError }] =
+    useLazyGetSpeedDetailsQuery();
+  const [
+    triggerEngineFetch,
+    { isLoading: engineLoading, isError: engineError },
+  ] = useLazyGetEngineHoursDataQuery();
+
+  useEffect(() => {
+    if (item.chartData.chartType === "BarChart" && currentPage !== prevPage) {
+      const offset = (currentPage - 1) * limit;
+      triggerFetch({ offset, limit }).then((response) => {
+        if (response?.data?.response?.data) {
+          setChartData(response.data.response.data);
+        }
+        setPrevPage(currentPage);
+      });
+    }
+    if (
+      item.chartData.chartType === "SpeedDetailsChart" &&
+      currentPage !== prevPage
+    ) {
+      const offset = (currentPage - 1) * limit;
+      triggerSpeedFetch({ offset, limit }).then((response) => {
+        if (response?.data?.response?.data) {
+          setChartData(response.data.response.data);
+        }
+        setPrevPage(currentPage);
+      });
+    }
+    if (
+      item.chartData.chartType === "EngineHoursBarChart" &&
+      currentPage !== prevPage
+    ) {
+      const offset = (currentPage - 1) * limit;
+      triggerEngineFetch({ offset, limit }).then((response) => {
+        if (response?.data?.response?.data) {
+          setChartData(response.data.response.data);
+        }
+        setPrevPage(currentPage);
+      });
+    }
+  }, [currentPage]);
+
   const handleDelete = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -70,20 +124,26 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
           title={item.chartData.title}
           subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
         >
-          <BarChart
-            data={item.chartData.data}
-            labels={item.chartData.labels}
-            title={item.chartData.title}
-            number={item.chartData.number}
-            color={item.chartData.color}
-          />
+          {distanceLoading ? (
+            <p>Loading...</p>
+          ) : distanceError ? (
+            <p>Error fetching data</p>
+          ) : (
+            <BarChart
+              data={chartData.data}
+              labels={chartData.labels}
+              title={chartData.title}
+              number={chartData.number}
+              color={chartData.color}
+            />
+          )}
           {item.chartData.pagination && (
             <>
               <Pagination
-                page={1}
-                totalPages={20}
-                onPageChange={() => console.log("Page Change")}
-                setLimit={() => console.log("Limit Change")}
+                page={currentPage}
+                totalPages={chartData.pagination.totalPages}
+                onPageChange={(page) => setCurrentPage(page)}
+                setLimit={(newLimit) => setLimit(newLimit)}
                 unit="Vehicles"
               />
             </>
@@ -96,20 +156,26 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
           title={item.chartData.title}
           subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
         >
-          <BarChart
-            data={item.chartData.data}
-            labels={item.chartData.labels}
-            title={item.chartData.title}
-            number={item.chartData.number}
-            color={item.chartData.color}
-          />
+          {engineLoading ? (
+            <p>Loading...</p>
+          ) : engineError ? (
+            <p>Error fetching data</p>
+          ) : (
+            <BarChart
+              data={chartData.data}
+              labels={chartData.labels}
+              title={chartData.title}
+              number={chartData.number}
+              color={chartData.color}
+            />
+          )}
           {item.chartData.pagination && (
             <>
               <Pagination
-                page={1}
-                totalPages={20}
-                onPageChange={() => console.log("Page Change")}
-                setLimit={() => console.log("Limit Change")}
+                page={currentPage}
+                totalPages={chartData.pagination.totalPages}
+                onPageChange={(page) => setCurrentPage(page)}
+                setLimit={(newLimit) => setLimit(newLimit)}
                 unit="Vehicles"
               />
             </>
@@ -122,23 +188,26 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
           title={item.chartData.title}
           subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
         >
-          <StackedBarChart
-            data={[
-              { name: "max-speed", data: item.chartData.data },
-              { name: "avg-speed", data: item.chartData.data },
-            ]}
-            labels={item.chartData.labels}
-            title={item.chartData.title}
-            number={item.chartData.number}
-            color={item.chartData.color}
-          />
+          {engineLoading ? (
+            <p>Loading...</p>
+          ) : engineError ? (
+            <p>Error fetching data</p>
+          ) : (
+            <StackedBarChart
+              data={chartData.data}
+              labels={chartData.labels}
+              title={chartData.title}
+              number={chartData.number}
+              color={chartData.color}
+            />
+          )}
           {item.chartData.pagination && (
             <>
               <Pagination
-                page={1}
-                totalPages={20}
-                onPageChange={() => console.log("Page Change")}
-                setLimit={() => console.log("Limit Change")}
+                page={currentPage}
+                totalPages={chartData.pagination.totalPages}
+                onPageChange={(page) => setCurrentPage(page)}
+                setLimit={(newLimit) => setLimit(newLimit)}
                 unit="Vehicles"
               />
             </>
