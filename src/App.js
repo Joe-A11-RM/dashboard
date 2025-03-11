@@ -7,86 +7,49 @@ import DashBoardMenu from "./Components/DashBoardMenu/DashBoardMenu";
 import WidgetSettings from "./Components/WidgetSettings/WidgetSettings";
 import DashboardContext from "./context/DashboardContext";
 import Gridthree from "./Components/Grid/Gridthree.jsx";
+import {
+	createBrowserRouter,
+	Navigate,
+	RouterProvider,
+} from "react-router-dom";
+import AuthLayout from "./Components/Layouts/AuthLayout.jsx";
+import ProtectedRoutes from "./Components/Layouts/ProtectedRoutes.jsx";
+import MainLayout from "./Components/Layouts/MainLayout.jsx";
 
 function App() {
-	const [mainData, setMainData] = useState([
+	const routes = createBrowserRouter(
+		[
+			/**			{
+				path: "/",
+				element: (
+					<Navigate
+						to={`/dashboard/auth?token=${localStorage.getItem("token")}`}
+						replace
+					/>
+				),
+			},
+			{
+				path: "/dashboard/auth",
+				element: <AuthLayout />,
+			},*/
+			{
+				path: `/`,
+				element: (
+					<ProtectedRoutes>
+						<MainLayout />
+					</ProtectedRoutes>
+				),
+			},
+		],
 		{
-			id: 1,
-			chartType: "LabelChart",
-			style: "col-lg-3",
-			img: "labelchart.png",
-			type: "template",
-		},
-		{
-			id: 2,
-			chartType: "LineChart",
-			style: "col-lg-3",
-			img: "labelchart.png",
-			type: "template",
-		},
-		{
-			id: 3,
-			chartType: "BarChart",
-			style: "col-lg-3",
-			img: "labelchart.png",
-			type: "template",
-		},
-		{
-			id: 4,
-			chartType: "PieChart",
-			style: "col-lg-3",
-			img: "labelchart.png",
-			type: "template",
-		},
-		{
-			id: 5,
-			chartType: "LabelChart",
-			style: "col-lg-3",
-			img: "chart.svg",
-			type: "custom",
-		},
-		{
-			id: 6,
-			chartType: "LineChart",
-			style: "col-lg-3",
-			img: "chart.svg",
-			type: "custom",
-		},
-		{
-			id: 7,
-			chartType: "BarChart",
-			style: "col-lg-3",
-			img: "chart.svg",
-			type: "custom",
-		},
-		{
-			id: 8,
-			chartType: "PieChart",
-			style: "col-lg-3",
-			img: "chart.svg",
-			type: "custom",
-		},
-	]);
-	const [widgetSettings, setWidgetSettings] = useState(false);
-	const [choice, setChoice] = useState("ready");
+			basename: "/dash",
+		}
+	);
+
 	return (
 		<>
 			<DashboardContext>
-				<div className="App">
-					<Header />
-					<DashBoardMenu
-						mainData={mainData}
-						choice={choice}
-						setChoice={setChoice}
-					/>
-
-					<WidgetSettings
-						show={widgetSettings}
-						onHide={() => setWidgetSettings(false)}
-					/>
-
-					<Gridthree />
-				</div>
+				<RouterProvider router={routes} />
 			</DashboardContext>
 		</>
 	);

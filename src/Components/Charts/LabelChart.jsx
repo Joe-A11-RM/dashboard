@@ -11,9 +11,7 @@ export default function LabelChart({
 	number,
 	color,
 }) {
-	console.log("TITLELABEL", title);
-	console.log("TITLEData", data);
-	console.log("TITLEDatas", labels);
+
 	return (
 		<>
 			{data ? (

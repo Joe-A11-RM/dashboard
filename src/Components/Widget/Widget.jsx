@@ -13,7 +13,10 @@ const Widget = ({ editMode, handleDelete, children, title, subTitle, id }) => {
 					{editMode && (
 						<div className="d-flex">
 							<div className="bin cancelSelectorName" onClick={handleDelete}>
-								<img src="assets/Dark/Delete.svg" alt="delete" />
+								<img
+									src={`${process.env.PUBLIC_URL}/assets/Dark/Delete.svg`}
+									alt="delete"
+								/>
 							</div>
 						</div>
 					)}

@@ -44,7 +44,6 @@ const baseLayout = [
 
 const layouts = generateResponsiveLayouts(baseLayout, columnCounts);
 
-console.log("Generated Layouts:", layouts);
 
 export default function GridTwo() {
 	return (

@@ -78,7 +78,6 @@ export default function Gridthree() {
     if (id === "1" || id === "2" || id === "3" || id === "4") return;
     deleDashboardWidget(id);
   };
-  console.log("Theme", theme);
   const generateLayouts = (themeData, columnCounts) => {
     const layouts = {};
 
@@ -227,7 +226,6 @@ export default function Gridthree() {
 					prevItems.length > 0
 						? Math.max(...prevItems.map((item) => item.y))
 						: 0;
-				console.log("maxY", maxY);
 
 				// **Find the highest x position at max y**
 				const itemsAtMaxY = prevItems.filter((item) => item.y === maxY);
@@ -235,9 +233,7 @@ export default function Gridthree() {
 					itemsAtMaxY.length > 0
 						? Math.max(...itemsAtMaxY.map((item) => item.x))
 						: 0;
-				console.log("maxX", maxX);
-				console.log("w", w);
-
+		
 				// **Set newX beside the last item at maxY, otherwise reset to 0 if row is full**
 				let newX =
 					maxX + w < columnCounts[breakpoint]
@@ -246,7 +242,6 @@ export default function Gridthree() {
 							: maxX + w
 						: 0;
 				let newY = newX === 0 ? maxY + 1 : maxY; // Move to a new row if the current row is full
-				console.log("NewX", newX);
 				// Generate a unique `i` value
 				const existingIds = new Set(prevItems.map((item) => item.i));
 				let newId = 1;
@@ -295,8 +290,7 @@ export default function Gridthree() {
     });
   };
 
-  console.log("xx", x);
-  console.log("allWidgets", allWidgets);
+
 
   const handleSave = () => {
     try {

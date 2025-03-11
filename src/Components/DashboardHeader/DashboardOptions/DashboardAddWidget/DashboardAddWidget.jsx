@@ -8,7 +8,11 @@ export default function DashboardAddWidget() {
 			className="dashboard-cancel-btn"
 			onClick={() => setDashboardMenu(true)}
 		>
-			<img src="assets/Dark/Add.svg" alt="add" className="me-1" />
+			<img
+				src={`${process.env.PUBLIC_URL}/assets/Dark/Add.svg`}
+				alt="add"
+				className="me-1"
+			/>
 			<div>Add widget</div>
 		</div>
 	);

@@ -27,7 +27,7 @@ export default function DashboardDropdownMenu({
 							<div title={i.name}> {truncateText(i.name)} </div>
 							<div>
 								<img
-									src="assets/Dark/Edit.svg"
+									src={`${process.env.PUBLIC_URL}/assets/Dark/Edit.svg`}
 									alt="edit"
 									className="me-1"
 									onClick={() => {
@@ -36,7 +36,7 @@ export default function DashboardDropdownMenu({
 									}}
 								/>
 								<img
-									src="assets/Dark/Delete.svg"
+									src={`${process.env.PUBLIC_URL}/assets/Dark/Delete.svg`}
 									alt="delete"
 									onClick={() => {
 										setModal({ type: "delete", value: true });

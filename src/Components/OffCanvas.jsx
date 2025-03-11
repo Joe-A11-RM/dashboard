@@ -41,7 +41,10 @@ const OffCanvasTemplate = ({ title, scroll, backdrop, children }) => {
 											setDashboardTypeWidget({ type: "", value: false })
 										}
 									>
-										<img src="assets/Light/Arrow.svg" alt="Back" />
+										<img
+											src={`${process.env.PUBLIC_URL}/assets/Light/Arrow.svg`}
+											alt="Back"
+										/>
 									</div>
 									<div className="dashboard-menu-head-title">
 										{dashboardTypeWidget.type}

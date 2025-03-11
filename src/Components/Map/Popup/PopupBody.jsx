@@ -9,7 +9,6 @@ export default function PopupBody({ item }) {
 			const response = await axios.get(
 				`https://nominatim.openstreetmap.org/reverse.php?lat=${lat}&lon=${lon}&zoom=18&format=jsonv2`
 			);
-			console.log(response);
 			setGeoCode(`${response.data.display_name}`);
 			return `${response.data.display_name}`;
 		} catch (error) {
@@ -20,7 +19,6 @@ export default function PopupBody({ item }) {
 	useEffect(() => {
 		fetchGeoCodePosition(item.latitude, item.longitude);
 	}, [item.latitude, item.longitude]);
-	console.log("geoCode", geoCode);
 	return (
 		<div className="popup-body ">
 			<div className="container-fluid">
