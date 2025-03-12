@@ -8,7 +8,7 @@ export default function GeoMap({ children }) {
 				id="map-container"
 				center={[23.8859, 45.0792]}
 				zoomControl={false}
-				zoom={4}
+				zoom={6}
 				scrollWheelZoom={true}
 				minZoom={4.5}
 				maxZoom={18}
