@@ -1,7 +1,14 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
 
-const Pagination = ({ page, totalPages, onPageChange, setLimit, unit }) => {
+const Pagination = ({
+  page,
+  totalPages,
+  onPageChange,
+  setLimit,
+  unit,
+  containerStyle,
+}) => {
   const handlePageClick = (selected) => {
     onPageChange(selected.selected + 1);
   };
@@ -12,7 +19,7 @@ const Pagination = ({ page, totalPages, onPageChange, setLimit, unit }) => {
   };
 
   return (
-    <div className="paginationContainer">
+    <div className={`paginationContainer ${containerStyle}`}>
       <ReactPaginate
         breakLabel={"..."}
         previousLabel={"<"}
@@ -32,17 +39,19 @@ const Pagination = ({ page, totalPages, onPageChange, setLimit, unit }) => {
         forcePage={page - 1}
         renderOnZeroPageCount={null}
       />
-      <div className="itemsContainer">
-        <div className="mr-3">{unit} per view:</div>
-        <select className="itemsSelect" onChange={handleLimitChange}>
-          <option value={10}>10 {unit}</option>
-          <option value={20}>20 {unit}</option>
-          <option value={30}>30 {unit}</option>
-          <option value={40}>40 {unit}</option>
-          <option value={50}>50 {unit}</option>
-          <option value={60}>60 {unit}</option>
-        </select>
-      </div>
+      {setLimit && (
+        <div className="itemsContainer">
+          <div className="mr-3">{unit} per view:</div>
+          <select className="itemsSelect" onChange={handleLimitChange}>
+            <option value={10}>10 {unit}</option>
+            <option value={20}>20 {unit}</option>
+            <option value={30}>30 {unit}</option>
+            <option value={40}>40 {unit}</option>
+            <option value={50}>50 {unit}</option>
+            <option value={60}>60 {unit}</option>
+          </select>
+        </div>
+      )}
     </div>
   );
 };
