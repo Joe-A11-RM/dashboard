@@ -7,7 +7,7 @@ export const geoSpatialSlice = createSlice({
 	},
 	reducers: {
 		addGeofence: (state, action) => {
-			state.geospatial = [action.payload];
+			state.geospatial = action.payload;
 		},
 	},
 });

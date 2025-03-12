@@ -1,25 +1,86 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useGetPointsQuery } from "../../../Redux/service/GeoSpatial/GeoSpatial";
-import { addGeofence } from "../../../Redux/service/GeoSpatial/GeoSpatialSlice";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { Marker, Polygon } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-markercluster";
+import L from "leaflet";
+import { geospatialcontext } from "../../../context/GeoSpatialContext";
+
+// Custom marker icon
+const customIcon = new L.Icon({
+	iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+	iconSize: [32, 32],
+	iconAnchor: [16, 32],
+	popupAnchor: [0, -32],
+});
 
 export default function GeoSpatialPoints() {
-	const dispatch = useDispatch();
 	const geospatial = useSelector((state) => state.geospatial.geospatial);
+	const memoizedGeospatial = useMemo(() => geospatial, [geospatial]);
+	let { type } = useContext(geospatialcontext);
 
-	const { data } = useGetPointsQuery({
-		type: "points",
-		sortType: "desc",
-		search: "",
-		page: 0,
-		total: 100,
-	});
+	let [polygons, setPolygons] = useState();
 
 	useEffect(() => {
-		if (data) {
-			dispatch(addGeofence(data));
+		if (type === "polygons" || type === "lines") {
+			const parsedPolygons = geospatial.map((item) => ({
+				id: item.id,
+				name: item.name,
+				coordinates: JSON.parse(item.coordinates),
+			}));
+			console.log("parsedPolygons", parsedPolygons);
+			setPolygons(parsedPolygons);
 		}
-	}, [data, dispatch]);
+	}, [type, geospatial]);
+	return (
+		<>
+			{type === "points" && (
+				<MarkerClusterGroup chunkedLoading>
+					{memoizedGeospatial.map((point) => {
+						if (!point.lat || !point.lng) {
+							return null;
+						}
 
-	console.log("geospatial:", geospatial);
+						return (
+							<Marker
+								key={point?.id}
+								position={[point.lat, point.lng]}
+								icon={customIcon}
+							/>
+						);
+					})}
+				</MarkerClusterGroup>
+			)}
+			{(type === "polygons" || type === "lines") && (
+				<>
+					{polygons?.map((i) => (
+						<Polygon
+							key={i.id}
+							positions={i.coordinates.map((coord) => [coord.lat, coord.lng])}
+							color="blue"
+							weight={4}
+							fillColor="blue"
+							fillOpacity={0.3}
+							dashArray="8"
+							eventHandlers={{
+								mouseover: (e) => {
+									const layer = e.target;
+									layer.setStyle({
+										color: "red",
+										weight: 6,
+									});
+								},
+								mouseout: (e) => {
+									const layer = e.target;
+									layer.setStyle({
+										color: "blue",
+										weight: 4,
+									});
+								},
+							}}
+						></Polygon>
+					))}
+				</>
+			)}
+		</>
+	);
 }
