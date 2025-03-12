@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import WidgetSettings from "../WidgetSettings/WidgetSettings";
-import Gridthree from "../Grid/Gridthree";
-import Header from "../DashboardHeader/Header";
-import DashBoardMenu from "../DashBoardMenu/DashBoardMenu";
+import DashBoardMenu from "../Dashboard/DashBoardMenu/DashBoardMenu";
+import Header from "../Dashboard/DashboardHeader/Header";
+import Gridthree from "../Dashboard/Grid/Gridthree";
+import WidgetSettings from "../Dashboard/WidgetSettings/WidgetSettings";
 
 export default function MainLayout() {
 	const [mainData, setMainData] = useState([
@@ -71,18 +71,15 @@ export default function MainLayout() {
 		<div>
 			<div className="App">
 				<Header />
-
 				<DashBoardMenu
 					mainData={mainData}
 					choice={choice}
 					setChoice={setChoice}
 				/>
-
 				<WidgetSettings
 					show={widgetSettings}
 					onHide={() => setWidgetSettings(false)}
 				/>
-
 				<Gridthree />
 			</div>
 		</div>

@@ -531,17 +531,17 @@ label {
 }
 
 .dashboard-Pie {
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  padding-top: 20px;
-  padding-inline: 20px;
-  transition: all 0.5s ease;
-  position: relative;
-  overflow: visible;
+	width: 100%;
+	height: 100%;
+	border-radius: 8px;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	padding-top: 20px;
+	padding-inline: 20px;
+	transition: all 0.5s ease;
+	position: relative;
+	overflow: visible;
 }
 
 .pie-chart {
@@ -771,6 +771,15 @@ label {
 	height: 86%;
 }
 
+.full-map {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+}
+
 .map-container {
 	position: relative;
 	height: 100%;
@@ -812,11 +821,11 @@ label {
 	margin-block: 8px;
 }
 
-.popup-vehicle-title{
-  font-weight: 500;
-  font-size: 14px;
-  text-transform: capitalize;
-  margin-right: 4px;
+.popup-vehicle-title {
+	font-weight: 500;
+	font-size: 14px;
+	text-transform: capitalize;
+	margin-right: 4px;
 }
 
 .alert-widget {
@@ -842,6 +851,52 @@ label {
 	object-fit: cover;
 }
 
+.geospatial-uploads {
+	position: absolute;
+	background-color: white;
+	width: 400px;
+	height: 700px;
+	top: 10px;
+	left: 10px;
+	bottom: 10px;
+	padding: 16px;
+	border-radius: 8px;
+	z-index: 999;
+	transition: 0.5s ease-out all;
+}
+
+.geospatial-uploads-mini {
+	position: absolute;
+	background-color: white;
+	width: auto;
+	height: auto;
+	top: 10px;
+	left: 10px;
+	padding: 8px;
+	border-radius: 8px;
+	z-index: 999;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	transition: 0.5s ease all;
+}
+
+.geospatial-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: #192839;
+	font-size: 20px;
+	font-weight: 600;
+	text-transform: capitalize;
+}
+
+.geospatial-data {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-block: 16px;
+}
 @media (max-width: 575.98px) {
 	.dashboard-header {
 		display: block !important;

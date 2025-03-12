@@ -1,20 +1,16 @@
 /* eslint-disable no-unused-vars */
 import "./App.css";
-import { useState } from "react";
 
-import Header from "./Components/DashboardHeader/Header";
-import DashBoardMenu from "./Components/DashBoardMenu/DashBoardMenu";
-import WidgetSettings from "./Components/WidgetSettings/WidgetSettings";
 import DashboardContext from "./context/DashboardContext";
-import Gridthree from "./Components/Grid/Gridthree.jsx";
 import {
 	createBrowserRouter,
 	Navigate,
 	RouterProvider,
 } from "react-router-dom";
-import AuthLayout from "./Components/Layouts/AuthLayout.jsx";
 import ProtectedRoutes from "./Components/Layouts/ProtectedRoutes.jsx";
-import MainLayout from "./Components/Layouts/MainLayout.jsx";
+import Dashboard from "./Components/Dashboard/Dashboard.jsx";
+import GeoSpatial from "./Components/GeoSpatial/GeoSpatial.jsx";
+import GeoSpatialContext from "./context/GeoSpatialContext.jsx";
 
 function App() {
 	const routes = createBrowserRouter(
@@ -36,7 +32,15 @@ function App() {
 				path: `/`,
 				element: (
 					<ProtectedRoutes>
-						<MainLayout />
+						<Dashboard />
+					</ProtectedRoutes>
+				),
+			},
+			{
+				path: `/geospatial`,
+				element: (
+					<ProtectedRoutes>
+						<GeoSpatial />
 					</ProtectedRoutes>
 				),
 			},
@@ -49,7 +53,9 @@ function App() {
 	return (
 		<>
 			<DashboardContext>
-				<RouterProvider router={routes} />
+				<GeoSpatialContext>
+					<RouterProvider router={routes} />
+				</GeoSpatialContext>
 			</DashboardContext>
 		</>
 	);
