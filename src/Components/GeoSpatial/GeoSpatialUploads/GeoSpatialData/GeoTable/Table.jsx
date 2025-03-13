@@ -3,18 +3,34 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { FaTrash } from "react-icons/fa";
 import { geospatialcontext } from "../../../../../context/GeoSpatialContext";
 import { useDeletePointsMutation } from "../../../../../Redux/service/GeoSpatial/GeoSpatial";
+import { useMap } from "react-leaflet";
 
 const GeoTable = ({ data, refetch }) => {
   let { type, sortType, setSortType, selectedIds, setSelectedIds } =
     useContext(geospatialcontext);
 
-  const handleSelectRow = (id) => {
+  const map = useMap();
+  const moveToPointLocation = (lat, lon) => {
+    map.setView([lat, lon], 40);
+  };
+
+  const moveToPolygonsLocation = (coordinates) => {
+    let latLng = JSON.parse(coordinates);
+    map.setView([latLng[0].lat, latLng[0].lng], 40);
+  };
+
+  const handleSelectRow = (id, lat, lng, coordinates) => {
     setSelectedIds(
       (prevSelected) =>
         prevSelected.includes(id)
-          ? prevSelected.filter((rowId) => rowId !== id) // Unselect if already selected
-          : [...prevSelected, id] // Add if not selected
+          ? prevSelected.filter((rowId) => rowId !== id)
+          : [...prevSelected, id] 
     );
+    if (type === "points") {
+      moveToPointLocation(lat, lng);
+    } else {
+      moveToPolygonsLocation(coordinates);
+    }
   };
   const [deletePoint] = useDeletePointsMutation();
 
@@ -37,6 +53,10 @@ const GeoTable = ({ data, refetch }) => {
       alert("Error deleting item. Please try again.");
     }
   };
+
+  useEffect(() => {
+    setSelectedIds([]);
+  }, [type]);
 
   return (
     <div className="geo-table card">
@@ -62,7 +82,17 @@ const GeoTable = ({ data, refetch }) => {
             <tbody>
               {data?.response?.data.map((item) => {
                 return (
-                  <tr key={item.id}>
+                  <tr
+                    key={item.id}
+                    onClick={() =>
+                      handleSelectRow(
+                        item.id,
+                        item.lat,
+                        item.lng,
+                        item.coordinates
+                      )
+                    }
+                  >
                     <td
                       className={
                         selectedIds.includes(item.id) ? "active-row" : ""
@@ -72,7 +102,14 @@ const GeoTable = ({ data, refetch }) => {
                         type="checkbox"
                         className="form-check-input custom-checkbox"
                         checked={selectedIds.includes(item.id)}
-                        onChange={() => handleSelectRow(item.id)}
+                        onChange={() =>
+                          handleSelectRow(
+                            item.id,
+                            item.lat,
+                            item.lng,
+                            item.coordinates
+                          )
+                        }
                       />
                     </td>
                     <td

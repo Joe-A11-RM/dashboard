@@ -12,9 +12,8 @@ export default function GeoSpatial() {
 		<div>
 			<GeoMap>
 				<GeoSpatialPoints />
+				{!minimize ? <GeoSpatialUploads /> : <GeoSpatialUploadsMini />}
 			</GeoMap>
-
-			{!minimize ? <GeoSpatialUploads /> : <GeoSpatialUploadsMini />}
 		</div>
 	);
 }

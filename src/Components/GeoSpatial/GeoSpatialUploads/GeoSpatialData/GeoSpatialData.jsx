@@ -33,7 +33,7 @@ export default function GeoSpatialData() {
     <>
       <div className="geospatial-data">
         <GeoSpatialSearch />
-        <GesSpatialBulk />
+        <GesSpatialBulk refetch={refetch} />
         {selectedIds.length > 0 && <GeoSpitalDelete refetch={refetch} />}
       </div>
       <div className="geo-filters">

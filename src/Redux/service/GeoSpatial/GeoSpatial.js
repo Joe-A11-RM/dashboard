@@ -23,7 +23,18 @@ export const GeoSpatialApi = createApi({
         method: "DELETE",
       }),
     }),
+    addPoints: builder.mutation({
+      query: (val) => ({
+        url: "/upload",
+        method: "POST",
+        body: { file: val },
+      }),
+    }),
   }),
 });
 
-export const { useGetPointsQuery, useDeletePointsMutation } = GeoSpatialApi;
+export const {
+  useGetPointsQuery,
+  useDeletePointsMutation,
+  useAddPointsMutation,
+} = GeoSpatialApi;
