@@ -9,7 +9,7 @@ import { addGeofence } from "../../../../Redux/service/GeoSpatial/GeoSpatialSlic
 
 export default function GeoSpatialData() {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data } = useGetPointsQuery({
+  const { data , refetch} = useGetPointsQuery({
     type: "points",
     sortType: "desc",
     search: "",
@@ -26,7 +26,7 @@ export default function GeoSpatialData() {
     <>
       <div className="geospatial-data">
         <GeoSpatialSearch />
-        <GesSpatialBulk />
+        <GesSpatialBulk refetch={refetch}/>
       </div>
       <div className="geo-filters">
         <div className="geo-filter">Points</div>

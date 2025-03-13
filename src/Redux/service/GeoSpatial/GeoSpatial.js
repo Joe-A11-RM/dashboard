@@ -17,7 +17,14 @@ export const GeoSpatialApi = createApi({
 			query: ({ type, search, sortType, page, total }) =>
 				`/points?type=${type}&search=${search}&sort=0&sortType=${sortType}&page=${page}&total=${total}`,
 		}),
+		addPoints: builder.mutation({
+			query: (val) => ({
+				url: "/upload",
+				method: "POST",
+				body: {file:val},
+			}),
+		}),
 	}),
 });
 
-export const { useGetPointsQuery } = GeoSpatialApi;
+export const { useGetPointsQuery, useAddPointsMutation } = GeoSpatialApi;
