@@ -896,6 +896,7 @@ label {
 	justify-content: space-between;
 	align-items: center;
 	margin-block: 16px;
+	gap: 4px;
 }
 @media (max-width: 575.98px) {
 	.dashboard-header {

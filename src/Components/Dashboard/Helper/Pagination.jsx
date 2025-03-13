@@ -8,6 +8,7 @@ const Pagination = ({
   setLimit,
   unit,
   containerStyle,
+  pageRange,
 }) => {
   const handlePageClick = (selected) => {
     onPageChange(selected.selected + 1);
@@ -26,7 +27,7 @@ const Pagination = ({
         nextLabel={">"}
         initialPage={0}
         containerClassName={"pagination"}
-        pageRangeDisplayed={totalPages > 20 ? 1 : 3}
+        pageRangeDisplayed={totalPages > 20 ? (pageRange ? pageRange : 1) : 2}
         marginPagesDisplayed={totalPages > 20 ? 1 : 2}
         pageClassName={"pageClaseName"}
         previousClassName={"paginationButton"}
