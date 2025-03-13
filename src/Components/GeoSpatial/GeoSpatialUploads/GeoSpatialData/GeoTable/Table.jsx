@@ -20,11 +20,10 @@ const GeoTable = ({ data, refetch }) => {
   };
 
   const handleSelectRow = (id, lat, lng, coordinates) => {
-    setSelectedIds(
-      (prevSelected) =>
-        prevSelected.includes(id)
-          ? prevSelected.filter((rowId) => rowId !== id)
-          : [...prevSelected, id] 
+    setSelectedIds((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((rowId) => rowId !== id)
+        : [...prevSelected, id]
     );
     if (type === "points") {
       moveToPointLocation(lat, lng);
@@ -102,6 +101,7 @@ const GeoTable = ({ data, refetch }) => {
                         type="checkbox"
                         className="form-check-input custom-checkbox"
                         checked={selectedIds.includes(item.id)}
+                        onClick={(e) => e.stopPropagation()} // Prevents row click from triggering
                         onChange={() =>
                           handleSelectRow(
                             item.id,
