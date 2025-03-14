@@ -17,7 +17,7 @@ export default function GeoSpatialData() {
     type: type,
     sortType: sortType,
     search: search,
-    page: currentPage,
+    page: currentPage * 100,
     total: 100,
   });
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ export default function GeoSpatialData() {
         onPageChange={(page) => setCurrentPage(page - 1)}
         unit="items"
         containerStyle={"h-10 w-100"}
-        pageRange={10}
+        pageRange={6}
       />
     </>
   );

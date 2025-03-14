@@ -16,12 +16,15 @@
   color: #334155;
 }
 .pageClaseName {
+  display: flex;
   border-radius: 50%;
   color: #334155;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   text-align: center;
   font-size: 12px;
+  align-items: center;
+  justify-content: center;
 }
 
 .pageClaseName:hover {
@@ -46,6 +49,7 @@
   display: flex;
   flex-direction: row;
   margin: 1px;
+  gap: 3px;
 }
 .pagination a {
   text-decoration: none !important;
@@ -54,10 +58,13 @@
 .paginationButton {
   border-radius: 50%;
   color: #334155;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   text-align: center;
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .paginationButton:hover {
   background-color: #3b3887;
@@ -69,16 +76,22 @@
   padding: 2px;
   border-radius: 50%;
   color: #334155;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 .pageBreakClassName {
   border-radius: 50%;
   color: #334155;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .geoSearch {
   padding: 6px 10px;
