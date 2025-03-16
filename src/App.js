@@ -11,6 +11,8 @@ import ProtectedRoutes from "./Components/Layouts/ProtectedRoutes.jsx";
 import Dashboard from "./Components/Dashboard/Dashboard.jsx";
 import GeoSpatial from "./Components/GeoSpatial/GeoSpatial.jsx";
 import GeoSpatialContext from "./context/GeoSpatialContext.jsx";
+import MainLayout from "./Components/Layouts/MainLayout.jsx";
+import { ToastContainer } from "react-toastify";
 
 function App() {
 	const routes = createBrowserRouter(
@@ -27,6 +29,14 @@ function App() {
 			{
 				path: "/dashboard/auth",
 				element: <AuthLayout />,
+			},*/
+			/**{
+				path: `/`,
+				element: (
+					<ProtectedRoutes>
+						<MainLayout />
+					</ProtectedRoutes>
+				),
 			},*/
 			{
 				path: `/`,
@@ -57,6 +67,7 @@ function App() {
 					<RouterProvider router={routes} />
 				</GeoSpatialContext>
 			</DashboardContext>
+			<ToastContainer theme="colored" />
 		</>
 	);
 }

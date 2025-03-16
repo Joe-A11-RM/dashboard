@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import { useAddPointsMutation } from "../../../../../Redux/service/GeoSpatial/GeoSpatial";
+import { toast } from "react-toastify";
 
 export default function GesSpatialBulk({ refetch }) {
-	let [addPoints, { data }] = useAddPointsMutation();
+	let [addPoints, { data, isLoading }] = useAddPointsMutation();
 	const fileInputRef = useRef(null);
 
 	const handleClick = () => {
@@ -15,7 +16,6 @@ export default function GesSpatialBulk({ refetch }) {
 			const reader = new FileReader();
 			reader.onload = () => {
 				const base64String = reader.result.split(",")[1];
-				alert("File uploaded successfully!");
 				if (base64String) {
 					addPoints(base64String)
 						.unwrap()
@@ -33,6 +33,11 @@ export default function GesSpatialBulk({ refetch }) {
 		}
 	};
 	console.log(data);
+	if (isLoading) {
+		toast.info("Loading....", { autoClose: false });
+	} else if (data) {
+		toast.dismiss();
+	}
 	return (
 		<div className="geo-bulk" onClick={handleClick}>
 			Bulk Upload
