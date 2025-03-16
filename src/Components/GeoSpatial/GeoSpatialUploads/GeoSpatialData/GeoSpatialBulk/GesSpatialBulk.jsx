@@ -32,7 +32,6 @@ export default function GesSpatialBulk({ refetch }) {
 			event.target.value = "";
 		}
 	};
-	console.log(data);
 	if (isLoading) {
 		toast.info("Loading....", { autoClose: false });
 	} else if (data) {

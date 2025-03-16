@@ -4,6 +4,8 @@ import { FaTrash } from "react-icons/fa";
 import { geospatialcontext } from "../../../../../context/GeoSpatialContext";
 import { useDeletePointsMutation } from "../../../../../Redux/service/GeoSpatial/GeoSpatial";
 import { useMap } from "react-leaflet";
+import { useDispatch } from "react-redux";
+import { addGeofence } from "../../../../../Redux/service/GeoSpatial/GeoSpatialSlice";
 
 const GeoTable = ({ data, refetch }) => {
   let {
@@ -15,7 +17,7 @@ const GeoTable = ({ data, refetch }) => {
     selectMode,
     setSelectMode,
   } = useContext(geospatialcontext);
-
+  const dispatch = useDispatch();
   const map = useMap();
   const moveToPointLocation = (lat, lon) => {
     map.setView([lat, lon], 40);
@@ -102,14 +104,15 @@ const GeoTable = ({ data, refetch }) => {
                   return (
                     <tr
                       key={item.id}
-                      onClick={() =>
+                      onClick={() => {
                         handleSelectRow(
                           item.id,
                           item.lat,
                           item.lng,
                           item.coordinates
-                        )
-                      }
+                        );
+                        dispatch(addGeofence([item]));
+                      }}
                     >
                       <td
                         className={

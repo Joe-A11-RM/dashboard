@@ -20,12 +20,12 @@ export default function GeoSpatialData() {
 		page: currentPage * 100,
 		total: 100,
 	});
-	const dispatch = useDispatch();
-	useEffect(() => {
-		if (data?.response?.data) {
-			dispatch(addGeofence(data?.response?.data));
-		}
-	}, [data, dispatch]);
+	//const dispatch = useDispatch();
+	// useEffect(() => {
+	// 	if (data?.response?.data) {
+	// 		dispatch(addGeofence(data?.response?.data));
+	// 	}
+	// }, [data, dispatch]);
 	useEffect(() => {
 		console.log("selectedIds", selectedIds);
 	});

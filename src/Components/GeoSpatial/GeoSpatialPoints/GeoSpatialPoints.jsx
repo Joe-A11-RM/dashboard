@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { Marker, Polygon } from "react-leaflet";
+import { Marker, Polygon, Polyline, Popup, Tooltip } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import L from "leaflet";
 import { geospatialcontext } from "../../../context/GeoSpatialContext";
@@ -17,55 +17,87 @@ export default function GeoSpatialPoints() {
 	const geospatial = useSelector((state) => state.geospatial.geospatial);
 	const memoizedGeospatial = useMemo(() => geospatial, [geospatial]);
 	let { type } = useContext(geospatialcontext);
-
-	let [polygons, setPolygons] = useState();
+	let [polygons, setPolygons] = useState([]);
+	useEffect(() => {
+		setPolygons([]);
+	}, [type]);
 
 	useEffect(() => {
 		if (type === "polygons" || type === "lines") {
 			const parsedPolygons = geospatial
-				.filter((item) => item.coordinates) // Ensure it exists
+				.filter((item) => item.coordinates)
 				.map((item) => {
 					try {
 						return {
 							id: item.id,
 							name: item.name,
 							coordinates: JSON.parse(item.coordinates),
+							style: JSON.parse(item.styleHash),
 						};
 					} catch (error) {
 						console.error(
 							`Error parsing coordinates for item ${item.id}:`,
 							error
 						);
-						return null; // Skip invalid items
+						return null;
 					}
 				})
-				.filter((item) => item !== null); // Remove invalid entries
-
-			console.log("Parsed Polygons:", parsedPolygons);
+				.filter((item) => item !== null);
 			setPolygons(parsedPolygons);
 		}
-	}, [type, geospatial]);
+	}, [geospatial]);
+	console.log("Polygons", polygons);
 	return (
 		<>
-			{type === "points" && (
-				<MarkerClusterGroup chunkedLoading>
-					{memoizedGeospatial &&
-						memoizedGeospatial.map((point) => {
-							if (!point.lat || !point.lng) {
-								return null;
-							}
-
-							return (
-								<Marker
-									key={point?.id}
-									position={[point.lat, point.lng]}
-									icon={customIcon}
-								/>
-							);
-						})}
-				</MarkerClusterGroup>
-			)}
-			{(type === "polygons" || type === "lines") && (
+			{type === "points" &&
+				memoizedGeospatial &&
+				memoizedGeospatial.map((point) => {
+					if (!point.lat || !point.lng) {
+						return null;
+					}
+					console.log("Point", point);
+					return (
+						<>
+							<Marker
+								key={point?.id}
+								position={[point?.lat, point?.lng]}
+								icon={customIcon}
+							>
+								<Tooltip permanent={true} direction="top" offset={[0, -30]}>
+									<div className="visited">
+										<div className="mb-2 d-flex justify-content-center">
+											<span>vistied</span>
+											{point?.visited === 0 ? (
+												<div className="rvisited"></div>
+											) : (
+												<div className="gvisited"></div>
+											)}
+										</div>
+										<div>
+											{point?.visited === 1 && (
+												<>
+													<span>visiting date: </span>
+													{new Date(point?.visited_date).toLocaleString(
+														"en-US",
+														{
+															year: "numeric",
+															month: "2-digit",
+															day: "2-digit",
+															hour: "2-digit",
+															minute: "2-digit",
+															hour12: true,
+														}
+													)}
+												</>
+											)}
+										</div>
+									</div>
+								</Tooltip>
+							</Marker>
+						</>
+					);
+				})}
+			{type === "polygons" && (
 				<>
 					{polygons &&
 						polygons?.map((i) => (
@@ -74,26 +106,25 @@ export default function GeoSpatialPoints() {
 								positions={i.coordinates.map((coord) => [coord.lat, coord.lng])}
 								color="blue"
 								weight={4}
+								fillColor={i.style ? `#{${i.style}}` : "blue"}
+								fillOpacity={0.3}
+							></Polygon>
+						))}
+				</>
+			)}
+
+			{type === "lines" && (
+				<>
+					{polygons &&
+						polygons?.map((i) => (
+							<Polyline
+								key={i.id}
+								positions={i.coordinates.map((coord) => [coord.lat, coord.lng])}
+								color="blue"
+								weight={4}
 								fillColor="blue"
 								fillOpacity={0.3}
-								dashArray="8"
-								eventHandlers={{
-									mouseover: (e) => {
-										const layer = e.target;
-										layer.setStyle({
-											color: "red",
-											weight: 6,
-										});
-									},
-									mouseout: (e) => {
-										const layer = e.target;
-										layer.setStyle({
-											color: "blue",
-											weight: 4,
-										});
-									},
-								}}
-							></Polygon>
+							></Polyline>
 						))}
 				</>
 			)}
