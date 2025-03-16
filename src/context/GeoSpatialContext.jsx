@@ -6,6 +6,7 @@ export default function GeoSpatialContext({ children }) {
   let [sortType, setSortType] = useState("desc");
   let [search, setSearch] = useState("");
   let [selectedIds, setSelectedIds] = useState([]);
+  let [selectMode, setSelectMode] = useState(false);
   return (
     <>
       <geospatialcontext.Provider
@@ -20,6 +21,8 @@ export default function GeoSpatialContext({ children }) {
           setSearch,
           selectedIds,
           setSelectedIds,
+          selectMode,
+          setSelectMode,
         }}
       >
         {children}
