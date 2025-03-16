@@ -907,6 +907,31 @@ label {
 	}
 }
 
+.visited {
+	width: auto;
+	padding: 8px;
+	background-color: white;
+}
+
+.visited span {
+	font-weight: 600;
+	font-size: 14px;
+	text-transform: capitalize;
+}
+.gvisited {
+	background-color: green;
+	border-radius: 100px;
+	width: 20px;
+	height: 20px;
+	margin-left: 10px;
+}
+.rvisited {
+	background-color: red;
+	border-radius: 100px;
+	width: 20px;
+	height: 20px;
+	margin-left: 10px;
+}
 @media (max-width: 767.98px) {
 	.count {
 		padding: 5px 10px;
