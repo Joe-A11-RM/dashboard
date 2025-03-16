@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import GeoSpatialSearch from "./GeoSpatialSearch/GeoSpatialSearch";
 import GesSpatialBulk from "./GeoSpatialBulk/GesSpatialBulk";
 import GeoTable from "./GeoTable/Table";
 import Pagination from "../../../Dashboard/Helper/Pagination";
 import { useGetPointsQuery } from "../../../../Redux/service/GeoSpatial/GeoSpatial";
-import { useDispatch } from "react-redux";
-import { addGeofence } from "../../../../Redux/service/GeoSpatial/GeoSpatialSlice";
 import { geospatialcontext } from "../../../../context/GeoSpatialContext";
 import GeoSpitalDelete from "./GeoSpatialBulk/GeoSpitalDelete";
 
@@ -26,9 +24,7 @@ export default function GeoSpatialData() {
 	// 		dispatch(addGeofence(data?.response?.data));
 	// 	}
 	// }, [data, dispatch]);
-	useEffect(() => {
-		console.log("selectedIds", selectedIds);
-	});
+
 	return (
 		<>
 			<div className="geospatial-data">

@@ -113,7 +113,7 @@ export default function Gridthree() {
 							default:
 								newWidth = Math.max(2, Math.floor((w / 12) * cols));
 						}
-						console.log("Component", component.props.item.chartData.chartType);
+						//console.log("Component", component.props.item.chartData.chartType);
 						/*	if (
 							(component.props.item.chartData.chartType === "BarChart" ||
 								component.props.item.chartData.chartType ===
@@ -358,7 +358,6 @@ export default function Gridthree() {
 			refetch();
 		}
 	}, [status, refetch]);
-	console.log("Layout", x);
 
 	const j = () => {
 		let data = [];

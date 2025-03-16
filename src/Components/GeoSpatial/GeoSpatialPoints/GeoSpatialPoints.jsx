@@ -1,7 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { Marker, Polygon, Polyline, Popup, Tooltip } from "react-leaflet";
-import MarkerClusterGroup from "react-leaflet-markercluster";
+import { Marker, Polygon, Polyline,  Tooltip } from "react-leaflet";
 import L from "leaflet";
 import { geospatialcontext } from "../../../context/GeoSpatialContext";
 
@@ -16,7 +16,7 @@ const customIcon = new L.Icon({
 export default function GeoSpatialPoints() {
 	const geospatial = useSelector((state) => state.geospatial.geospatial);
 	const memoizedGeospatial = useMemo(() => geospatial, [geospatial]);
-	let { type } = useContext(geospatialcontext);
+	let { type, selectMode } = useContext(geospatialcontext);
 	let [polygons, setPolygons] = useState([]);
 	useEffect(() => {
 		setPolygons([]);
@@ -46,16 +46,15 @@ export default function GeoSpatialPoints() {
 			setPolygons(parsedPolygons);
 		}
 	}, [geospatial]);
-	console.log("Polygons", polygons);
 	return (
 		<>
 			{type === "points" &&
+				!selectMode &&
 				memoizedGeospatial &&
 				memoizedGeospatial.map((point) => {
 					if (!point.lat || !point.lng) {
 						return null;
 					}
-					console.log("Point", point);
 					return (
 						<>
 							<Marker
@@ -97,7 +96,7 @@ export default function GeoSpatialPoints() {
 						</>
 					);
 				})}
-			{type === "polygons" && (
+			{type === "polygons" && !selectMode && (
 				<>
 					{polygons &&
 						polygons?.map((i) => (
@@ -113,7 +112,7 @@ export default function GeoSpatialPoints() {
 				</>
 			)}
 
-			{type === "lines" && (
+			{type === "lines" && !selectMode && (
 				<>
 					{polygons &&
 						polygons?.map((i) => (

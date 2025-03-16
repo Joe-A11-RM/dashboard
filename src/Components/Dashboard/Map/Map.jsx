@@ -33,7 +33,6 @@ export default function Map() {
 
 		return () => clearInterval(interval);
 	}, [refetch, isUninitialized]);
-	console.log("Edit", editMode);
 	return (
 		<div className="map">
 			<MapContainer
