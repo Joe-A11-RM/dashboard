@@ -30,7 +30,7 @@ function App() {
 				path: "/dashboard/auth",
 				element: <AuthLayout />,
 			},*/
-			/**{
+			/*{
 				path: `/`,
 				element: (
 					<ProtectedRoutes>

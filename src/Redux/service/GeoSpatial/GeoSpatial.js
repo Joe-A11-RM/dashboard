@@ -5,9 +5,13 @@ export const GeoSpatialApi = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: `${process.env.REACT_APP_API_GEOSPATIAL}/map`,
 		prepareHeaders: (headers) => {
-			const token = localStorage.getItem("token");
+			let token =
+				sessionStorage.getItem("token") || localStorage.getItem("token");
+			console.log("Token", token);
+			console.log("Session Token", sessionStorage.getItem("token"));
+			console.log("Local Token", localStorage.getItem("token"));
 			if (token) {
-				headers.set("Authorization", `${token}`);
+				headers.set("Authorization", ` ${token}`);
 			}
 			return headers;
 		},

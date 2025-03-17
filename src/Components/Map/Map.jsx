@@ -17,7 +17,7 @@ export default function GeoMap({ children }) {
 				className="map-container"
 			>
 				<ZoomControl position="bottomright" />
-				<TileLayer url="https://mt0.google.com/vt/lyrs=m,&hl=en&x={x}&y={y}&z={z}&s=Ga" />
+				<TileLayer url="https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}" />
 				{children}
 			</MapContainer>
 		</div>

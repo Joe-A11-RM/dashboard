@@ -5,7 +5,11 @@ export const DashboardApi = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: `${process.env.REACT_APP_API_URL}/api/v1`,
 		prepareHeaders: (headers) => {
-			const token = localStorage.getItem("token");
+			let token =
+				sessionStorage.getItem("token") || localStorage.getItem("token");
+			console.log("Token", token);
+			console.log("Session Token", sessionStorage.getItem("token"));
+			console.log("Local Token", localStorage.getItem("token"));
 			if (token) {
 				headers.set("Authorization", `Bearer ${token}`);
 			}

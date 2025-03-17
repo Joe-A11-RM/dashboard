@@ -5,13 +5,12 @@ export default function GeoSpatialUploadsMini() {
 	let { setMinimize } = useContext(geospatialcontext);
 
 	return (
-		<div className="geospatial-uploads-mini">
+		<div className="geospatial-uploads-mini" onClick={() => setMinimize(false)}>
 			<div>GeoSpatial</div>
 			<img
 				src={`${process.env.PUBLIC_URL}/assets/Light/Double-Arrow.svg`}
-				style={{ transform: "rotate(-180deg)" , cursor:"pointer"}}
+				style={{ transform: "rotate(-180deg)", cursor: "pointer" }}
 				alt="minimize"
-				onClick={() => setMinimize(false)}
 			/>
 		</div>
 	);

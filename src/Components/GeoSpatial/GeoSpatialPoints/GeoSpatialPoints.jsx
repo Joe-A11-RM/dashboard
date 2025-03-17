@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { Marker, Polygon, Polyline,  Tooltip } from "react-leaflet";
+import { Marker, Polygon, Polyline, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import { geospatialcontext } from "../../../context/GeoSpatialContext";
 
@@ -65,13 +65,17 @@ export default function GeoSpatialPoints() {
 								<Tooltip permanent={true} direction="top" offset={[0, -30]}>
 									<div className="visited">
 										<div className="mb-2 d-flex justify-content-center">
-											<span>vistied</span>
+											<span>{point?.name}</span>
+
 											{point?.visited === 0 ? (
 												<div className="rvisited"></div>
 											) : (
 												<div className="gvisited"></div>
 											)}
 										</div>
+										{point?.visited_vehicle && (
+											<div className="mb-2">{point?.visited_vehicle}</div>
+										)}
 										<div>
 											{point?.visited === 1 && (
 												<>
