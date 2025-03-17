@@ -5,7 +5,6 @@ export default function ProtectedRoutes({ children }) {
 	let token = localStorage.getItem("token");
 	try {
 		if (token) {
-			console.log("done");
 			return children;
 		} else {
 			return <div>Session Expired</div>;

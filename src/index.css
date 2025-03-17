@@ -901,6 +901,14 @@ label {
 	margin-block: 16px;
 	gap: 4px;
 }
+
+.basic-multi-select{
+	z-index: 999;
+}
+
+.ant-select{
+	border-color: red !important;
+}
 @media (max-width: 575.98px) {
 	.dashboard-header {
 		display: block !important;

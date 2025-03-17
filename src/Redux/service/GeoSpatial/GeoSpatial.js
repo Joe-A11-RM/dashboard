@@ -7,9 +7,6 @@ export const GeoSpatialApi = createApi({
 		prepareHeaders: (headers) => {
 			let token =
 				sessionStorage.getItem("token") || localStorage.getItem("token");
-			console.log("Token", token);
-			console.log("Session Token", sessionStorage.getItem("token"));
-			console.log("Local Token", localStorage.getItem("token"));
 			if (token) {
 				headers.set("Authorization", ` ${token}`);
 			}
@@ -18,8 +15,11 @@ export const GeoSpatialApi = createApi({
 	}),
 	endpoints: (builder) => ({
 		getPoints: builder.query({
-			query: ({ type, search, sortType, page, total }) =>
-				`/points?type=${type}&search=${search}&sort=0&sortType=${sortType}&page=${page}&total=${total}`,
+			query: ({ type, search, sortType, page, total, groups }) =>
+				`/points?type=${type}&search=${search}&sort=0&sortType=${sortType}&page=${page}&total=${total}&groups=${groups}`,
+		}),
+		getGroups: builder.query({
+			query: () => `/groups`,
 		}),
 		deletePoints: builder.mutation({
 			query: ({ type, ids }) => ({
@@ -41,4 +41,5 @@ export const {
 	useGetPointsQuery,
 	useDeletePointsMutation,
 	useAddPointsMutation,
+	useGetGroupsQuery,
 } = GeoSpatialApi;
