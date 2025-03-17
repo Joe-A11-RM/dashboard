@@ -9,11 +9,13 @@ export default function GeoSpatialUploads() {
   const disableMapDrag = () => {
     map.dragging.disable();
     map.scrollWheelZoom.disable();
+    map.doubleClickZoom.disable();
   };
 
   const enableMapDrag = () => {
     map.dragging.enable();
     map.scrollWheelZoom.enable();
+    map.doubleClickZoom.enable();
   };
 
   return (
