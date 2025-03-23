@@ -1,5 +1,6 @@
 import React from "react";
 import DashboardWidgetTypesCard from "../DashboardWidgetTypes/DashboardWidgetTypesCard";
+import NoWidgets from "../../Helper/NoWidgets";
 
 export default function DashboardCountsWidget({ addedWidgetIds }) {
   const countsWidgetWidgets = [
@@ -22,7 +23,7 @@ export default function DashboardCountsWidget({ addedWidgetIds }) {
     <div className="container">
       <div className="row">
         {availableWidgets.length === 0 ? (
-          <p>No widgets available</p>
+          <NoWidgets />
         ) : (
           availableWidgets.map((widget) => (
             <div key={widget.id} className="col-lg-6">

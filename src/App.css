@@ -241,6 +241,16 @@ tr:hover td {
   background-color: #f2f1fa !important;
 }
 
+.no-widgets {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 20px;
+  color: #334155;
+  min-height: 600px;
+}
 @media (min-width: 2000px) {
   .geospatial-uploads {
     width: 500px;
