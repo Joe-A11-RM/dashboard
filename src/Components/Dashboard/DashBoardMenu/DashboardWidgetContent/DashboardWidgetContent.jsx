@@ -4,18 +4,21 @@ import DashboardCountsWidget from "./DashboardCountsWidget";
 import DashboardAlertWidget from "./DashboardAlertWidget";
 import { dashboardcontext } from "../../../../context/DashboardContext";
 
-export default function DashboardWidgetContent() {
+export default function DashboardWidgetContent({ allWidgets }) {
+  console.log("allWidgets", allWidgets);
   let { dashboardTypeWidget } = useContext(dashboardcontext);
+  const addedWidgetIds = allWidgets?.map((widget) => widget.widgetId) || [];
+  console.log("addedWidgetIds", addedWidgetIds);
   return (
     <div>
       {dashboardTypeWidget.type === "tracking widgets" && (
-        <DashboardTrackingWidget />
+        <DashboardTrackingWidget addedWidgetIds={addedWidgetIds} />
       )}
       {dashboardTypeWidget.type === "counts widgets" && (
-        <DashboardCountsWidget />
+        <DashboardCountsWidget addedWidgetIds={addedWidgetIds} />
       )}
       {dashboardTypeWidget.type === "alerts widgets" && (
-        <DashboardAlertWidget />
+        <DashboardAlertWidget addedWidgetIds={addedWidgetIds} />
       )}
     </div>
   );
