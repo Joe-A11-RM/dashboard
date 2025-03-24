@@ -316,6 +316,7 @@ tr:hover td {
 
 .ant-pagination-item:hover a {
   background-color: #eae9f3 !important;
+  border-radius: 50% !important;
 }
 
 @media (min-width: 2000px) {
