@@ -21,7 +21,7 @@ const generateInitialTheme = (data) => {
       ...item.position,
       component: (
         <Cards
-          key={item.id}
+          valuekey={item.id}
           i={item?.position.i}
           item={item}
           removeWidget={() => {}}

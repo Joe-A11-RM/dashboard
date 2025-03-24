@@ -251,6 +251,73 @@ tr:hover td {
   color: #334155;
   min-height: 600px;
 }
+/* ---------------------- Pop up --------------------------- */
+.popup-header-count {
+  font-size: 14px;
+  font-weight: 500;
+  color: #5e6c84;
+}
+.modal-header {
+  position: sticky;
+  width: 100%;
+  z-index: 1;
+  padding-inline: 16px;
+}
+.modal-body {
+  padding-inline: 16px;
+}
+.popup-title {
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: capitalize;
+}
+.popup-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: #5e6c84;
+}
+.popup-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--borderColorPrimary);
+}
+.popup-closebtn {
+  color: #42526e;
+  border: 1px solid #dfe1e6;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s ease !important;
+}
+.popup-closebtn:hover {
+  color: #2a2929;
+  background-color: #cacaca;
+  border-color: #dfe1e6;
+  transition: all 0.2s ease !important;
+}
+
+/* ---------------------- Antd Pagination edit --------------------------- */
+.ant-pagination-item-active {
+  background-color: #eae9f3 !important;
+  border-color: #eae9f3 !important;
+  border-radius: 50% !important;
+}
+.ant-pagination-item {
+  border-radius: 50% !important;
+}
+
+.ant-pagination-item-active a {
+  color: #3b3887 !important;
+}
+
+.ant-pagination-item a {
+  color: #334155 !important;
+}
+
+.ant-pagination-item:hover a {
+  background-color: #eae9f3 !important;
+}
+
 @media (min-width: 2000px) {
   .geospatial-uploads {
     width: 500px;

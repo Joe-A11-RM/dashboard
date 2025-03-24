@@ -15,7 +15,7 @@ import {
 import VehicleTableDetails from "../Table/VehicleTableDetails";
 import Map from "../Map/Map";
 
-export default function Cards({ key, item, i, removeWidget, isDraggable }) {
+export default function Cards({ valuekey, item, i, removeWidget, isDraggable }) {
   let { editMode } = useContext(dashboardcontext);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -86,7 +86,7 @@ export default function Cards({ key, item, i, removeWidget, isDraggable }) {
     removeWidget(item?.id);
   };
   return (
-    <div className="h-100 radius-8" key={key}>
+    <div className="h-100 radius-8" key={valuekey}>
       {item.chartData.chartType === "TrackingMapPositions" ? (
         <Widget
           editMode={editMode}
