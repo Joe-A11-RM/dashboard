@@ -544,7 +544,8 @@ label {
 	overflow: visible;
 }
 
-.pie-chart {
+.pie-chart,
+.donut-chart {
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -850,7 +851,60 @@ label {
 	max-height: 250px;
 	object-fit: cover;
 }
+.dashboard-border {
+	border: 1px solid #e3e3ed;
+	border-radius: 4px;
+}
+.dashboard-table-head {
+	display: flex;
+	padding-inline: 8px;
+	padding-block: 12px;
+	background-color: #fafbfc;
+	font-size: 14px;
+	font-weight: 500;
+	border-bottom: 1px solid #ebecf0;
+	text-transform: capitalize;
+}
 
+.dashboard-table-body {
+	display: flex;
+	padding-inline: 8px;
+	padding-block: 12px;
+}
+
+.dashboard-table-item {
+	width: 246px;
+	text-align: left;
+	text-transform: capitalize;
+	font-size: 16px;
+}
+
+.dashboard-table-item-nameId {
+	color: #1d4ed8;
+}
+
+.table-status {
+	font-weight: 600;
+	font-size: 16px;
+	border-radius: 100px;
+	width: fit-content;
+	padding-block: 4px;
+	padding-inline: 8px;
+}
+
+.table-status-online {
+	background-color: #e8f5e9;
+	color: #4caf50;
+}
+
+.table-status-offline {
+	background-color: #feebee;
+	color: #f44336;
+}
+
+.apexcharts-legend {
+	overflow: hidden !important;
+}
 .geospatial-uploads {
 	position: absolute;
 	background-color: white;
@@ -902,11 +956,11 @@ label {
 	gap: 4px;
 }
 
-.basic-multi-select{
+.basic-multi-select {
 	z-index: 999;
 }
 
-.ant-select{
+.ant-select {
 	border-color: red !important;
 }
 @media (max-width: 575.98px) {

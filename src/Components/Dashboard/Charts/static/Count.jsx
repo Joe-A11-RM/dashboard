@@ -1,9 +1,9 @@
 import React from "react";
 import { LuExternalLink } from "react-icons/lu";
 
-const Count = ({ title, number, key }) => {
+const Count = ({ title, number, valuekey }) => {
 	return (
-		<div key={key} className="count">
+		<div key={valuekey} className="count">
 			<div className="count-header">
 				<p>{title}</p>
 				<LuExternalLink color="#CCCCCC" size={16} className="count-link" />

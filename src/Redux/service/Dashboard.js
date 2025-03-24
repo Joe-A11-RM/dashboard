@@ -100,6 +100,7 @@ export const {
 	useEditDashboardMutation,
 	useDeleteDashboardMutation,
 	useGetAllDashboardsWidgetsQuery,
+	useLazyGetAllDashboardsWidgetsQuery,
 	useEditDashboardWidgetsMutation,
 	useDeleteDashboardWidgetsMutation,
 	useCreateWidgetMutation,

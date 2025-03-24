@@ -67,3 +67,63 @@ const generateLayouts = (themeData, columnCounts) => {
 
 		return layouts;
 	};
+
+
+
+
+
+
+
+
+
+
+
+
+	/*
+		const [widgets, setWidgets] = useState([{ widgets: [] }]);
+
+	const newWidgets = {
+			widgets: widgetIds.map((id, index) => ({
+				widgetId: id,
+				position: [
+					{
+						"4k": {
+							i: responsive["4k"][index].i,
+							x: responsive["4k"][index].x,
+							y: responsive["4k"][index].y,
+							w: responsive["4k"][index].w,
+							h: responsive["4k"][index].h,
+						},
+						"2k": {
+							i: responsive["2k"][index].i,
+							x: responsive["2k"][index].x,
+							y: responsive["2k"][index].y,
+							w: responsive["2k"][index].w,
+							h: responsive["2k"][index].h,
+						},
+						lg: {
+							i: responsive.lg[index].i,
+							x: responsive.lg[index].x,
+							y: responsive.lg[index].y,
+							w: responsive.lg[index].w,
+							h: responsive.lg[index].h,
+						},
+						md: {
+							i: responsive.md[index].i,
+							x: responsive.md[index].x,
+							y: responsive.md[index].y,
+							w: responsive.md[index].w,
+							h: responsive.md[index].h,
+						},
+						s: {
+							i: responsive.s[index].i,
+							x: responsive.s[index].x,
+							y: responsive.s[index].y,
+							w: responsive.s[index].w,
+							h: responsive.s[index].h,
+						},
+					},
+				],
+			})),
+		};
+		setWidgets([newWidgets]);*/

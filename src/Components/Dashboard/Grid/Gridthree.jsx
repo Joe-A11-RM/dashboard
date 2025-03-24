@@ -86,8 +86,7 @@ export default function Gridthree() {
 				currentY = 0,
 				rowHeight = 0,
 				itemsInRow = 0,
-				rowLimit = 0; // Number of items per row before moving to next y
-
+				rowLimit = 0;
 			if (themeData?.length > 0) {
 				layouts[breakpoint] = themeData.map(
 					({ i, x, y, w, h, component }, index) => {
@@ -124,7 +123,7 @@ export default function Gridthree() {
 									"vehicletabledetails") &&
 							["lg", "2k", "4k"].includes(breakpoint)
 						) {
-							newWidth = 6;
+							newWidth = 12;
 						} else if (
 							component.props.item.chartData.chartType ===
 							"TrackingMapPositions"
@@ -212,7 +211,7 @@ export default function Gridthree() {
 			}
 		}
 	}, [theme]);
-
+	console.log("X", x);
 	const handleDrop = async (layout, layoutItem, e) => {
 		e.preventDefault();
 		if (!e.dataTransfer) {
@@ -363,7 +362,7 @@ export default function Gridthree() {
 		let data = [];
 
 		if (window.innerWidth > 1200) {
-			data = x?.lg || [];
+			data = x?.lg || []; //x.widget1.position.[col].map(i)=>
 		} else if (window.innerWidth > 996) {
 			data = x?.md || [];
 		} else if (window.innerWidth > 768) {
@@ -390,6 +389,7 @@ export default function Gridthree() {
 			</div>
 		));
 	};
+	console.log("X", x.i);
 	return (
 		<div className="">
 			<ReactGridLayout
@@ -416,6 +416,7 @@ export default function Gridthree() {
 				onDragStop={handleDrag}
 				onDrop={handleDrop}
 				draggableCancel=".cancelSelectorName"
+				
 			>
 				{j()}
 			</ReactGridLayout>

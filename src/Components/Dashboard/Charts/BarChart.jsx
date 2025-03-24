@@ -18,10 +18,10 @@ const BarChart = ({ data, labels }) => {
 					show: false,
 				},
 			},
-			colors: ["#5E5CA9"],
+			colors: ["#023E8A"],
 			plotOptions: {
 				bar: {
-					columnWidth: "25%",
+					columnWidth: "32px",
 					borderRadius: 5,
 					borderRadiusApplication: "end",
 				},
@@ -29,7 +29,7 @@ const BarChart = ({ data, labels }) => {
 			stroke: {
 				show: true,
 				width: 2,
-				colors: ["#5E5CA9"],
+				colors: ["#023E8A"],
 			},
 			dataLabels: {
 				enabled: false,

@@ -209,3 +209,132 @@ const staticData = [
 			},
 		},
 	];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		const generateLayouts = (themeData, columnCounts) => {
+		const layouts = {};
+
+		Object.entries(columnCounts).forEach(([breakpoint, cols]) => {
+			let currentX = 0,
+				currentY = 0,
+				rowHeight = 0,
+				itemsInRow = 0,
+				rowLimit = 0; // Number of items per row before moving to next y
+
+			if (themeData?.length > 0) {
+				layouts[breakpoint] = themeData.map(
+					({ i, x, y, w, h, component }, index) => {
+						let newWidth;
+						switch (breakpoint) {
+							case "4k":
+							case "2k":
+								newWidth = 3;
+								break;
+							case "lg":
+								newWidth = 4;
+								break;
+							case "md":
+								newWidth = 5;
+								break;
+							case "sm":
+								newWidth = 6;
+								break;
+							case "xs":
+							case "xss":
+								newWidth = 4;
+								break;
+							default:
+								newWidth = Math.max(2, Math.floor((w / 12) * cols));
+						}
+						
+						rowLimit = newWidth === 3 ? 4 : 3;
+
+						if (index === 0) {
+							currentX = ["md"].includes(breakpoint) ? 0 : x; // Take x from themeData
+							currentY = 0;
+							rowHeight = h;
+						} else {
+							if (currentX + newWidth > cols) {
+								// Move to next row
+								currentX = 0;
+								currentY += rowHeight; // Increment Y correctly
+								if (["md"].includes(breakpoint)) {
+									itemsInRow = 0;
+								}
+							}
+						}
+
+						if (["4k", "2k"].includes(breakpoint)) {
+							currentX = Math.floor(currentX / 3) * 3; // Force multiples of 3
+						}
+
+					
+						if (itemsInRow >= rowLimit) {
+							currentX = ["lg"].includes(breakpoint) ? x : 0;
+							currentY = ["lg"].includes(breakpoint) ? y : +1;
+							itemsInRow = 0;
+						}
+
+						let newPosition = {
+							i,
+							x: currentX,
+							y: currentY,
+							w: newWidth,
+							h,
+							component: (
+								<Cards
+									key={index}
+									i={index}
+									item={themeData[index]?.component?.props.item}
+									removeWidget={removeWidget}
+								/>
+							),
+						};
+
+						currentX += newWidth;
+						itemsInRow++;
+
+						return newPosition;
+					}
+				);
+			}
+		});
+
+		return layouts;
+	};
+	const columnCounts = {
+		"4k": 12, // 4K screens
+		"2k": 12, // 2K screens
+		lg: 12, // Laptop
+		md: 10, // Medium
+		sm: 6, // Small
+		xs: 4, // Extra small
+		xxs: 2, // Tiny screens
+	};
