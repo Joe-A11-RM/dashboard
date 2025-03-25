@@ -17,6 +17,8 @@ import {
 } from "../../../Redux/service/Dashboard";
 import { dashboardcontext } from "../../../context/DashboardContext";
 import DashboardAddWidget from "../DashboardHeader/DashboardOptions/DashboardAddWidget/DashboardAddWidget";
+import { useSelector } from "react-redux";
+import DraggableItems from "../Helper/DraggableItem/DraggableItems";
 const ReactGridLayout = WidthProvider(Responsive);
 
 export default function Trial() {
@@ -499,6 +501,12 @@ export default function Trial() {
 		}
 		console.log("Useffect_3");
 	}, [saveChanges]);
+	const draggableItems = useSelector(
+		(state) => state.dashboards.draggableItems
+	);
+	console.log(draggableItems);
+	const nodesRef = useRef({});
+
 	return (
 		<div className="">
 			<ReactGridLayout
@@ -527,6 +535,16 @@ export default function Trial() {
 			>
 				{ResponsiveLayout()}
 			</ReactGridLayout>
+			{draggableItems?.map((item) => {
+				if (!nodesRef.current[item.id]) {
+					nodesRef.current[item.id] = React.createRef(); // ✅ Assign ref if missing
+				}
+				return (
+					<>
+						<DraggableItems item={item} nodesRef={nodesRef} />
+					</>
+				);
+			})}
 		</div>
 	);
 }

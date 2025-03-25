@@ -19,6 +19,7 @@ export default function Dashboard() {
 					onHide={() => setWidgetSettings(false)}
 				/>
 				<Trial />
+				
 			</div>
 		</div>
 	);
