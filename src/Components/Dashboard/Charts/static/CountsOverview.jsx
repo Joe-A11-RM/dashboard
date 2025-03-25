@@ -14,7 +14,7 @@ const CountsOverview = ({ data }) => {
             title={i?.label}
             number={i?.totalCount}
             setOpenPopup={setOpenPopup}
-            tableData={i?.userData}
+            tableData={i?.tableData}
           />
         </div>
       ))}

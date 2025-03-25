@@ -135,7 +135,6 @@ export default function Trial() {
 
   useEffect(() => {
     setCurrentWidgets(DashboardWidgets?.response.data);
-    console.log("HIIIIIII", DashboardWidgets?.response?.data);
   }, [DashboardWidgets]);
   const ResponsiveLayout = () => {
     let data = [];
