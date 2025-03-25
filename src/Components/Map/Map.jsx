@@ -1,12 +1,12 @@
 import React from "react";
 import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 
-export default function GeoMap({ children }) {
+export default function GeoMap({ children, mapheight, lat, lon }) {
 	return (
-		<div className="full-map">
+		<div className={`${mapheight ? mapheight : "full-map"}`}>
 			<MapContainer
 				id="map-container"
-				center={[23.8859, 45.0792]}
+				center={lat && lon ? [lat, lon] : [23.8859, 45.0792]}
 				zoomControl={false}
 				zoom={6}
 				scrollWheelZoom={true}

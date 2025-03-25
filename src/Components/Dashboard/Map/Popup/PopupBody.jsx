@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 export default function PopupBody({ item }) {
 	const [geoCode, setGeoCode] = useState(false);
-
+	
 	const fetchGeoCodePosition = async (lat, lon) => {
 		try {
 			const response = await axios.get(

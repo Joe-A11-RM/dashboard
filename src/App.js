@@ -13,7 +13,6 @@ import GeoSpatial from "./Components/GeoSpatial/GeoSpatial.jsx";
 import GeoSpatialContext from "./context/GeoSpatialContext.jsx";
 import MainLayout from "./Components/Layouts/MainLayout.jsx";
 import { ToastContainer } from "react-toastify";
-import Trial from "./Components/Dashboard/Grid/Trial.jsx";
 
 function App() {
 	const routes = createBrowserRouter(
@@ -52,14 +51,6 @@ function App() {
 				element: (
 					<ProtectedRoutes>
 						<GeoSpatial />
-					</ProtectedRoutes>
-				),
-			},
-			{
-				path: "/trial",
-				element: (
-					<ProtectedRoutes>
-						<Trial />
 					</ProtectedRoutes>
 				),
 			},

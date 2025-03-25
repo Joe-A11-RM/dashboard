@@ -516,7 +516,295 @@ const CountPopupBody = ({ tableData, title }) => {
             ),
           ];
           break;
+        case "Speed":
+          selectedColumns = [
+            Object.assign({
+              title: "Id",
+              dataIndex: "vehicleId",
+              key: "vehicleId",
+            }),
+            Object.assign(
+              {
+                title: "Name",
+                dataIndex: "vehicleName",
+                key: "vehicleName",
+              },
+              getColumnSearchProps("vehicleName")
+            ),
+            Object.assign(
+              {
+                title: "Plate Number",
+                dataIndex: "plateNumber",
+                key: "plateNumber",
+              },
+              getColumnSearchProps("plateNumber")
+            ),
+            Object.assign(
+              {
+                title: "Status",
+                dataIndex: "status",
+                key: "status",
+              },
+              getColumnSearchProps("status")
+            ),
+            Object.assign({
+              title: "Alarm Type",
+              dataIndex: "alarm",
+              key: "alarm",
+            }),
+            Object.assign({
+              title: "Date",
+              dataIndex: "timestamp",
+              key: "timestamp",
+            }),
+          ];
+          break;
+        case "Geofence":
+          selectedColumns = [
+            Object.assign({
+              title: "Id",
+              dataIndex: "vehicleId",
+              key: "vehicleId",
+            }),
+            Object.assign(
+              {
+                title: "Name",
+                dataIndex: "vehicleName",
+                key: "vehicleName",
+              },
+              getColumnSearchProps("vehicleName")
+            ),
+            Object.assign(
+              {
+                title: "Plate Number",
+                dataIndex: "plateNumber",
+                key: "plateNumber",
+              },
+              getColumnSearchProps("plateNumber")
+            ),
+            Object.assign(
+              {
+                title: "Status",
+                dataIndex: "status",
+                key: "status",
+              },
+              getColumnSearchProps("status")
+            ),
+            Object.assign({
+              title: "Alarm Type",
+              dataIndex: "alarm",
+              key: "alarm",
+            }),
+            Object.assign({
+              title: "Date",
+              dataIndex: "timestamp",
+              key: "timestamp",
+            }),
+          ];
+          break;
+        case "Others":
+          selectedColumns = [
+            Object.assign({
+              title: "Id",
+              dataIndex: "vehicleId",
+              key: "vehicleId",
+            }),
+            Object.assign(
+              {
+                title: "Name",
+                dataIndex: "vehicleName",
+                key: "vehicleName",
+              },
+              getColumnSearchProps("vehicleName")
+            ),
+            Object.assign(
+              {
+                title: "Plate Number",
+                dataIndex: "plateNumber",
+                key: "plateNumber",
+              },
+              getColumnSearchProps("plateNumber")
+            ),
+            Object.assign(
+              {
+                title: "Status",
+                dataIndex: "status",
+                key: "status",
+              },
+              getColumnSearchProps("status")
+            ),
+            Object.assign({
+              title: "Alarm Type",
+              dataIndex: "alarm",
+              key: "alarm",
+            }),
+            Object.assign({
+              title: "Date",
+              dataIndex: "timestamp",
+              key: "timestamp",
+            }),
+          ];
+          break;
+        case "Malfunctions":
+          selectedColumns = [
+            Object.assign({
+              title: "Id",
+              dataIndex: "vehicleId",
+              key: "vehicleId",
+            }),
+            Object.assign(
+              {
+                title: "Name",
+                dataIndex: "vehicleName",
+                key: "vehicleName",
+              },
+              getColumnSearchProps("vehicleName")
+            ),
+            Object.assign(
+              {
+                title: "Plate Number",
+                dataIndex: "plateNumber",
+                key: "plateNumber",
+              },
+              getColumnSearchProps("plateNumber")
+            ),
+            Object.assign(
+              {
+                title: "Last Status",
+                dataIndex: "lastStatus",
+                key: "lastStatus",
+              },
+              getColumnSearchProps("lastStatus")
+            ),
+            Object.assign({
+              title: "No Update",
+              dataIndex: "daysWithoutUpdate",
+              key: "daysWithoutUpdate",
+            }),
+            Object.assign({
+              title: "Last Update",
+              dataIndex: "lastUpdate",
+              key: "lastUpdate",
+            }),
+          ];
+          break;
+        case "Accidents":
+          selectedColumns = [
+            Object.assign({
+              title: "Id",
+              dataIndex: "vehicleId",
+              key: "vehicleId",
+            }),
+            Object.assign(
+              {
+                title: "Name",
+                dataIndex: "vehicleName",
+                key: "vehicleName",
+              },
+              getColumnSearchProps("vehicleName")
+            ),
+            Object.assign(
+              {
+                title: "Plate Number",
+                dataIndex: "plateNumber",
+                key: "plateNumber",
+              },
+              getColumnSearchProps("plateNumber")
+            ),
+            Object.assign(
+              {
+                title: "Status",
+                dataIndex: "status",
+                key: "status",
+              },
+              getColumnSearchProps("status")
+            ),
+            Object.assign(
+              {
+                title: "Location",
+                dataIndex: "location",
+                key: "location",
+              },
+              getColumnSearchProps("location")
+            ),
+            Object.assign(
+              {
+                title: "Description",
+                dataIndex: "description",
+                key: "description",
+              },
+              getColumnSearchProps("description")
+            ),
 
+            Object.assign(
+              {
+                title: "Police Report",
+                dataIndex: "policeReport",
+                key: "policeReport",
+              },
+              getColumnSearchProps("policeReport")
+            ),
+            Object.assign({
+              title: "Date",
+              dataIndex: "timestamp",
+              key: "timestamp",
+            }),
+          ];
+          break;
+        case "Expenses":
+          selectedColumns = [
+            Object.assign({
+              title: "Id",
+              dataIndex: "vehicleId",
+              key: "vehicleId",
+            }),
+            Object.assign(
+              {
+                title: "Name",
+                dataIndex: "vehicleName",
+                key: "vehicleName",
+              },
+              getColumnSearchProps("vehicleName")
+            ),
+            Object.assign(
+              {
+                title: "Plate Number",
+                dataIndex: "plateNumber",
+                key: "plateNumber",
+              },
+              getColumnSearchProps("plateNumber")
+            ),
+            Object.assign(
+              {
+                title: "Type",
+                dataIndex: "type",
+                key: "type",
+              },
+              getColumnSearchProps("type")
+            ),
+            Object.assign({
+              title: "Date",
+              dataIndex: "timestamp",
+              key: "timestamp",
+            }),
+            Object.assign(
+              {
+                title: "Cost",
+                dataIndex: "cost",
+                key: "cost",
+              },
+              getColumnSearchProps("cost")
+            ),
+            Object.assign(
+              {
+                title: "Remarks",
+                dataIndex: "remarks",
+                key: "remarks",
+              },
+              getColumnSearchProps("remarks")
+            ),
+          ];
+          break;
         default:
           selectedColumns = Object.keys(tableData[0]).map((key) => ({
             title: key.replace("_", " ").toUpperCase(),
@@ -524,7 +812,6 @@ const CountPopupBody = ({ tableData, title }) => {
             key: key,
           }));
       }
-      console.log("Count -> columns", selectedColumns);
       setColumn(selectedColumns);
       setData(tableData);
     }
