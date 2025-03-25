@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Header from "./DashboardHeader/Header";
 import DashBoardMenu from "./DashBoardMenu/DashBoardMenu";
 import WidgetSettings from "./WidgetSettings/WidgetSettings";
-import Gridthree from "./Grid/Gridthree";
 import Trial from "./Grid/Trial";
 
 export default function Dashboard() {
