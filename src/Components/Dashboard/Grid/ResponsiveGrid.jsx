@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import React, {
 	useCallback,
 	useContext,
@@ -30,6 +29,7 @@ export default function ResponsiveGrid() {
 		"2k": [],
 		s: [],
 	});
+	let [deleteSuccess, setDeleteSuccess] = useState(false);
 	const widgetsRef = useRef({ widgets: [] });
 	let {
 		dashboardInf,
@@ -37,7 +37,9 @@ export default function ResponsiveGrid() {
 		setEditMode,
 		saveChanges,
 		setSaveChanges,
+		setDeleteMode,
 		setCurrentWidgets,
+		setChanges,
 	} = useContext(dashboardcontext);
 	let {
 		data: DashboardWidgets,
@@ -48,94 +50,108 @@ export default function ResponsiveGrid() {
 	});
 	const [createWidget] = useCreateWidgetMutation();
 	const [fetchSingle] = useLazyGetSingleWidgetQuery();
-	let [deleDashboardWidget, { status }] = useDeleteDashboardWidgetsMutation();
+	let [deleDashboardWidget] = useDeleteDashboardWidgetsMutation();
 	const removeWidget = useCallback(
 		(id) => {
-			if (id === "1" || id === "2" || id === "3" || id === "4") return;
-			deleDashboardWidget(id);
+			if (
+				id === "1" ||
+				id === "2" ||
+				id === "3" ||
+				id === "4" ||
+				id === "5" ||
+				id === "6" ||
+				id === "7" ||
+				id === "8" ||
+				id === "9"
+			)
+				return;
+
+			if (widgetsRef.current.widgets.length === 1) {
+				alert("You must have at leat one widget");
+				return;
+			} else {
+				deleDashboardWidget(id).then(() => {
+					refetch();
+				});
+			}
+			setDeleteSuccess(false);
 		},
 		[deleDashboardWidget]
 	);
-	useEffect(() => {
-		if (status === "fulfilled") {
+	/*useEffect(() => {
+		if (deleteSuccess) {
 			refetch();
 		}
-	}, [status, refetch]);
+	}, [deleteSuccess, refetch]);*/
 	useEffect(() => {
-		let groupedPositions = {
+		setCurrentWidgets(DashboardWidgets?.response.data);
+	}, [DashboardWidgets]);
+	/*	useEffect(() => {
+		if (!DashboardWidgets?.response?.data || !responsive) return;
+		if (deleteSuccess) {
+			setChanges(true);
+
+			const widgetIds = DashboardWidgets.response.data.map((i) => i.widgetId);
+
+			const getPosition = (index, size) => ({
+				i: responsive[size]?.[index]?.i ?? "",
+				x: responsive[size]?.[index]?.x ?? 0,
+				y: responsive[size]?.[index]?.y ?? 0,
+				w: responsive[size]?.[index]?.w ?? 1,
+				h: responsive[size]?.[index]?.h ?? 1,
+			});
+
+			widgetsRef.current = {
+				widgets: widgetIds.map((id, index) => ({
+					widgetId: id,
+					position: [
+						{
+							"4k": getPosition(index, "4k"),
+							"2k": getPosition(index, "2k"),
+							lg: getPosition(index, "lg"),
+							md: getPosition(index, "md"),
+							s: getPosition(index, "s"),
+						},
+					],
+				})),
+			};
+		}
+	}, [DashboardWidgets, deleteSuccess, responsive]);*/
+
+	useEffect(() => {
+		if (!DashboardWidgets?.response?.data?.length) return;
+
+		const groupedPositions = {
 			lg: [],
 			md: [],
 			"4k": [],
 			"2k": [],
 			s: [],
 		};
-		if (DashboardWidgets?.response?.data?.length > 0) {
-			DashboardWidgets?.response?.data.forEach((item) => {
-				item.position.forEach((pos, index) => {
-					groupedPositions.lg.push({
-						...pos.lg,
-						component: (
-							<Cards
-								valuekey={index}
-								i={index}
-								item={item}
-								removeWidget={removeWidget}
-							/>
-						),
-					});
-					groupedPositions.md.push({
-						...pos.md,
-						component: (
-							<Cards
-								valuekey={index}
-								i={index}
-								item={item}
-								removeWidget={removeWidget}
-							/>
-						),
-					});
-					groupedPositions.s.push({
-						...pos.s,
-						component: (
-							<Cards
-								valuekey={index}
-								i={index}
-								item={item}
-								removeWidget={removeWidget}
-							/>
-						),
-					});
-					groupedPositions["4k"].push({
-						...pos["4k"],
-						component: (
-							<Cards
-								valuekey={index}
-								i={index}
-								item={item}
-								removeWidget={removeWidget}
-							/>
-						),
-					});
-					groupedPositions["2k"].push({
-						...pos["2k"],
-						component: (
-							<Cards
-								valuekey={index}
-								i={index}
-								item={item}
-								removeWidget={removeWidget}
-							/>
-						),
+
+		const createCard = (index, item) => (
+			<Cards
+				valuekey={index}
+				i={index}
+				item={item}
+				removeWidget={removeWidget}
+			/>
+		);
+
+		DashboardWidgets.response.data.forEach((item) => {
+			item.position.forEach((pos, index) => {
+				["lg", "md", "s", "4k", "2k"].forEach((size) => {
+					groupedPositions[size].push({
+						...(pos[size] ?? {}), // Default to empty object if undefined
+						component: createCard(index, item),
 					});
 				});
 			});
-		}
+		});
+
 		setResponsive(groupedPositions);
 	}, [DashboardWidgets, removeWidget]);
 
-	useEffect(() => {
-		setCurrentWidgets(DashboardWidgets?.response.data);
-	}, [DashboardWidgets]);
 	const ResponsiveLayout = () => {
 		let data = [];
 		if (window.innerWidth > 1200) {
@@ -180,137 +196,79 @@ export default function ResponsiveGrid() {
 	};
 
 	const handleDrag = async (e) => {
-		const updatedWidgets = e.map((item) => ({
-			i: item.i,
-			x: item.x,
-			y: item.y,
-			w: item.w,
-			h: item.h,
-		}));
+		// Extract updated widget positions
+		const updatedWidgets = e.map(({ i, x, y, w, h }) => ({ i, x, y, w, h }));
+
+		// Define a mapping of width values to responsive breakpoints
+		const widthToBreakpoint = {
+			4: ["lg"],
+			3: ["4k", "2k"],
+			6: ["md"],
+			12: ["s"],
+		};
+
+		// Clone responsive state to avoid mutating directly
+		const newResponsive = { ...responsive };
+
 		updatedWidgets.forEach((pos) => {
-			if (pos.w === 4) {
-				responsive.lg.map((i) => {
-					if (i.i === pos.i) {
-						i.x = pos.x;
-						i.y = pos.y;
-					}
-				});
-			} else if (pos.w === 3) {
-				responsive[("4k", "2k")].map((i) => {
-					if (i.i === pos.i) {
-						i.x = pos.x;
-						i.y = pos.y;
-					}
-				});
-			} else if (pos.w === 6) {
-				responsive.md.map((i) => {
-					if (i.i === pos.i) {
-						i.x = pos.x;
-						i.y = pos.y;
-					}
-				});
-			} else if (pos.w === 12) {
-				responsive.s.map((i) => {
-					if (i.i === pos.i) {
-						i.x = pos.x;
-						i.y = pos.y;
-					}
-				});
-			}
+			const breakpoints = widthToBreakpoint[pos.w] || [];
+			breakpoints.forEach((bp) => {
+				newResponsive[bp] = newResponsive[bp]?.map((item) =>
+					item.i === pos.i ? { ...item, x: pos.x, y: pos.y } : item
+				);
+			});
 		});
-		let widgetIds = DashboardWidgets?.response?.data?.map((i) => i.widgetId);
+
+		// Update state with new responsive positions
+		setResponsive(newResponsive);
+		setChanges(true);
+
+		// Update widget reference
+		const widgetIds =
+			DashboardWidgets?.response?.data?.map((i) => i.widgetId) || [];
 		widgetsRef.current = {
 			widgets: widgetIds.map((id, index) => ({
 				widgetId: id,
 				position: [
-					{
-						"4k": {
-							i: responsive["4k"][index].i,
-							x: responsive["4k"][index].x,
-							y: responsive["4k"][index].y,
-							w: responsive["4k"][index].w,
-							h: responsive["4k"][index].h,
-						},
-						"2k": {
-							i: responsive["2k"][index].i,
-							x: responsive["2k"][index].x,
-							y: responsive["2k"][index].y,
-							w: responsive["2k"][index].w,
-							h: responsive["2k"][index].h,
-						},
-						lg: {
-							i: responsive.lg[index].i,
-							x: responsive.lg[index].x,
-							y: responsive.lg[index].y,
-							w: responsive.lg[index].w,
-							h: responsive.lg[index].h,
-						},
-						md: {
-							i: responsive.md[index].i,
-							x: responsive.md[index].x,
-							y: responsive.md[index].y,
-							w: responsive.md[index].w,
-							h: responsive.md[index].h,
-						},
-						s: {
-							i: responsive.s[index].i,
-							x: responsive.s[index].x,
-							y: responsive.s[index].y,
-							w: responsive.s[index].w,
-							h: responsive.s[index].h,
-						},
-					},
+					["4k", "2k", "lg", "md", "s"].reduce((acc, bp) => {
+						acc[bp] = {
+							i: newResponsive[bp]?.[index]?.i ?? "",
+							x: newResponsive[bp]?.[index]?.x ?? 0,
+							y: newResponsive[bp]?.[index]?.y ?? 0,
+							w: newResponsive[bp]?.[index]?.w ?? 0,
+							h: newResponsive[bp]?.[index]?.h ?? 0,
+						};
+						return acc;
+					}, {}),
 				],
 			})),
 		};
 	};
+
 	const handleDropDragOver = () => {
-		let widgetIds = DashboardWidgets?.response?.data?.map((i) => i.widgetId);
+		setChanges(true);
+
+		const widgetIds =
+			DashboardWidgets?.response?.data?.map((i) => i.widgetId) || [];
 		widgetsRef.current = {
 			widgets: widgetIds.map((id, index) => ({
 				widgetId: id,
 				position: [
-					{
-						"4k": {
-							i: responsive["4k"][index].i,
-							x: responsive["4k"][index].x,
-							y: responsive["4k"][index].y,
-							w: responsive["4k"][index].w,
-							h: responsive["4k"][index].h,
-						},
-						"2k": {
-							i: responsive["2k"][index].i,
-							x: responsive["2k"][index].x,
-							y: responsive["2k"][index].y,
-							w: responsive["2k"][index].w,
-							h: responsive["2k"][index].h,
-						},
-						lg: {
-							i: responsive.lg[index].i,
-							x: responsive.lg[index].x,
-							y: responsive.lg[index].y,
-							w: responsive.lg[index].w,
-							h: responsive.lg[index].h,
-						},
-						md: {
-							i: responsive.md[index].i,
-							x: responsive.md[index].x,
-							y: responsive.md[index].y,
-							w: responsive.md[index].w,
-							h: responsive.md[index].h,
-						},
-						s: {
-							i: responsive.s[index].i,
-							x: responsive.s[index].x,
-							y: responsive.s[index].y,
-							w: responsive.s[index].w,
-							h: responsive.s[index].h,
-						},
-					},
+					["4k", "2k", "lg", "md", "s"].reduce((acc, bp) => {
+						acc[bp] = {
+							i: responsive[bp]?.[index]?.i ?? "",
+							x: responsive[bp]?.[index]?.x ?? 0,
+							y: responsive[bp]?.[index]?.y ?? 0,
+							w: responsive[bp]?.[index]?.w ?? 0,
+							h: responsive[bp]?.[index]?.h ?? 0,
+						};
+						return acc;
+					}, {}),
 				],
 			})),
 		};
 	};
+
 	/*	const handleDrop = async (layout, layoutItem, e) => {
 		e.preventDefault();
 		if (!e.dataTransfer) {
@@ -491,12 +449,17 @@ export default function ResponsiveGrid() {
 	};
 	const handleSave = async () => {
 		try {
-			await createWidget({
-				id: 17,
-				val: widgetsRef.current.widgets,
-			}).unwrap();
-			refetch();
-			setEditMode(false);
+			if (widgetsRef.current.widgets.length === 0) {
+				alert("You must have at least one widget");
+				return;
+			} else {
+				await createWidget({
+					id: 17,
+					val: widgetsRef.current.widgets,
+				}).unwrap();
+				refetch();
+				setEditMode(false);
+			}
 		} catch (err) {
 			console.error("Error saving widget:", err);
 		}
@@ -510,6 +473,7 @@ export default function ResponsiveGrid() {
 	const draggableItems = useSelector(
 		(state) => state.dashboards.draggableItems
 	);
+	console.log("www", widgetsRef.current.widgets);
 	const nodesRef = useRef({});
 
 	return (
@@ -542,7 +506,7 @@ export default function ResponsiveGrid() {
 			</ReactGridLayout>
 			{draggableItems?.map((item) => {
 				if (!nodesRef.current[item.id]) {
-					nodesRef.current[item.id] = React.createRef(); // ✅ Assign ref if missing
+					nodesRef.current[item.id] = React.createRef();
 				}
 				return (
 					<>

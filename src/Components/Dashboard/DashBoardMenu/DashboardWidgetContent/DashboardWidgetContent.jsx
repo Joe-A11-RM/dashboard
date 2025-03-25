@@ -13,7 +13,9 @@ export default function DashboardWidgetContent({ allWidgets }) {
         <DashboardTrackingWidget addedWidgetIds={addedWidgetIds} />
       )}
       {dashboardTypeWidget.type === "counts widgets" && (
+        <>
         <DashboardCountsWidget addedWidgetIds={addedWidgetIds} />
+        </>
       )}
       {dashboardTypeWidget.type === "alerts widgets" && (
         <DashboardAlertWidget addedWidgetIds={addedWidgetIds} />
