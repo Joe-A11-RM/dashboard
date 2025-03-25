@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "./DashboardHeader/Header";
 import DashBoardMenu from "./DashBoardMenu/DashBoardMenu";
 import WidgetSettings from "./WidgetSettings/WidgetSettings";
-import Trial from "./Grid/Trial";
+import ResponsiveGrid from "./Grid/ResponsiveGrid";
 
 export default function Dashboard() {
 	const [widgetSettings, setWidgetSettings] = useState(false);
@@ -17,8 +17,7 @@ export default function Dashboard() {
 					show={widgetSettings}
 					onHide={() => setWidgetSettings(false)}
 				/>
-				<Trial />
-				
+				<ResponsiveGrid />
 			</div>
 		</div>
 	);

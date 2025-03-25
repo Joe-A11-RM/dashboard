@@ -18,11 +18,11 @@ export default function VehicleTableDetails({ rows }) {
 		dispatch(addDraggableIds(newIds));
 	};
 
-	useEffect(() => {
+	/*useEffect(() => {
 		const draggable = rows.filter((row) => draggableIds.includes(row.id));
 		dispatch(addDraggableItems(draggable));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [draggableIds, rows]);
+	}, [draggableIds, rows]);*/
 	return (
 		<>
 			{/* Table Container */}
@@ -49,7 +49,7 @@ export default function VehicleTableDetails({ rows }) {
 						<React.Fragment key={row.id}>
 							<div
 								className="dashboard-table-body border-bottom"
-								onClick={() => addDraggableItem(row.id)}
+								/*onClick={() => addDraggableItem(row.id)}*/
 							>
 								<div className="dashboard-table-item" style={{ width: "48px" }}>
 									<input

@@ -156,6 +156,21 @@ export default function Cards({
 						subTitle="Total Vehicles: 100"
 					/>
 				</Widget>
+			)  : item.chartData.chartType === "AlertCategoriesOverview" ? (
+				<Widget
+					editMode={editMode}
+					handleDelete={handleDelete}
+					title={item.chartData.title}
+				>
+					<CountsOverview
+						data={item.chartData.data}
+						labels={item.chartData.labels}
+						title={item.chartData.title}
+						number={item.chartData.number}
+						color={["#4FD7A9", "#F6BB63", "#93AAC1", "#F17676"]}
+						subTitle="Total Vehicles: 100"
+					/>
+				</Widget>
 			) : item.chartData.chartType === "BarChart" ? (
 				<Widget
 					editMode={editMode}
