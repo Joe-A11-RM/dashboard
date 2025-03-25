@@ -319,6 +319,17 @@ tr:hover td {
   border-radius: 50% !important;
 }
 
+.ant-dropdown,
+.ant-popover,
+.ant-tooltip {
+  z-index: 9999 !important;
+}
+.reset-btn:hover {
+  background-color: #d32f2f !important; /* Change to your preferred hover color */
+  border-color: #d32f2f !important;
+  color: white !important;
+}
+
 @media (min-width: 2000px) {
   .geospatial-uploads {
     width: 500px;
