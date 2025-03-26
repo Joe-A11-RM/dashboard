@@ -25,8 +25,7 @@ export default function DraggableItems({ item, nodesRef }) {
 			scale={1}
 			nodeRef={nodesRef.current[item.id]}
 			cancel=".map-container"
-			bounds={{ right: 400 }}
-		>
+ 		>
 			<div ref={nodesRef.current[item.id]} className="draggable-item  handle">
 				<div className="draggable-head">
 					<div>{item?.vehicleName}</div>

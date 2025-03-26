@@ -542,6 +542,7 @@ label {
 	transition: all 0.5s ease;
 	position: relative;
 	overflow: visible;
+	z-index: 1 ;
 }
 
 .pie-chart,
@@ -979,13 +980,15 @@ label {
 }
 .draggable-item {
 	position: absolute !important;
-	top: 50% !important;
-	left: 50% !important;
+	top: 10% !important;
+	left: 10% !important;
 	padding: 8px;
 	width: 350px;
 	height: 250px;
 	border-radius: 8px;
 	background-color: #1d4ed8;
+	z-index: 9999 !important;
+
 }
 
 .draggable-head {

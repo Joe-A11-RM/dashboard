@@ -66,7 +66,7 @@ export default function ResponsiveGrid() {
 			)
 				return;
 
-			if (widgetsRef.current.widgets.length === 1) {
+			if (Number(DashboardWidgets?.response?.data?.length) === 1) {
 				alert("You must have at leat one widget");
 				return;
 			} else {
@@ -76,7 +76,11 @@ export default function ResponsiveGrid() {
 			}
 			setDeleteSuccess(false);
 		},
-		[deleDashboardWidget]
+		[deleDashboardWidget, DashboardWidgets]
+	);
+	console.log(
+		"DashboardWidgets?.response.data",
+		DashboardWidgets?.response.data.length
 	);
 	/*useEffect(() => {
 		if (deleteSuccess) {
@@ -117,7 +121,7 @@ export default function ResponsiveGrid() {
 			};
 		}
 	}, [DashboardWidgets, deleteSuccess, responsive]);*/
-
+	console.log(widgetsRef.current);
 	useEffect(() => {
 		if (!DashboardWidgets?.response?.data?.length) return;
 
@@ -444,7 +448,6 @@ export default function ResponsiveGrid() {
 		widgetsRef.current = {
 			widgets: [...widgetsRef.current.widgets, newAdd], // Add new widget
 		};
-
 		setResponsive(newResponsive);
 	};
 	const handleSave = async () => {
@@ -504,16 +507,6 @@ export default function ResponsiveGrid() {
 			>
 				{ResponsiveLayout()}
 			</ReactGridLayout>
-			{draggableItems?.map((item) => {
-				if (!nodesRef.current[item.id]) {
-					nodesRef.current[item.id] = React.createRef();
-				}
-				return (
-					<>
-						<DraggableItems item={item} nodesRef={nodesRef} />
-					</>
-				);
-			})}
 		</div>
 	);
 }

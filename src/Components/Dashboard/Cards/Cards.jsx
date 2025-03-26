@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import PieChart from "../Charts/PieChart";
 import BarChart from "../Charts/BarChart";
 import { dashboardcontext } from "../../../context/DashboardContext";
@@ -15,6 +15,8 @@ import {
 import VehicleTableDetails from "../Table/VehicleTableDetails";
 import Map from "../Map/Map";
 import DonutPieChart from "../Charts/DonutPieChart";
+import { useSelector } from "react-redux";
+import DraggableItems from "../Helper/DraggableItem/DraggableItems";
 
 export default function Cards({
 	valuekey,
@@ -36,6 +38,10 @@ export default function Cards({
 		{ isLoading: engineLoading, isError: engineError },
 	] = useLazyGetEngineHoursDataQuery();
 	const [triggerVehicleDetails] = useLazyGetVehicleDetailsQuery();
+	const draggableItems = useSelector(
+		(state) => state.dashboards.draggableItems
+	);
+	const nodesRef = useRef({});
 
 	useEffect(() => {
 		if (item.chartData.chartType === "BarChart" && currentPage !== prevPage) {
@@ -289,6 +295,16 @@ export default function Cards({
 							/>
 						</>
 					)}
+						{draggableItems?.map((item) => {
+				if (!nodesRef.current[item.id]) {
+					nodesRef.current[item.id] = React.createRef();
+				}
+				return (
+					<>
+						<DraggableItems item={item} nodesRef={nodesRef} />
+					</>
+				);
+			})}
 				</Widget>
 			) : (
 				<></>
