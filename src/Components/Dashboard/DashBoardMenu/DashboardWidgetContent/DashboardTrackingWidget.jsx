@@ -22,6 +22,42 @@ export default function DashboardTrackingWidget({ addedWidgetIds }) {
       w: 6,
       h: 1,
     },
+    {
+      id: 8,
+      img: "Max-speed",
+      title: "Average & Maximum Speed",
+      description:
+        "Users, vehicles, drivers, sectors, companies, etc Users, vehicles, etc Users, vehicles, drivers, sectors, companies, etc Users...",
+      w: 3,
+      h: 1,
+    },
+    {
+      id: 5,
+      img: "Engine-hours",
+      title: "Engine Hours",
+      description:
+        "Users, vehicles, drivers, sectors, companies, etc Users, vehicles, etc Users, vehicles, drivers, sectors, companies, etc Users...",
+      w: 3,
+      h: 1,
+    },
+    {
+      id: 7,
+      img: "Table-overview",
+      title: "Table Overview",
+      description:
+        "Users, vehicles, drivers, sectors, companies, etc Users, vehicles, etc Users, vehicles, drivers, sectors, companies, etc Users...",
+      w: 3,
+      h: 1,
+    },
+    {
+      id: 6,
+      img: "Tracking-map",
+      title: "Tracking Map",
+      description:
+        "Users, vehicles, drivers, sectors, companies, etc Users, vehicles, etc Users, vehicles, drivers, sectors, companies, etc Users...",
+      w: 3,
+      h: 1,
+    },
   ];
 
   const availableWidgets = trackingWidgets.filter(
