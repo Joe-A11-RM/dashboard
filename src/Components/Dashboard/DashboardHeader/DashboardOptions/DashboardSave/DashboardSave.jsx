@@ -5,8 +5,7 @@ export default function DashboardSave() {
 	const { setSaveChanges, changes } = useContext(dashboardcontext);
 
 	const isDisabled = changes ;
-	console.log("isDisabled", isDisabled);
-	console.log("changes", changes);
+	
 	return (
 		<div
 			className={`dashboard-save-widget  ${
