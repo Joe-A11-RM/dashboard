@@ -66,7 +66,6 @@ export default function ResponsiveGrid() {
 				id === "9"
 			)
 				return;
-			console.log("AAAAAAAAA", i);
 			if (Number(DashboardWidgets?.response?.data?.length) === 1) {
 				alert("You must have at leat one widget");
 				return;
@@ -469,7 +468,6 @@ export default function ResponsiveGrid() {
 			widgetsRef.current = {
 				widgets: [...widgetsRef.current.widgets, ...dropped], // Add new widget
 			};
-			console.log(widgetsRef.current.widgets);
 		}
 	}, [dropped]);
 	const handleSave = async () => {
@@ -479,7 +477,7 @@ export default function ResponsiveGrid() {
 				return;
 			} else {
 				await createWidget({
-					id: 17,
+					id: dashboardInf?.id,
 					val: widgetsRef.current.widgets,
 				}).unwrap();
 				refetch();
@@ -489,7 +487,6 @@ export default function ResponsiveGrid() {
 			console.error("Error saving widget:", err);
 		}
 	};
-	console.log("ll", responsive);
 	useEffect(() => {
 		if (saveChanges) {
 			handleSave();

@@ -14,7 +14,6 @@ export default function Dashboard() {
 		(state) => state.dashboards.draggableItems
 	);
 	const nodesRef = useRef({});
-	console.log("object", draggableItems);
 	return (
 		<div>
 			<div className="App">

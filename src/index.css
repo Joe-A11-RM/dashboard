@@ -544,6 +544,27 @@ label {
 	overflow: visible;
 }
 
+.dashboard-Pie .table-container {
+	overflow-y: scroll !important;
+}
+
+.dashboard-Pie .table-container::-webkit-scrollbar {
+	width: 6px;
+}
+
+.dashboard-Pie .table-container::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 4px;
+}
+
+.dashboard-Pie .table-container::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 4px;
+}
+
+.dashboard-Pie .table-container::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
 .pie-chart,
 .donut-chart {
 	width: 100%;
