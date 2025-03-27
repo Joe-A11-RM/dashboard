@@ -14,6 +14,7 @@ export default function DashboardContext({ children }) {
 	});
 	const [saveChanges, setSaveChanges] = useState(false);
 	const [currentWidgets, setCurrentWidgets] = useState([]);
+	const [disableDrag, setDisableDrag] = useState(false);
 	return (
 		<>
 			<dashboardcontext.Provider
@@ -38,6 +39,8 @@ export default function DashboardContext({ children }) {
 					setIsCancelled,
 					setCurrentWidgets,
 					currentWidgets,
+					disableDrag,
+					setDisableDrag,
 				}}
 			>
 				{children}

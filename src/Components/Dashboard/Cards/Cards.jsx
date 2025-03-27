@@ -16,7 +16,6 @@ import VehicleTableDetails from "../Table/VehicleTableDetails";
 import Map from "../Map/Map";
 import DonutPieChart from "../Charts/DonutPieChart";
 import { useSelector } from "react-redux";
-import DraggableItems from "../Helper/DraggableItem/DraggableItems";
 
 export default function Cards({
 	valuekey,
@@ -38,10 +37,6 @@ export default function Cards({
 		{ isLoading: engineLoading, isError: engineError },
 	] = useLazyGetEngineHoursDataQuery();
 	const [triggerVehicleDetails] = useLazyGetVehicleDetailsQuery();
-	const draggableItems = useSelector(
-		(state) => state.dashboards.draggableItems
-	);
-	const nodesRef = useRef({});
 
 	useEffect(() => {
 		if (item.chartData.chartType === "BarChart" && currentPage !== prevPage) {
@@ -91,11 +86,11 @@ export default function Cards({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPage]);
-
+	console.log("FDfasd", item?.position[0]?.lg?.i);
 	const handleDelete = (e) => {
 		e.stopPropagation();
 		e.preventDefault();
-		removeWidget(item?.id);
+		removeWidget(item?.id, item?.position[0]?.lg?.i);
 	};
 	return (
 		<div className="h-100 radius-8" key={valuekey}>
@@ -104,6 +99,7 @@ export default function Cards({
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
+					id={item.id}
 				>
 					<Map title={item.chartData.title} />
 				</Widget>
@@ -123,6 +119,7 @@ export default function Cards({
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
+					id={item.id}
 				>
 					<PieChart
 						data={item.chartData.data}
@@ -139,6 +136,7 @@ export default function Cards({
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
+					id={item.id}
 				>
 					<DonutPieChart
 						data={item.chartData.data}
@@ -152,6 +150,7 @@ export default function Cards({
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
+					id={item.id}
 				>
 					<CountsOverview
 						data={item.chartData.data}
@@ -162,11 +161,12 @@ export default function Cards({
 						subTitle="Total Vehicles: 100"
 					/>
 				</Widget>
-			)  : item.chartData.chartType === "AlertCategoriesOverview" ? (
+			) : item.chartData.chartType === "AlertCategoriesOverview" ? (
 				<Widget
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
+					id={item.id}
 				>
 					<CountsOverview
 						data={item.chartData.data}
@@ -182,6 +182,7 @@ export default function Cards({
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
+					id={item.id}
 					subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
 				>
 					{distanceLoading ? (
@@ -215,6 +216,7 @@ export default function Cards({
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
+					id={item.id}
 					subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
 				>
 					{engineLoading ? (
@@ -246,6 +248,7 @@ export default function Cards({
 			) : item.chartData.chartType === "SpeedDetailsChart" ? (
 				<Widget
 					editMode={editMode}
+					id={item.id}
 					handleDelete={handleDelete}
 					title={item.chartData.title}
 					subTitle="Distance coverage chart for vehicles in period : 2025-01-20 To 2025-02-20"
@@ -281,6 +284,7 @@ export default function Cards({
 					editMode={editMode}
 					handleDelete={handleDelete}
 					title="Vehicles Table"
+					id={item.id}
 				>
 					<VehicleTableDetails rows={chartData.data} />
 					{item.chartData.pagination && (
@@ -295,16 +299,6 @@ export default function Cards({
 							/>
 						</>
 					)}
-						{draggableItems?.map((item) => {
-				if (!nodesRef.current[item.id]) {
-					nodesRef.current[item.id] = React.createRef();
-				}
-				return (
-					<>
-						<DraggableItems item={item} nodesRef={nodesRef} />
-					</>
-				);
-			})}
 				</Widget>
 			) : (
 				<></>

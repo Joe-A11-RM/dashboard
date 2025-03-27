@@ -5,7 +5,7 @@ import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import MapPopup from "../../Map/Popup/MapPopup";
 import { IoIosClose } from "react-icons/io";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removeDraggableItem } from "../../../../Redux/service/Dashboard/DashboardSlice";
 
 export default function DraggableItems({ item, nodesRef }) {
@@ -14,18 +14,18 @@ export default function DraggableItems({ item, nodesRef }) {
 	const handleClose = (id) => {
 		dispatch(removeDraggableItem(id)); // ✅ Dispatch action to remove from Redux store
 	};
-
+	const pos = useSelector((state) => state.dashboards.position);
 	return (
 		<Draggable
 			key={item?.id}
 			axis="both"
 			handle=".handle"
-			defaultPosition={{ x: 0, y: 0 }}
+			defaultPosition={{ x: pos?.x, y: pos?.y }}
 			grid={[35, 35]}
 			scale={1}
 			nodeRef={nodesRef.current[item.id]}
 			cancel=".map-container"
- 		>
+		>
 			<div ref={nodesRef.current[item.id]} className="draggable-item  handle">
 				<div className="draggable-head">
 					<div>{item?.vehicleName}</div>
@@ -37,13 +37,16 @@ export default function DraggableItems({ item, nodesRef }) {
 				</div>
 				<div>
 					<GeoMap
-						lat={item.latitude}
-						lon={item.longitude}
+						lat={item?.latitude ? item?.latitude : 33.33}
+						lon={item?.longitude ? item?.longitude : 33.33}
 						mapheight="dashboard-draggable-map"
 					>
 						<Marker
 							key={item?.vehicleUniqueId}
-							position={[item?.latitude, item?.longitude]}
+							position={[
+								item?.latitude ? item?.latitude : 33.33,
+								item?.longitude ? item?.longitude : 33.33,
+							]}
 							rotationAngle={item?.course || 0}
 							rotationOrigin="center"
 							interactive={true}

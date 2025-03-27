@@ -30,15 +30,15 @@ function App() {
 				path: "/dashboard/auth",
 				element: <AuthLayout />,
 			},*/
-			{
+			/*{
 				path: `/`,
 				element: (
 					<ProtectedRoutes>
 						<MainLayout />
 					</ProtectedRoutes>
 				),
-			},
-			/*{
+			},*/
+			{
 				path: `/`,
 				element: (
 					<ProtectedRoutes>
@@ -53,7 +53,7 @@ function App() {
 						<GeoSpatial />
 					</ProtectedRoutes>
 				),
-			},*/
+			},
 		],
 		{
 			basename: "/dash",

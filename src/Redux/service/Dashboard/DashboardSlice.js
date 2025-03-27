@@ -5,6 +5,7 @@ export const dashboardSlice = createSlice({
 	initialState: {
 		draggableIds: [],
 		draggableItems: [],
+		position: { x: 0, y: 0 },
 	},
 	reducers: {
 		addDraggableIds: (state, action) => {
@@ -13,14 +14,25 @@ export const dashboardSlice = createSlice({
 		addDraggableItems: (state, action) => {
 			state.draggableItems = action.payload;
 		},
-        removeDraggableItem: (state, action) => {
+		removeDraggableItem: (state, action) => {
 			const idToRemove = action.payload;
 			state.draggableIds = state.draggableIds.filter((id) => id !== idToRemove);
-			state.draggableItems = state.draggableItems.filter((item) => item.id !== idToRemove);
+			state.draggableItems = state.draggableItems.filter(
+				(item) => item.id !== idToRemove
+			);
+		},
+		addPosition: (state, action) => {
+			state.position.x = action.payload.x;
+			state.position.y = action.payload.y;
 		},
 	},
 });
 
-export const { addDraggableIds, addDraggableItems , removeDraggableItem} = dashboardSlice.actions;
+export const {
+	addDraggableIds,
+	addDraggableItems,
+	removeDraggableItem,
+	addPosition,
+} = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

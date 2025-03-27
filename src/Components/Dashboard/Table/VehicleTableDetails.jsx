@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
 	addDraggableIds,
 	addDraggableItems,
+	addPosition,
 } from "../../../Redux/service/Dashboard/DashboardSlice";
 
 export default function VehicleTableDetails({ rows }) {
@@ -11,18 +12,20 @@ export default function VehicleTableDetails({ rows }) {
 		(state) => state.dashboards.draggableIds || []
 	);
 
-	const addDraggableItem = (id) => {
+	const addDraggableItem = (id, event) => {
 		const newIds = draggableIds.includes(id)
 			? draggableIds
 			: [...draggableIds, id];
 		dispatch(addDraggableIds(newIds));
+
+		dispatch(addPosition({ x: event.clientX, y: event.clientY }));
 	};
 
-	/*useEffect(() => {
+	useEffect(() => {
 		const draggable = rows.filter((row) => draggableIds.includes(row.id));
 		dispatch(addDraggableItems(draggable));
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [draggableIds, rows]);*/
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [draggableIds, rows]);
 	return (
 		<>
 			{/* Table Container */}
@@ -49,7 +52,7 @@ export default function VehicleTableDetails({ rows }) {
 						<React.Fragment key={row.id}>
 							<div
 								className="dashboard-table-body border-bottom"
-								/*onClick={() => addDraggableItem(row.id)}*/
+								onClick={(event) => addDraggableItem(row.id, event)}
 							>
 								<div className="dashboard-table-item" style={{ width: "48px" }}>
 									<input

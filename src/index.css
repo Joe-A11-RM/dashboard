@@ -542,7 +542,6 @@ label {
 	transition: all 0.5s ease;
 	position: relative;
 	overflow: visible;
-	z-index: 1 ;
 }
 
 .pie-chart,
@@ -978,8 +977,13 @@ label {
 .ant-select {
 	border-color: red !important;
 }
+
+.layout .react-grid-item {
+	z-index: 1 !important;
+}
 .draggable-item {
 	position: absolute !important;
+	z-index: 3 !important;
 	top: 10% !important;
 	left: 10% !important;
 	padding: 8px;
@@ -987,8 +991,7 @@ label {
 	height: 250px;
 	border-radius: 8px;
 	background-color: #1d4ed8;
-	z-index: 9999 !important;
-
+	cursor: move;
 }
 
 .draggable-head {

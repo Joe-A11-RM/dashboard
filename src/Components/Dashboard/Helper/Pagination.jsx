@@ -18,7 +18,7 @@ const Pagination = ({
     const newLimit = parseInt(e.target.value, 10);
     setLimit(newLimit);
   };
-
+  let TotalPages = totalPages ? totalPages : 0
   return (
     <div className={`paginationContainer ${containerStyle}`}>
       <ReactPaginate
@@ -27,8 +27,8 @@ const Pagination = ({
         nextLabel={">"}
         initialPage={0}
         containerClassName={"pagination"}
-        pageRangeDisplayed={totalPages > 20 ? (pageRange ? pageRange : 1) : 2}
-        marginPagesDisplayed={totalPages > 20 ? 1 : 2}
+        pageRangeDisplayed={TotalPages > 20 ? (pageRange ? pageRange : 1) : 2}
+        marginPagesDisplayed={TotalPages > 20 ? 1 : 2}
         pageClassName={"pageClaseName"}
         previousClassName={"paginationButton"}
         nextClassName={"paginationButton"}
@@ -36,7 +36,7 @@ const Pagination = ({
         activeClassName={"activeClassName"}
         pageLinkClassName={"text-center"}
         onPageChange={handlePageClick}
-        pageCount={totalPages}
+        pageCount={TotalPages}
         forcePage={page - 1}
         renderOnZeroPageCount={null}
       />

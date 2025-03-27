@@ -11,6 +11,7 @@
 /build.zip
 # production
 /build
+/New folder
 
 # misc
 .DS_Store

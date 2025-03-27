@@ -17,8 +17,6 @@ import {
 } from "../../../Redux/service/Dashboard";
 import { dashboardcontext } from "../../../context/DashboardContext";
 import DashboardAddWidget from "../DashboardHeader/DashboardOptions/DashboardAddWidget/DashboardAddWidget";
-import { useSelector } from "react-redux";
-import DraggableItems from "../Helper/DraggableItem/DraggableItems";
 const ReactGridLayout = WidthProvider(Responsive);
 
 export default function ResponsiveGrid() {
@@ -29,7 +27,8 @@ export default function ResponsiveGrid() {
 		"2k": [],
 		s: [],
 	});
-	let [deleteSuccess, setDeleteSuccess] = useState(false);
+	let [deleteSuccess, setDeleteSuccess] = useState({ val: false, id: null });
+	let [dropped, setDropped] = useState([]);
 	const widgetsRef = useRef({ widgets: [] });
 	let {
 		dashboardInf,
@@ -37,7 +36,6 @@ export default function ResponsiveGrid() {
 		setEditMode,
 		saveChanges,
 		setSaveChanges,
-		setDeleteMode,
 		setCurrentWidgets,
 		setChanges,
 	} = useContext(dashboardcontext);
@@ -45,14 +43,17 @@ export default function ResponsiveGrid() {
 		data: DashboardWidgets,
 		isLoading,
 		refetch,
-	} = useGetAllDashboardsWidgetsQuery({
-		id: 17,
-	});
+	} = useGetAllDashboardsWidgetsQuery(
+		{
+			id: dashboardInf?.id,
+		},
+		{ skip: !dashboardInf?.id }
+	);
 	const [createWidget] = useCreateWidgetMutation();
 	const [fetchSingle] = useLazyGetSingleWidgetQuery();
 	let [deleDashboardWidget] = useDeleteDashboardWidgetsMutation();
 	const removeWidget = useCallback(
-		(id) => {
+		(id, i) => {
 			if (
 				id === "1" ||
 				id === "2" ||
@@ -65,23 +66,20 @@ export default function ResponsiveGrid() {
 				id === "9"
 			)
 				return;
-
+			console.log("AAAAAAAAA", i);
 			if (Number(DashboardWidgets?.response?.data?.length) === 1) {
 				alert("You must have at leat one widget");
 				return;
 			} else {
 				deleDashboardWidget(id).then(() => {
+					setDeleteSuccess({ val: true, id: i });
 					refetch();
 				});
 			}
-			setDeleteSuccess(false);
 		},
 		[deleDashboardWidget, DashboardWidgets]
 	);
-	console.log(
-		"DashboardWidgets?.response.data",
-		DashboardWidgets?.response.data.length
-	);
+
 	/*useEffect(() => {
 		if (deleteSuccess) {
 			refetch();
@@ -121,7 +119,6 @@ export default function ResponsiveGrid() {
 			};
 		}
 	}, [DashboardWidgets, deleteSuccess, responsive]);*/
-	console.log(widgetsRef.current);
 	useEffect(() => {
 		if (!DashboardWidgets?.response?.data?.length) return;
 
@@ -199,6 +196,27 @@ export default function ResponsiveGrid() {
 		s: 12,
 	};
 
+	useEffect(() => {
+		const widgetIds =
+			DashboardWidgets?.response?.data?.map((i) => i.widgetId) || [];
+		widgetsRef.current = {
+			widgets: widgetIds.map((id, index) => ({
+				widgetId: id,
+				position: [
+					["4k", "2k", "lg", "md", "s"].reduce((acc, bp) => {
+						acc[bp] = {
+							i: responsive[bp]?.[index]?.i ?? "",
+							x: responsive[bp]?.[index]?.x ?? 0,
+							y: responsive[bp]?.[index]?.y ?? 0,
+							w: responsive[bp]?.[index]?.w ?? 0,
+							h: responsive[bp]?.[index]?.h ?? 0,
+						};
+						return acc;
+					}, {}),
+				],
+			})),
+		};
+	}, [DashboardWidgets]);
 	const handleDrag = async (e) => {
 		// Extract updated widget positions
 		const updatedWidgets = e.map(({ i, x, y, w, h }) => ({ i, x, y, w, h }));
@@ -248,7 +266,6 @@ export default function ResponsiveGrid() {
 			})),
 		};
 	};
-
 	const handleDropDragOver = () => {
 		setChanges(true);
 
@@ -272,7 +289,6 @@ export default function ResponsiveGrid() {
 			})),
 		};
 	};
-
 	/*	const handleDrop = async (layout, layoutItem, e) => {
 		e.preventDefault();
 		if (!e.dataTransfer) {
@@ -380,7 +396,9 @@ export default function ResponsiveGrid() {
 		}
 
 		const { widgetId, h } = JSON.parse(draggedData);
-		const { data: singleWidgetData } = await fetchSingle({ id: widgetId });
+		const { data: singleWidgetData } = await fetchSingle({
+			id: widgetId,
+		}).catch((e) => console.log(e));
 		const widgetData = singleWidgetData.response.data[0];
 
 		const newResponsive = { ...responsive };
@@ -443,13 +461,17 @@ export default function ResponsiveGrid() {
 				h: h,
 			};
 		});
-
-		// 🔹 Update `widgetsRef.current`
-		widgetsRef.current = {
-			widgets: [...widgetsRef.current.widgets, newAdd], // Add new widget
-		};
+		setDropped((prev) => [...prev, newAdd]);
 		setResponsive(newResponsive);
 	};
+	useEffect(() => {
+		if (dropped) {
+			widgetsRef.current = {
+				widgets: [...widgetsRef.current.widgets, ...dropped], // Add new widget
+			};
+			console.log(widgetsRef.current.widgets);
+		}
+	}, [dropped]);
 	const handleSave = async () => {
 		try {
 			if (widgetsRef.current.widgets.length === 0) {
@@ -467,23 +489,19 @@ export default function ResponsiveGrid() {
 			console.error("Error saving widget:", err);
 		}
 	};
+	console.log("ll", responsive);
 	useEffect(() => {
 		if (saveChanges) {
 			handleSave();
 			setSaveChanges(false);
 		}
 	}, [saveChanges]);
-	const draggableItems = useSelector(
-		(state) => state.dashboards.draggableItems
-	);
-	console.log("www", widgetsRef.current.widgets);
-	const nodesRef = useRef({});
 
 	return (
 		<div className="">
 			<ReactGridLayout
 				key={JSON.stringify(responsive.lg.i)}
-				className="layout"
+				className="layout "
 				layouts={responsive}
 				cols={columnCounts}
 				rowHeight={400}

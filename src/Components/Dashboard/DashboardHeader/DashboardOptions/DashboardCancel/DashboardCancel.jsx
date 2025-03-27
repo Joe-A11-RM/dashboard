@@ -9,7 +9,6 @@ export default function DashboardCancel() {
 			onClick={() => {
 				setIsCancelled(true);
 				setEditMode(false);
-				setIsCancelled(false);
 			}}
 		>
 			Cancel
