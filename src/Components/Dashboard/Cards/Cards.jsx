@@ -86,7 +86,6 @@ export default function Cards({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPage]);
-	console.log("FDfasd", item?.position[0]?.lg?.i);
 	const handleDelete = (e) => {
 		e.stopPropagation();
 		e.preventDefault();

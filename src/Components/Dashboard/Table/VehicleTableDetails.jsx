@@ -12,13 +12,11 @@ export default function VehicleTableDetails({ rows }) {
 		(state) => state.dashboards.draggableIds || []
 	);
 
-	const addDraggableItem = (id, event) => {
+	const addDraggableItem = (id) => {
 		const newIds = draggableIds.includes(id)
 			? draggableIds
 			: [...draggableIds, id];
 		dispatch(addDraggableIds(newIds));
-
-		dispatch(addPosition({ x: event.clientX, y: event.clientY }));
 	};
 
 	useEffect(() => {
@@ -52,7 +50,10 @@ export default function VehicleTableDetails({ rows }) {
 						<React.Fragment key={row.id}>
 							<div
 								className="dashboard-table-body border-bottom"
-								onClick={(event) => addDraggableItem(row.id, event)}
+								onClick={() => addDraggableItem(row.id)}
+								onMouseDown={(event) => {
+									dispatch(addPosition({ x: event.clientX, y: event.clientY }));
+								}}
 							>
 								<div className="dashboard-table-item" style={{ width: "48px" }}>
 									<input
