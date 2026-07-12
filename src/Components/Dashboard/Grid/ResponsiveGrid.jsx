@@ -18,6 +18,749 @@ import {
 import { dashboardcontext } from "../../../context/DashboardContext";
 import DashboardAddWidget from "../DashboardHeader/DashboardOptions/DashboardAddWidget/DashboardAddWidget";
 const ReactGridLayout = WidthProvider(Responsive);
+const staticData = [
+	{
+		id: 3651,
+		dashboard_id: 3,
+		widgetId: 1,
+		position: [
+			{
+				"4k": {
+					i: "1",
+					x: 0,
+					y: 0,
+					w: 3,
+					h: 1,
+				},
+				"2k": {
+					i: "1",
+					x: 0,
+					y: 0,
+					w: 3,
+					h: 1,
+				},
+				lg: {
+					i: "1",
+					x: 0,
+					y: 0,
+					w: 4,
+					h: 1,
+				},
+				md: {
+					i: "1",
+					x: 0,
+					y: 0,
+					w: 6,
+					h: 1,
+				},
+				s: {
+					i: "1",
+					x: 0,
+					y: 0,
+					w: 12,
+					h: 1,
+				},
+			},
+		],
+		dashboard_title: "Dashboard3",
+		CreatedBy: 3,
+		chartData: {
+			chartType: "CountsOverview",
+			data: [
+				{
+					label: "Users",
+					totalCount: 2,
+					tableData: [
+						{
+							id: 3,
+							user_name: "demo_us3",
+							name: "user3",
+							phone: "00201014764570",
+							email: "us3@gmail.com",
+							parentID: 2,
+							time_zone: "3",
+							phone1: null,
+							phone2: null,
+							address: null,
+							profilePicture: null,
+							fmsAccountDefaultLanguage: "English",
+							company: 1,
+							acc_token: "ox8tSBkfKKYoRoJBRlNOmYC0zeX16bisNFSArKi39mAA1",
+						},
+						{
+							id: 4,
+							user_name: "demo_us4",
+							name: "user4",
+							phone: "00201066183486",
+							email: "us4@gmail.com",
+							parentID: 2,
+							time_zone: "3",
+							phone1: null,
+							phone2: null,
+							address: null,
+							profilePicture: null,
+							fmsAccountDefaultLanguage: "English",
+							company: 1,
+							acc_token: "ox8tSBkfKKYoRoJBRlNOmYC0zeX16bisNFSArKi39mAA1",
+						},
+					],
+				},
+				{
+					label: "Vehicles",
+					totalCount: 4,
+					tableData: [
+						{
+							id: 1,
+							name: "Volvo",
+							uniqueId: "a-344083300892",
+							status: "1",
+							lastUpdate: "2025-03-23T18:16:09.000Z",
+							speed_limit: "100",
+							driver_name: "No name",
+							sim_number: "+966555535235",
+							expire: "2025-09-09",
+						},
+						{
+							id: 2,
+							name: "BMW",
+							uniqueId: "a-344083300883",
+							status: "1",
+							lastUpdate: "2025-03-23T18:37:18.000Z",
+							speed_limit: "100",
+							driver_name: "No name",
+							sim_number: "+966555535235",
+							expire: "2025-09-09",
+						},
+						{
+							id: 9,
+							name: "Hyundai",
+							uniqueId: "a-344083300885",
+							status: "0",
+							lastUpdate: "2025-03-23T18:37:18.000Z",
+							speed_limit: "100",
+							driver_name: "No name",
+							sim_number: "+966555535235",
+							expire: "2025-09-09",
+						},
+						{
+							id: 10,
+							name: "Kia",
+							uniqueId: "a-344083300886",
+							status: "1",
+							lastUpdate: "2025-03-23T18:37:18.000Z",
+							speed_limit: "100",
+							driver_name: "No name",
+							sim_number: "+966555535235",
+							expire: "2025-09-09",
+						},
+					],
+				},
+				{
+					label: "Drivers",
+					totalCount: 1,
+					tableData: [
+						{
+							id: 3,
+							name: "حسين الشحات",
+							id_card: "965658",
+							phone1: "",
+							phone2: "",
+							address: "",
+							profilePicture: "",
+							licenseNumber: "2175232459",
+						},
+					],
+				},
+				{
+					label: "Online",
+					totalCount: 3,
+					tableData: [
+						{
+							id: 1,
+							vehicle: "Volvo-archived",
+							imei: "a-344083300892",
+							status: "1",
+							lastUpdate: "2025-02-11 09:25:41",
+							acc: "0",
+							plateNumber: "s i d 2123",
+							simNumber: "+966555535235",
+							vehicleType: "Cargo Vans",
+							parent: "demo",
+							speed: 95,
+						},
+						{
+							id: 2,
+							vehicle: "BMW-archived",
+							imei: "a-344083300883",
+							status: "1",
+							lastUpdate: "2025-02-11 07:25:41",
+							acc: "1",
+							plateNumber: "g k d 2123",
+							simNumber: "+966555535235",
+							vehicleType: "Cargo Vans",
+							parent: "demo",
+							speed: 95,
+						},
+						{
+							id: 10,
+							vehicle: "Kia-archived",
+							imei: "a-344083300886",
+							status: "1",
+							lastUpdate: "2025-02-10 17:20:41",
+							acc: "0",
+							plateNumber: "k i d 6183",
+							simNumber: "+966555535235",
+							vehicleType: "Cargo Vans",
+							parent: "demo",
+							speed: 99,
+						},
+					],
+				},
+				{
+					label: "Offline",
+					totalCount: 1,
+					tableData: [
+						{
+							id: 9,
+							vehicle: "Hyundai-archived",
+							imei: "a-344083300885",
+							status: "0",
+							lastUpdate: "2025-02-10 23:20:41",
+							acc: "0",
+							plateNumber: "h y d 5183",
+							simNumber: "+966555535235",
+							vehicleType: "Cargo Vans",
+							parent: "demo",
+							speed: 70,
+						},
+					],
+				},
+				{
+					label: "Parking",
+					totalCount: 0,
+					tableData: [],
+				},
+				{
+					label: "Idle",
+					totalCount: 0,
+					tableData: [],
+				},
+				{
+					label: "Alerts",
+					totalCount: 3,
+					tableData: [
+						{
+							id: 1,
+							deviceid: 1,
+							speed: "93",
+							lat: "20.4547",
+							lng: "41.3265",
+							alarm: "speed alarm",
+							ar_alarm: null,
+							address: "Speed alarm",
+							devicename: "أ س و 2498",
+							time: "2025-02-10T05:26:37.000Z",
+							driver: "No name",
+							read: 0,
+							route: null,
+							user: null,
+							outRead: 0,
+							alertType: 0,
+							pushed: 0,
+							username: null,
+							module: "tracking",
+							email: 0,
+							fatigue: 0,
+						},
+						{
+							id: 2,
+							deviceid: 2,
+							speed: "93",
+							lat: "20.4547",
+							lng: "41.3265",
+							alarm: "geofence alarm",
+							ar_alarm: null,
+							address: "Speed alarm",
+							devicename: "أ س و 2498",
+							time: "2025-02-10T05:26:37.000Z",
+							driver: "No name",
+							read: 0,
+							route: null,
+							user: null,
+							outRead: 0,
+							alertType: 0,
+							pushed: 0,
+							username: null,
+							module: "tracking",
+							email: 0,
+							fatigue: 0,
+						},
+						{
+							id: 11,
+							deviceid: 2,
+							speed: "93",
+							lat: "20.4547",
+							lng: "41.3265",
+							alarm: "LOL alarm",
+							ar_alarm: null,
+							address: "Speed alarm",
+							devicename: "أ س و 2498",
+							time: "2025-02-10T05:26:37.000Z",
+							driver: "No name",
+							read: 0,
+							route: null,
+							user: null,
+							outRead: 0,
+							alertType: 0,
+							pushed: 0,
+							username: null,
+							module: "tracking",
+							email: 0,
+							fatigue: 0,
+						},
+					],
+				},
+			],
+			title: "Counts Overview",
+		},
+	},
+	{
+		id: 3652,
+		dashboard_id: 3,
+		widgetId: 2,
+		position: [
+			{
+				"4k": {
+					i: "2",
+					x: 3,
+					y: 0,
+					w: 3,
+					h: 1,
+				},
+				"2k": {
+					i: "2",
+					x: 3,
+					y: 0,
+					w: 3,
+					h: 1,
+				},
+				lg: {
+					i: "2",
+					x: 4,
+					y: 1,
+					w: 4,
+					h: 1,
+				},
+				md: {
+					i: "2",
+					x: 6,
+					y: 0,
+					w: 6,
+					h: 1,
+				},
+				s: {
+					i: "2",
+					x: 0,
+					y: 1,
+					w: 12,
+					h: 1,
+				},
+			},
+		],
+		dashboard_title: "Dashboard3",
+		CreatedBy: 3,
+		chartData: {
+			chartType: "PieChart",
+			labels: ["Speed", "Geofences", "Idle", "Power", "Expires", "Other"],
+			data: [1, 1, 0, 0, 0, 1],
+			color: ["#4FD7A9", "#F6BB63", "#93AAC1", "#F17676", "#93Ae", "#52359c"],
+			title: "Alerts Overview",
+		},
+	},
+	{
+		id: 3653,
+		dashboard_id: 3,
+		widgetId: 3,
+		position: [
+			{
+				"4k": {
+					i: "3",
+					x: 6,
+					y: 0,
+					w: 3,
+					h: 1,
+				},
+				"2k": {
+					i: "3",
+					x: 6,
+					y: 0,
+					w: 3,
+					h: 1,
+				},
+				lg: {
+					i: "3",
+					x: 8,
+					y: 1,
+					w: 4,
+					h: 1,
+				},
+				md: {
+					i: "3",
+					x: 0,
+					y: 1,
+					w: 6,
+					h: 1,
+				},
+				s: {
+					i: "3",
+					x: 0,
+					y: 2,
+					w: 12,
+					h: 1,
+				},
+			},
+		],
+		dashboard_title: "Dashboard3",
+		CreatedBy: 3,
+		chartData: {
+			chartType: "PieChart",
+			labels: ["Offline", "Parking", "Moving", "Idle"],
+			data: [1, 0, 3, 0],
+			color: ["#4FD7A9", "#F6BB63", "#93AAC1", "#F17676"],
+			title: "Vehicle Status",
+		},
+	},
+	{
+		id: 3654,
+		dashboard_id: 3,
+		widgetId: 4,
+		position: [
+			{
+				"4k": {
+					i: "4",
+					x: 9,
+					y: 0,
+					w: 3,
+					h: 1,
+				},
+				"2k": {
+					i: "4",
+					x: 9,
+					y: 0,
+					w: 3,
+					h: 1,
+				},
+				lg: {
+					i: "4",
+					x: 0,
+					y: 1,
+					w: 4,
+					h: 1,
+				},
+				md: {
+					i: "4",
+					x: 6,
+					y: 1,
+					w: 6,
+					h: 1,
+				},
+				s: {
+					i: "4",
+					x: 0,
+					y: 3,
+					w: 12,
+					h: 1,
+				},
+			},
+		],
+		dashboard_title: "Dashboard3",
+		CreatedBy: 3,
+		chartData: {
+			chartType: "BarChart",
+			labels: ["Volvo", "BMW", "Hyundai", "Kia"],
+			data: [0, 0, 0, 0],
+			color: ["#4FD7A9"],
+			title: "Distance Coverage",
+			pagination: {
+				limit: 5,
+				totalData: 4,
+				totalPages: 1,
+				previousPage: null,
+				currentPage: 1,
+				nextPage: null,
+			},
+		},
+	},
+	{
+		id: 3655,
+		dashboard_id: 3,
+		widgetId: 5,
+		position: [
+			{
+				"4k": {
+					i: "5",
+					x: 0,
+					y: 0,
+					w: 3,
+					h: 1,
+				},
+				"2k": {
+					i: "5",
+					x: 0,
+					y: 1,
+					w: 3,
+					h: 1,
+				},
+				lg: {
+					i: "5",
+					x: 4,
+					y: 0,
+					w: 4,
+					h: 1,
+				},
+				md: {
+					i: "5",
+					x: 0,
+					y: 3,
+					w: 6,
+					h: 1,
+				},
+				s: {
+					i: "5",
+					x: 0,
+					y: 4,
+					w: 12,
+					h: 1,
+				},
+			},
+		],
+		dashboard_title: "Dashboard3",
+		CreatedBy: 3,
+		chartData: {
+			chartType: "EngineHoursBarChart",
+			labels: ["Volvo", "BMW", "Hyundai", "Kia"],
+			data: ["4h :35m", "7h :45m", "1h :30m", "3h :30m"],
+			color: ["#4FD7A9"],
+			title: "Engine Hours",
+			pagination: {
+				limit: 5,
+				totalData: 4,
+				totalPages: 1,
+				previousPage: null,
+				currentPage: 1,
+				nextPage: null,
+			},
+		},
+	},
+	{
+		id: 3656,
+		dashboard_id: 3,
+		widgetId: 6,
+		position: [
+			{
+				"4k": {
+					i: "6",
+					x: 3,
+					y: 1,
+					w: 3,
+					h: 1,
+				},
+				"2k": {
+					i: "6",
+					x: 3,
+					y: 1,
+					w: 3,
+					h: 1,
+				},
+				lg: {
+					i: "6",
+					x: 8,
+					y: 0,
+					w: 4,
+					h: 1,
+				},
+				md: {
+					i: "6",
+					x: 6,
+					y: 3,
+					w: 6,
+					h: 1,
+				},
+				s: {
+					i: "6",
+					x: 0,
+					y: 5,
+					w: 12,
+					h: 1,
+				},
+			},
+		],
+		dashboard_title: "Dashboard3",
+		CreatedBy: 3,
+		chartData: {
+			chartType: "TrackingMapPositions",
+			data: [
+				{
+					id: 1,
+					vehicleName: "Volvo",
+					vehicleUniqueId: "a-344083300892",
+					latitude: 16.6947,
+					longitude: 42.1356,
+					speed: 95,
+					course: 231,
+					status: "Offline",
+					lastMessage: "2025-02-11 09:25:41",
+					fixtime: "2025-02-10T03:25:41.000Z",
+				},
+				{
+					id: 2,
+					vehicleName: "BMW",
+					vehicleUniqueId: "a-344083300883",
+					latitude: 17.2779,
+					longitude: 42.5683,
+					speed: 95,
+					course: 231,
+					status: "Offline",
+					lastMessage: "2025-02-11 07:25:41",
+					fixtime: "2025-02-11T01:25:41.000Z",
+				},
+				{
+					id: 9,
+					vehicleName: "Hyundai",
+					vehicleUniqueId: "a-344083300885",
+					latitude: 19.2779,
+					longitude: 42.5683,
+					speed: 70,
+					course: 231,
+					status: "Offline",
+					lastMessage: "2025-02-10 23:20:41",
+					fixtime: "2025-02-11T01:25:41.000Z",
+				},
+				{
+					id: 10,
+					vehicleName: "Kia",
+					vehicleUniqueId: "a-344083300886",
+					latitude: 19.2779,
+					longitude: 42.5683,
+					speed: 99,
+					course: 231,
+					status: "Offline",
+					lastMessage: "2025-02-10 17:20:41",
+					fixtime: "2025-02-11T01:25:41.000Z",
+				},
+			],
+			title: "Tracking Map",
+		},
+	},
+	{
+		id: 3657,
+		dashboard_id: 3,
+		widgetId: 7,
+		position: [
+			{
+				"4k": {
+					i: "7",
+					x: 6,
+					y: 1,
+					w: 3,
+					h: 1,
+				},
+				"2k": {
+					i: "7",
+					x: 6,
+					y: 1,
+					w: 3,
+					h: 1,
+				},
+				lg: {
+					i: "7",
+					x: 0,
+					y: 2,
+					w: 4,
+					h: 1,
+				},
+				md: {
+					i: "7",
+					x: 0,
+					y: 4,
+					w: 6,
+					h: 1,
+				},
+				s: {
+					i: "7",
+					x: 0,
+					y: 6,
+					w: 12,
+					h: 1,
+				},
+			},
+		],
+		dashboard_title: "Dashboard3",
+		CreatedBy: 3,
+		chartData: {
+			chartType: "vehicletabledetails",
+			data: [
+				{
+					id: 1,
+					vehicleName: "Volvo",
+					vehicleUniqueId: "a-344083300892",
+					latitude: 16.6947,
+					longitude: 42.1356,
+					speed: 95,
+					course: 231,
+					status: "Offline",
+					lastMessage: "2025-02-11 09:25:41",
+					fixtime: "2025-02-10T03:25:41.000Z",
+				},
+				{
+					id: 2,
+					vehicleName: "BMW",
+					vehicleUniqueId: "a-344083300883",
+					latitude: 17.2779,
+					longitude: 42.5683,
+					speed: 95,
+					course: 231,
+					status: "Offline",
+					lastMessage: "2025-02-11 07:25:41",
+					fixtime: "2025-02-11T01:25:41.000Z",
+				},
+				{
+					id: 9,
+					vehicleName: "Hyundai",
+					vehicleUniqueId: "a-344083300885",
+					latitude: 19.2779,
+					longitude: 42.5683,
+					speed: 70,
+					course: 231,
+					status: "Offline",
+					lastMessage: "2025-02-10 23:20:41",
+					fixtime: "2025-02-11T01:25:41.000Z",
+				},
+				{
+					id: 10,
+					vehicleName: "Kia",
+					vehicleUniqueId: "a-344083300886",
+					latitude: 19.2779,
+					longitude: 42.5683,
+					speed: 99,
+					course: 231,
+					status: "Offline",
+					lastMessage: "2025-02-10 17:20:41",
+					fixtime: "2025-02-11T01:25:41.000Z",
+				},
+			],
+			title: "Vehicles Table Details",
+			pagination: {
+				limit: 5,
+				totalData: 4,
+				totalPages: 1,
+				previousPage: null,
+				currentPage: 1,
+				nextPage: null,
+			},
+		},
+	},
+];
 
 export default function ResponsiveGrid() {
 	let [responsive, setResponsive] = useState({
@@ -28,7 +771,7 @@ export default function ResponsiveGrid() {
 		s: [],
 	});
 	let [deleteSuccess, setDeleteSuccess] = useState({ val: false, id: null });
-	let [dropped, setDropped] = useState([]);
+	let [dropped, setDropped] = useState(staticData);
 	const widgetsRef = useRef({ widgets: [] });
 	let {
 		dashboardInf,
@@ -49,9 +792,9 @@ export default function ResponsiveGrid() {
 		},
 		{ skip: !dashboardInf?.id }
 	);
-	const [createWidget] = useCreateWidgetMutation();
-	const [fetchSingle] = useLazyGetSingleWidgetQuery();
-	let [deleDashboardWidget] = useDeleteDashboardWidgetsMutation();
+	// const [createWidget] = useCreateWidgetMutation();
+	// const [fetchSingle] = useLazyGetSingleWidgetQuery();
+	// let [deleDashboardWidget] = useDeleteDashboardWidgetsMutation();
 	const removeWidget = useCallback(
 		(id, i) => {
 			if (
@@ -66,17 +809,18 @@ export default function ResponsiveGrid() {
 				id === "9"
 			)
 				return;
-			if (Number(DashboardWidgets?.response?.data?.length) === 1) {
+			if (Number(staticData?.length) === 1) {
 				alert("You must have at leat one widget");
 				return;
 			} else {
-				deleDashboardWidget(id).then(() => {
-					setDeleteSuccess({ val: true, id: i });
-					refetch();
-				});
+				// deleDashboardWidget(id).then(() => {
+				// 	setDeleteSuccess({ val: true, id: i });
+				// 	refetch();
+				// });
+				setDropped((prev) => prev.filter((item) => item.id !== id));
 			}
 		},
-		[deleDashboardWidget, DashboardWidgets]
+		[staticData] //deleDashboardWidget
 	);
 
 	/*useEffect(() => {
@@ -85,14 +829,14 @@ export default function ResponsiveGrid() {
 		}
 	}, [deleteSuccess, refetch]);*/
 	useEffect(() => {
-		setCurrentWidgets(DashboardWidgets?.response.data);
-	}, [DashboardWidgets]);
+		setCurrentWidgets(staticData);
+	}, [staticData]);
 	/*	useEffect(() => {
-		if (!DashboardWidgets?.response?.data || !responsive) return;
+		if (!staticData?.response?.data || !responsive) return;
 		if (deleteSuccess) {
 			setChanges(true);
 
-			const widgetIds = DashboardWidgets.response.data.map((i) => i.widgetId);
+			const widgetIds = staticData.response.data?.map((i) => i.widgetId);
 
 			const getPosition = (index, size) => ({
 				i: responsive[size]?.[index]?.i ?? "",
@@ -103,7 +847,7 @@ export default function ResponsiveGrid() {
 			});
 
 			widgetsRef.current = {
-				widgets: widgetIds.map((id, index) => ({
+				widgets: widgetIds?.map((id, index) => ({
 					widgetId: id,
 					position: [
 						{
@@ -117,9 +861,9 @@ export default function ResponsiveGrid() {
 				})),
 			};
 		}
-	}, [DashboardWidgets, deleteSuccess, responsive]);*/
+	}, [staticData, deleteSuccess, responsive]);*/
 	useEffect(() => {
-		if (!DashboardWidgets?.response?.data?.length) return;
+		if (!staticData?.length) return;
 
 		const groupedPositions = {
 			lg: [],
@@ -138,8 +882,8 @@ export default function ResponsiveGrid() {
 			/>
 		);
 
-		DashboardWidgets.response.data.forEach((item) => {
-			item.position.forEach((pos, index) => {
+		staticData?.forEach((item) => {
+			item?.position.forEach((pos, index) => {
 				["lg", "md", "s", "4k", "2k"].forEach((size) => {
 					groupedPositions[size].push({
 						...(pos[size] ?? {}), // Default to empty object if undefined
@@ -150,7 +894,7 @@ export default function ResponsiveGrid() {
 		});
 
 		setResponsive(groupedPositions);
-	}, [DashboardWidgets, removeWidget]);
+	}, [staticData, removeWidget]);
 
 	const ResponsiveLayout = () => {
 		let data = [];
@@ -161,7 +905,7 @@ export default function ResponsiveGrid() {
 		} else if (window.innerWidth > 768) {
 			data = responsive?.s || [];
 		}
-		if (data.length === 0) {
+		if (data?.length === 0) {
 			return (
 				<div
 					key="no-data"
@@ -172,7 +916,7 @@ export default function ResponsiveGrid() {
 				</div>
 			);
 		}
-		return data.map(({ i, component }) => (
+		return data?.map(({ i, component }) => (
 			<div key={i} className="grid-item">
 				{component}
 			</div>
@@ -196,10 +940,9 @@ export default function ResponsiveGrid() {
 	};
 
 	useEffect(() => {
-		const widgetIds =
-			DashboardWidgets?.response?.data?.map((i) => i.widgetId) || [];
+		const widgetIds = staticData?.map((i) => i.widgetId) || [];
 		widgetsRef.current = {
-			widgets: widgetIds.map((id, index) => ({
+			widgets: widgetIds?.map((id, index) => ({
 				widgetId: id,
 				position: [
 					["4k", "2k", "lg", "md", "s"].reduce((acc, bp) => {
@@ -215,10 +958,10 @@ export default function ResponsiveGrid() {
 				],
 			})),
 		};
-	}, [DashboardWidgets]);
+	}, [staticData]);
 	const handleDrag = async (e) => {
 		// Extract updated widget positions
-		const updatedWidgets = e.map(({ i, x, y, w, h }) => ({ i, x, y, w, h }));
+		const updatedWidgets = e?.map(({ i, x, y, w, h }) => ({ i, x, y, w, h }));
 
 		// Define a mapping of width values to responsive breakpoints
 		const widthToBreakpoint = {
@@ -245,10 +988,9 @@ export default function ResponsiveGrid() {
 		setChanges(true);
 
 		// Update widget reference
-		const widgetIds =
-			DashboardWidgets?.response?.data?.map((i) => i.widgetId) || [];
+		const widgetIds = staticData?.map((i) => i.widgetId) || [];
 		widgetsRef.current = {
-			widgets: widgetIds.map((id, index) => ({
+			widgets: widgetIds?.map((id, index) => ({
 				widgetId: id,
 				position: [
 					["4k", "2k", "lg", "md", "s"].reduce((acc, bp) => {
@@ -268,10 +1010,9 @@ export default function ResponsiveGrid() {
 	const handleDropDragOver = () => {
 		setChanges(true);
 
-		const widgetIds =
-			DashboardWidgets?.response?.data?.map((i) => i.widgetId) || [];
+		const widgetIds = staticData?.map((i) => i.widgetId) || [];
 		widgetsRef.current = {
-			widgets: widgetIds.map((id, index) => ({
+			widgets: widgetIds?.map((id, index) => ({
 				widgetId: id,
 				position: [
 					["4k", "2k", "lg", "md", "s"].reduce((acc, bp) => {
@@ -395,10 +1136,10 @@ export default function ResponsiveGrid() {
 		}
 
 		const { widgetId, h } = JSON.parse(draggedData);
-		const { data: singleWidgetData } = await fetchSingle({
-			id: widgetId,
-		}).catch((e) => console.log(e));
-		const widgetData = singleWidgetData.response.data[0];
+		// const { data: singleWidgetData } = await fetchSingle({
+		// 	id: widgetId,
+		// }).catch((e) => console.log(e));
+		// const widgetData = singleWidgetData?.response?.data[0];
 
 		const newResponsive = { ...responsive };
 
@@ -442,7 +1183,7 @@ export default function ResponsiveGrid() {
 					<Cards
 						key={lastItemIndex + 1}
 						i={lastItemIndex + 1}
-						item={widgetData}
+						item={staticData[0]}
 						removeWidget={removeWidget}
 					/>
 				),
@@ -476,12 +1217,12 @@ export default function ResponsiveGrid() {
 				alert("You must have at least one widget");
 				return;
 			} else {
-				await createWidget({
-					id: dashboardInf?.id,
-					val: widgetsRef.current.widgets,
-				}).unwrap();
-				refetch();
-				setEditMode(false);
+				// await createWidget({
+				// 	id: dashboardInf?.id,
+				// 	val: widgetsRef.current.widgets,
+				// }).unwrap();
+				// refetch();
+				// setEditMode(false);
 			}
 		} catch (err) {
 			console.error("Error saving widget:", err);

@@ -30,33 +30,23 @@ function App() {
 				path: "/dashboard/auth",
 				element: <AuthLayout />,
 			},*/
-			{
-				path: `/`,
-				element: (
-					<ProtectedRoutes>
-						<MainLayout />
-					</ProtectedRoutes>
-				),
-			},
 			/*{
 				path: `/`,
 				element: (
-					<ProtectedRoutes>
-						<Dashboard />
-					</ProtectedRoutes>
-				),
-			},
-			{
-				path: `/geospatial`,
-				element: (
-					<ProtectedRoutes>
-						<GeoSpatial />
-					</ProtectedRoutes>
+						<MainLayout />
 				),
 			},*/
+			{
+				path: `/`,
+				element: <Dashboard />,
+			},
+			// {
+			// 	path: `/geospatial`,
+			// 	element: <GeoSpatial />,
+			// },
 		],
 		{
-			basename: "/dash",
+			basename: "/",
 		}
 	);
 

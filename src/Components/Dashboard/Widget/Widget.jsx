@@ -10,7 +10,7 @@ const Widget = ({ editMode, handleDelete, children, title, subTitle, id }) => {
 				<div className="d-flex justify-content-between align-items-center">
 					<h5 className="widgetTitle">{title}</h5>
 
-					{editMode && id > 100 && (
+					{/* {editMode && id > 100 && (
 						<div className="d-flex">
 							<div className="bin cancelSelectorName" onClick={handleDelete}>
 								<img
@@ -19,7 +19,7 @@ const Widget = ({ editMode, handleDelete, children, title, subTitle, id }) => {
 								/>
 							</div>
 						</div>
-					)}
+					)} */}
 				</div>
 				{subTitle && <p className="widgetSubTitle">{subTitle}</p>}
 			</div>
