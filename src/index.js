@@ -8,13 +8,13 @@ import "leaflet-draw/dist/leaflet.draw.css";
 import "react-leaflet-markercluster/styles";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
-import App from "./App";
 import { Provider } from "react-redux";
 import { store } from "./Redux/store";
+import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 	<Provider store={store}>
 		<App />
-	</Provider>
+	</Provider>,
 );
