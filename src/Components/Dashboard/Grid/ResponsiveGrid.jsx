@@ -810,7 +810,7 @@ export default function ResponsiveGrid() {
 			)
 				return;
 			if (Number(staticData?.length) === 1) {
-				alert("You must have at leat one widget.");
+				alert("You must have at leat one widget");
 				return;
 			} else {
 				// deleDashboardWidget(id).then(() => {
