@@ -790,7 +790,7 @@ export default function ResponsiveGrid() {
 		{
 			id: dashboardInf?.id,
 		},
-		{ skip: !dashboardInf?.id }
+		{ skip: !dashboardInf?.id },
 	);
 	// const [createWidget] = useCreateWidgetMutation();
 	// const [fetchSingle] = useLazyGetSingleWidgetQuery();
@@ -820,7 +820,7 @@ export default function ResponsiveGrid() {
 				setDropped((prev) => prev.filter((item) => item.id !== id));
 			}
 		},
-		[staticData] //deleDashboardWidget
+		[staticData], //deleDashboardWidget
 	);
 
 	/*useEffect(() => {
@@ -978,7 +978,7 @@ export default function ResponsiveGrid() {
 			const breakpoints = widthToBreakpoint[pos.w] || [];
 			breakpoints.forEach((bp) => {
 				newResponsive[bp] = newResponsive[bp]?.map((item) =>
-					item.i === pos.i ? { ...item, x: pos.x, y: pos.y } : item
+					item.i === pos.i ? { ...item, x: pos.x, y: pos.y } : item,
 				);
 			});
 		});
